@@ -1,0 +1,21 @@
+.app-user {
+  display: inline-block;
+  vertical-align: top;      
+  margin: 0 10px;
+  padding: 0 10px;
+  .user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  .user-avatar {
+    margin-right: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+  }
+}
+.user-dropdown-menu {
+  width: 200px;
+}

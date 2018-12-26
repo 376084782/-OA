@@ -1,0 +1,93 @@
+.app-header {
+  position: relative;
+  height: 64px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+  overflow: hidden;
+  z-index: 999;
+
+  .title {
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 1);
+    opacity: 0.85;
+    padding-left: 24px;
+  }
+
+  .header-game-scope {
+    display: flex;
+    align-items: center;
+
+    .anticon {
+      font-size: 20px;
+      opacity: .65;
+      line-height: 64px;
+      cursor: pointer;
+      transition: all 0.3s, padding 0s;
+      padding: 0px 24px;
+
+      &:hover {
+        background-color: #e6f7ff;
+      }
+    }
+
+    .gamescope-select {
+      .el-input__inner {
+        padding: 0;
+        color: #409eff;
+        border: none;
+      }
+
+      .el-input__icon {
+        color: #409eff;
+      }
+    }
+  }
+
+  .header-menu {
+    line-height: 64px;
+
+    .menu-item {
+      display: inline-block;
+      vertical-align: top;
+      height: 100%;
+      padding: 0 12px;
+      cursor: pointer;
+
+      &:not(.search):hover {
+        background-color: #e6f7ff;
+      }
+      &.search{
+        .el-input__inner{
+          border-radius: 1000px!important;
+        }
+      }
+    }
+
+    .menu-item-pcscope {
+      .el-input__inner {
+        padding: 0;
+        color: #409eff;
+        border: none;
+      }
+
+      .el-input__icon {
+        color: #409eff;
+      }
+    }
+
+    .menu-item-mobilescope {
+      margin-left: -10px;
+    }
+
+    .el-badge {
+      display: inline;
+    }
+  }
+}
+
+.app-inner-content {
+  position: relative;
+  flex: 1;
+  margin: 24px 24px 0px;
+}

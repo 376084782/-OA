@@ -1,0 +1,41 @@
+.app-scope {
+  margin: 0 auto;
+  width: 500px;
+  .scope-title {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #fff;
+  }
+  .scope-search {
+    margin: 20px 0 30px;
+  }
+  .scope-lists {
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    li {
+      padding: 0 15px;
+      height: 40px;
+      border-bottom: 1px solid #e8e8e8;
+      font-size: 16px;
+      line-height: 40px;
+      cursor: pointer;
+      &:last-child {
+        border-bottom: none;
+      }
+      &:hover {
+        background: rgba(24, 144, 255, .25);
+      }
+    }
+    .scope-active {
+      background: #1890ff;
+      color: #fff;
+      .anticon {
+        color: #fff;
+      }
+      &:hover {
+        background: #1890ff;
+      }
+    }
+  }
+}

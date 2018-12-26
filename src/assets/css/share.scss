@@ -1,0 +1,30 @@
+.tabContent {
+  display: flex;
+  justify-content: space-between;
+  .tab-box {
+    width: 18%;
+    transition: all .3s;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
+.share-charts {
+  background: #fff;
+  border-radius: 2px;
+  .title {
+    margin-bottom: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid #e8e8e8;
+    font-size: 18px;
+    font-weight: 400;
+    display: flex;
+    justify-content: space-between;
+  }
+  .chart {
+    margin: 10px 0 0 0;
+  }
+  .chart-condition {
+    text-align: center;
+  }
+}

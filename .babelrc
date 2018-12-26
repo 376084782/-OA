@@ -1,0 +1,32 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false,
+        "targets": {
+          "browsers": ["last 2 versions", "> 5%"]
+        },
+        "loose": true
+      }
+    ],
+    "stage-2"
+  ],
+  "plugins": [
+    "transform-vue-jsx",
+    "transform-runtime"
+  ],
+  "comments": false,
+  "env": {
+    "development": {
+      "plugins": [
+        
+      ]
+    },
+    "production": {
+      "plugins": [
+        "transform-remove-console"
+      ]
+    }
+  }
+}

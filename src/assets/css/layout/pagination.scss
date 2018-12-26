@@ -1,0 +1,11 @@
+.pagination{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .tip{
+    font-size:14px;
+    font-weight:400;
+    color:rgba(0,0,0,1);
+    opacity:0.85;
+  }
+}

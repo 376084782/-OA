@@ -1,0 +1,40 @@
+.layout-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 24px 0px;
+  min-height: 500px;
+  height: 80%;
+  .error-image {
+    margin-right: 88px;
+    height: 360px;
+    width: 100%;
+    max-width: 430px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: contain;
+  }
+  .image-403 {
+    background-image: url("../../images/403.svg");
+  }
+  .image-404 {
+    background-image: url("../../images/404.svg");
+  }
+  .image-500
+   {
+    background-image: url("../../images/500.svg");
+  }
+  .code {
+    color: #434e59;
+    font-size: 72px;
+    font-weight: 600;
+    line-height: 72px;
+    margin-bottom: 24px;
+  }
+  .message {
+    margin-bottom: 16px;
+    color: rgba(0, 0, 0, .45);
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
