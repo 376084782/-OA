@@ -52,16 +52,16 @@ const mutations = {
 const actions = {
   login (context) {
     return new Promise((resolve, reject) => {
-      getUserInfo().then(data => {
-        context.commit('updateUserInfo', data);
-        resolve(data.menu);
-      }).catch(data => {
-        if (data.code === 401) {
-          document.location.href = data.data.refererUrl;
-        } else {
-          reject(data);
-        }
-      });
+      // getUserInfo().then(data => {
+      //   context.commit('updateUserInfo', data);
+      //   resolve(data.menu);
+      // }).catch(data => {
+      //   if (data.code === 401) {
+      //     document.location.href = data.data.refererUrl;
+      //   } else {
+      //     reject(data);
+      //   }
+      // });
     });
   }
 };

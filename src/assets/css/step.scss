@@ -1,5 +1,26 @@
+.el-upload--picture-card {
+  background-color: #F4F9FC !important;
+
+  .picture-card-tip {
+    position: absolute;
+    top: 100px;
+    width: 148px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, .65);
+    line-height: 20px;
+  }
+}
+
 .common-step {
   padding-bottom: 40px;
+
+  .el-textarea__inner,
+  .el-input__inner {
+    width: 280px !important;
+    border: 1px solid #D9D9D9 !important;
+    background-color: #F4F9FC !important;
+  }
+
   .section {
     .circle {
       width: 50px;
@@ -8,52 +29,63 @@
       border-radius: 1000px;
       line-height: 50px;
       text-align: center;
+
       &.active {
         background-color: #f2faff;
         border-color: #4b9ffd;
         color: rgba(0, 0, 0, 0.85);
       }
+
       &.disabled {
         background-color: rgba(235, 241, 246, 1);
         border-color: rgba(235, 241, 246, 1);
         color: rgba(0, 0, 0, 0.45);
       }
+
       &.success {
         border-color: rgba(75, 159, 253, 1);
         background-color: rgba(75, 159, 253, 1);
         color: rgba(255, 255, 255, 1);
       }
     }
+
     .line-dash {
       height: 46px;
       width: 0;
       border-left: 1px dashed #4b9ffd;
       margin: 6px 25px;
+
       &.disabled {
         border-color: rgba(217, 217, 217, 1);
       }
     }
   }
+
   .tip-detail {
     font-size: 14px;
     font-weight: 400;
     color: rgba(0, 0, 0, 0.85);
+
     .action {
       &.success {
         color: rgba(102, 200, 86, 1);
       }
+
       &.danger {
         color: rgba(235, 106, 94, 1);
       }
     }
   }
+
   .tip-date {
     font-size: 12px;
     color: rgba(0, 0, 0, 0.65);
   }
+
   .detail {
     margin-top: 8px;
   }
+
   .el-tag {
     &.role {
       height: 20px;
@@ -67,16 +99,25 @@
       margin-top: 4px;
     }
   }
+
   .bubble-wrap {
     position: relative;
   }
+
   .bubble {
+    z-index: 99;
     position: absolute;
     width: 518px;
     min-height: 120px;
     background: rgba(244, 249, 252, 1);
     border-radius: 4px;
     top: -30px;
+    padding: 24px 0;
+
+    .el-form-item {
+      margin: 8px;
+    }
+
     &::before {
       content: "";
       position: absolute;
@@ -87,4 +128,3 @@
     }
   }
 }
-

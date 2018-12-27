@@ -59,13 +59,11 @@ export default {
     // 请求数据函数
     loadData() {
       this.bLoading = true;
-      let { ...params } = this.searchParams;
-      params.start_date = this.searchParams.dateRange[0];
-      params.end_date = this.searchParams.dateRange[1];
-      getClubList(params)
+      console.log('in')
+      getClubList({})
         .then(data => {
-          this.dataSource = data.list;
-          this.oPagination = data.page;
+          // this.dataSource = data.list;
+          // this.oPagination = data.page;
         })
         .finally(() => {
           this.bLoading = false;
@@ -73,12 +71,6 @@ export default {
     },
     // 搜索
     onSearch(params) {
-      // 重置排序
-      this.$nextTick(() => {
-        this.$refs.club.$refs.clubTable.clearSort();
-      });
-      this.searchParams.sort = "";
-      this.searchParams.sortBy = "";
       Object.assign(this.searchParams, params, { page: 1 });
       this.loadData();
     },

@@ -29,15 +29,20 @@
   </div>
 </template>
 <script>
-import turUser from 'components/header/user';
-import turUserNews from 'components/header/userNews';
+import turUser from "components/header/user";
+import turUserNews from "components/header/userNews";
 
 export default {
-  name: 'turHeaderRight',
+  name: "turHeaderRight",
   components: {
     turUser,
-    turUserNews,
+    turUserNews
   },
-  methods: {}
+  methods: {},
+  data() {
+    return {
+      news: 0
+    };
+  }
 };
 </script>

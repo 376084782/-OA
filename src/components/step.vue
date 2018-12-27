@@ -17,19 +17,7 @@
               <el-tag class="role">{{conf.roleName}}</el-tag>
             </el-col>
             <el-col>
-              <div v-if="index<active">
-                <p class="tip-detail">
-                  <span :class="`action ${conf.actionStatus}`">{{conf.actionName}}</span>&nbsp;&nbsp;
-                  <span class="tip-date">{{conf.date}}</span>
-                </p>
-                <p class="tip-detail">{{conf.remark}}</p>
-              </div>
-              <div class="bubble-wrap" v-else-if="index==active">
-                <div class="bubble">
-                  <slot></slot>
-                </div>
-              </div>
-              <div v-else></div>
+              <slot :name="`step${index}`"></slot>
             </el-col>
           </el-row>
         </el-col>
@@ -40,45 +28,41 @@
 <script>
 import "assets/css/step.scss";
 export default {
+  props: {
+    data: {
+      type: Array,
+      default() {
+        return [
+          {
+            name: "用户名",
+            roleName: "科长",
+            title: "步骤"
+          },
+          {
+            name: "用户名",
+            roleName: "科长",
+            title: "步骤"
+          },
+          {
+            name: "用户名",
+            roleName: "科长",
+            title: "步骤"
+          },
+          {
+            name: "用户名",
+            roleName: "科长",
+            title: "步骤"
+          }
+        ];
+      }
+    },
+    active: {
+      type: Number,
+      default: 3
+    }
+  },
   data() {
-    return {
-      active: 2,
-      /**
-       * @param actionStatus danger||success||default
-       */
-      data: [
-        {
-          name: "用户名",
-          roleName: "科长",
-          title: "步骤",
-          date: "2018.11.23",
-          actionName: "发起",
-          actionStatus: "success",
-          remark: "备注备注备注备注备注备注备注备注备注备注"
-        },
-        {
-          name: "用户名",
-          roleName: "科长",
-          date: "2018.11.23",
-          title: "步骤",
-          actionStatus: "danger",
-          actionName: "发起",
-          remark: "备注备注备注备注备注备注备注备注备注备注"
-        },
-        {
-          name: "用户名",
-          roleName: "科长",
-          date: "2018.11.23",
-          title: "步骤"
-        },
-        {
-          name: "用户名",
-          roleName: "科长",
-          date: "2018.11.23",
-          title: "步骤"
-        }
-      ]
-    };
+    return {};
   },
   methods: {
     circleClass(index) {
