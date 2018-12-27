@@ -1,0 +1,90 @@
+.common-step {
+  padding-bottom: 40px;
+  .section {
+    .circle {
+      width: 50px;
+      height: 50px;
+      border: 1px solid #4b9ffd;
+      border-radius: 1000px;
+      line-height: 50px;
+      text-align: center;
+      &.active {
+        background-color: #f2faff;
+        border-color: #4b9ffd;
+        color: rgba(0, 0, 0, 0.85);
+      }
+      &.disabled {
+        background-color: rgba(235, 241, 246, 1);
+        border-color: rgba(235, 241, 246, 1);
+        color: rgba(0, 0, 0, 0.45);
+      }
+      &.success {
+        border-color: rgba(75, 159, 253, 1);
+        background-color: rgba(75, 159, 253, 1);
+        color: rgba(255, 255, 255, 1);
+      }
+    }
+    .line-dash {
+      height: 46px;
+      width: 0;
+      border-left: 1px dashed #4b9ffd;
+      margin: 6px 25px;
+      &.disabled {
+        border-color: rgba(217, 217, 217, 1);
+      }
+    }
+  }
+  .tip-detail {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.85);
+    .action {
+      &.success {
+        color: rgba(102, 200, 86, 1);
+      }
+      &.danger {
+        color: rgba(235, 106, 94, 1);
+      }
+    }
+  }
+  .tip-date {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.65);
+  }
+  .detail {
+    margin-top: 8px;
+  }
+  .el-tag {
+    &.role {
+      height: 20px;
+      line-height: 20px;
+      background: rgba(221, 238, 252, 1);
+      border-radius: 2px;
+      border: none;
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(75, 159, 253, 1);
+      margin-top: 4px;
+    }
+  }
+  .bubble-wrap {
+    position: relative;
+  }
+  .bubble {
+    position: absolute;
+    width: 518px;
+    min-height: 120px;
+    background: rgba(244, 249, 252, 1);
+    border-radius: 4px;
+    top: -30px;
+    &::before {
+      content: "";
+      position: absolute;
+      left: -22px;
+      top: 52px;
+      border: 11px solid white;
+      border-right: 13px solid rgba(244, 249, 252, 1);
+    }
+  }
+}
+

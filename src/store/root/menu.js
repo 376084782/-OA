@@ -31,7 +31,7 @@ const menuList = {
         path: '/document/sponse'
       }, {
         title: '收文分派',
-        path: '/document/sponse'
+        path: '/document/assign'
       }, {
         title: '待办已办',
         path: '/document/sponse'

@@ -16,7 +16,7 @@
           <el-table-column prop="recharge" label="限办日期"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="text">详情</el-button>
+              <el-button @click="showModalDetail(scope.row)" type="text">详情</el-button>
               <i class="grey">|</i>
               <el-button type="text">接收情况</el-button>
             </template>
@@ -25,15 +25,18 @@
         <pagination :total="200" :currentPage="1" :size="20" @onPageChange="onPageChange"></pagination>
       </section>
     </el-card>
+    <modal-detail :visible.sync="showDetail"></modal-detail>
   </section>
 </template>
 <script>
-import listSearch from "./search";
+import listSearch from "./components/search";
+import modalDetail from "./components/modalDetail";
 import { getClubList } from "api/index";
 export default {
-  components: { listSearch },
+  components: { listSearch, modalDetail },
   data() {
     return {
+      showDetail: false,
       bLoading: false,
       searchParams: {
         level: "", // 俱乐部等级
@@ -50,6 +53,9 @@ export default {
     };
   },
   methods: {
+    showModalDetail(data) {
+      this.showDetail = true;
+    },
     // 请求数据函数
     loadData() {
       this.bLoading = true;
@@ -81,15 +87,6 @@ export default {
       Object.assign(this.searchParams, { page: page });
       this.loadData();
     },
-    // 排序
-    onSort(order, orderBy) {
-      Object.assign(this.searchParams, {
-        sort: orderBy === "descending" ? "desc" : "asc",
-        sortBy: order,
-        page: 1
-      });
-      this.loadData();
-    }
   },
   created() {
     this.onSearch();
