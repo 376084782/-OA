@@ -4,7 +4,7 @@
       :label="conf.label"
       v-for="(conf,index) in config"
       :key="index"
-      v-if="editData[conf.bindKey]==conf.bindKeyVal"
+      v-if="conf.bindKeyVal.indexOf(editData[conf.bindKey])>-1"
     >
       <template v-if="conf.type=='select'">
         <el-select
@@ -23,17 +23,31 @@
         </el-select>
       </template>
       <template v-else-if="conf.type=='input'">
-        <el-input :disabled="conf.readOnly" :style="{width:inputWidth}" v-model="editData[conf.key]"></el-input>
+        <el-input
+          :disabled="conf.readOnly"
+          :style="{width:inputWidth}"
+          v-model="editData[conf.key]"
+        ></el-input>
       </template>
       <template v-else-if="conf.type=='textarea'">
-        <el-input :disabled="conf.readOnly" type="textarea" :style="{width:inputWidth}" v-model="editData[conf.key]"></el-input>
+        <el-input
+          :disabled="conf.readOnly"
+          type="textarea"
+          :style="{width:inputWidth}"
+          v-model="editData[conf.key]"
+        ></el-input>
       </template>
       <template v-else-if="conf.type=='date'">
-        <el-date-picker :disabled="conf.readOnly" :style="{width:inputWidth}" v-model="editData[conf.key]"></el-date-picker>
+        <el-date-picker
+          :disabled="conf.readOnly"
+          :style="{width:inputWidth}"
+          v-model="editData[conf.key]"
+        ></el-date-picker>
       </template>
       <template v-else-if="conf.type=='radio'">
         <el-radio-group v-model="editData[conf.key]">
-          <el-radio :disabled="conf.readOnly"
+          <el-radio
+            :disabled="conf.readOnly"
             v-for="(item , index) in conf.meta.list"
             :key="index"
             :label="+item.key"

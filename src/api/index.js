@@ -39,7 +39,7 @@ export const getDetail = () => {
         key: 'gwType',
         // 绑定其他属性值控制显示隐藏，主要用于勾选不同意后填写不同意原因
         bindKey: 'jjcd',
-        bindKeyVal: '1'
+        bindKeyVal: ['1']
       }, {
         readOnly: true,
         type: 'input',
