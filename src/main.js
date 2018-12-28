@@ -11,7 +11,8 @@ import store from 'store';
 import LayoutDefault from 'layouts/default';
 import filter from 'plugins/filter';
 
-
+import $ from 'jquery';
+window.$ = $;
 filter(Vue);
 
 store.dispatch('login/login');

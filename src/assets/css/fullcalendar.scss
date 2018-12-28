@@ -1,0 +1,90 @@
+.fullcalendar-wrap {
+  width: 660px;
+  height: 622px;
+  .fc-toolbar {
+    height: 56px;
+    background-color: rgba(250, 250, 250, 1);
+    position: relative;
+    margin: 0;
+    .fc-center {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      & > div {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        & > .fc-button,
+        & > .fc-button.fc-state-hover {
+          display: block;
+          font-size: 14px;
+          color: rgba(0, 0, 0, 0.65);
+          height: 56px;
+          line-height: 56px;
+          background: none;
+          border: none;
+          text-shadow: none;
+          box-shadow: none;
+          outline: none;
+          padding: 0;
+          margin: 0;
+          filter: none;
+          position: relative;
+        }
+        & > .fc-prevCustom-button {
+          &::before {
+            font-family: "anticon" !important;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            content: "\e85a";
+            position: absolute;
+            left: -20px;
+            width: 20px;
+            height: 56px;
+          }
+        }
+        & > .fc-nextCustom-button {
+          &::before {
+            font-family: "anticon" !important;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            content: "\e859";
+            position: absolute;
+            right: -20px;
+            width: 20px;
+            height: 56px;
+          }
+        }
+        & > h2 {
+          line-height: 56px;
+          font-size: 14px;
+          color: rgba(0, 0, 0, 1);
+          margin: 0 30px;
+          font-weight: 400;
+        }
+      }
+    }
+    .fc-prev-button,
+    .fc-next-button {
+      display: none;
+    }
+  }
+  .fc-content-skeleton {
+    .fc-day-number{
+      line-height: 26px;
+    }
+    .fc-day-grid-event {
+      border-color: rgba(217, 217, 217, 0.8);
+      border-radius: 2px;
+      background-color: white;
+      color: rgba(0, 0, 0, 0.85);
+      text-align: center;
+      height: 20px;
+      line-height: 20px;
+      margin: 2px 9px;
+    }
+  }
+}

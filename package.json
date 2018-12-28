@@ -1,7 +1,7 @@
 {
   "name": "club-bed",
   "version": "0.1.0",
-  "description": "俱乐部后台",
+  "description": "重庆OA",
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.dev.js",
@@ -67,6 +67,8 @@
     "clipboard": "^2.0.1",
     "dayjs": "^1.5.23",
     "element-ui": "^2.3.7",
+    "fullcalendar": "^3.9.0",
+    "jquery": "^3.3.1",
     "js-md5": "^0.7.3",
     "viser-vue": "^2.2.5",
     "vue": "^2.5.16",

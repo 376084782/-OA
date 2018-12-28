@@ -107,9 +107,16 @@
 .mgLeft20 {
   margin-left: 20px;
 }
+.mgLeft120 {
+  margin-left: 120px;
+}
 
 .mgRight20 {
   margin-right: 20px;
+}
+
+.mgRight120 {
+  margin-right: 120px;
 }
 
 /* float */
@@ -283,6 +290,20 @@ h4 {
   .el-tabs__nav-wrap.is-top {
     &::after {
       display: none;
+    }
+  }
+}
+
+.analyse-entry .el-form-item__content {
+  & > span {
+    padding: 9px 12px;
+    margin-right: 20px;
+    background: rgba(244, 249, 252, 1);
+    border-radius: 4px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, .65);
+    .el-button{
+      margin-left: 30px;
     }
   }
 }

@@ -6,6 +6,7 @@
       <div class="line mgTop40"></div>
       <h4 class="mgTop40 mgLeft75">公文处理流程图：</h4>
       <step
+        ref="step"
         :style="{height:activeStep==3?'650px':'auto'}"
         :active="activeStep"
         class="mgTop24 mgLeft185"
@@ -86,15 +87,27 @@
           </template>
         </template>
       </step>
-      <el-button class="mgLeft185" type="primary">提交</el-button>
+      <el-row class="mgLeft185">
+        <el-button type="primary" @click="clickFP">分派</el-button>
+        <el-button @click="clickJS">拒收</el-button>
+        <el-button @click="clickZB">转办</el-button>
+        <el-button type="primary" @click="clickTJ">提交</el-button>
+      </el-row>
     </el-card>
+    <modal-js :visible.sync="showJS"></modal-js>
+    <modal-zb :visible.sync="showZB"></modal-zb>
   </section>
 </template>
 <script>
 import { getDetail } from "api/index";
+import ModalJs from "./components/modalJS";
+import ModalZb from "./components/modalZB";
 export default {
+  components: { ModalJs, ModalZb },
   data() {
     return {
+      showJS: false,
+      showZB: false,
       activeStep: 0,
       id: 1,
       nextPeople: 0,
@@ -108,7 +121,20 @@ export default {
   mounted() {
     getDetail().then(({ contentTop }) => {
       this.contentTop = contentTop;
+      this.$nextTick(() => {
+        this.$refs.step.resetHeight();
+      });
     });
+  },
+  methods: {
+    clickFP() {},
+    clickJS() {
+      this.showJS = true;
+    },
+    clickZB() {
+      this.showZB = true;
+    },
+    clickTJ() {}
   }
 };
 </script>

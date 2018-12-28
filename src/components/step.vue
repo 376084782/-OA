@@ -1,5 +1,5 @@
 <template>
-  <div class="common-step">
+  <div ref="root" class="common-step" :style="{'min-height':minHeight}">
     <div class="section">
       <el-row type="flex" v-for="(conf,index) in data" :key="index" class="area">
         <el-col style="width:50px;margin-right:20px;">
@@ -62,9 +62,26 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      minHeight: "auto"
+    };
   },
   methods: {
+    resetHeight() {
+      let $root = $(this.$refs.root);
+      let rootTop = $root.offset().top;
+      let maxHeight = 0;
+      $(this.$el)
+        .find(".bubble")
+        .each((index, item) => {
+          let $item = $(item);
+          let height = $item.offset().top - rootTop + $item.height() + 50;
+          if (height > maxHeight) {
+            maxHeight = height;
+          }
+        });
+      this.minHeight = maxHeight + "px";
+    },
     circleClass(index) {
       if (index < this.active) {
         return "success";
