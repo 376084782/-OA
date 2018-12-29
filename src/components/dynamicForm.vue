@@ -15,8 +15,8 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item label :key="index+10000" class="analyse-entry">
-          <span v-for="(type , index) in conf.meta.showType" :key="index">
-            {{getAnalyseName(type)}}
+          <span v-for="(type , index) in conf.meta.showType||[]" :key="index">
+            <span>{{getAnalyseName(type)}}</span>
             <el-upload
               action="http://rap2api.taobao.org/app/mock/46476/post/oa/flow/workPlanExcel/file/analysis"
               :headers="analyseHeader"

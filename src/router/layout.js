@@ -1,12 +1,28 @@
 import Error404 from "layouts/404";
 import breadcurmb from "components/breadcurmb";
 import documentSponse from "view/document/sponse/sponse";
-import documentDoSponse from "view/document/sponse/doSponse";
+import documentDoSponse from "view/form/do";
 import documentAssign from "view/document/assign/assign";
-import documentDoAssign from "view/document/assign/doAssign";
+import documentDone from "view/document/done/done";
+import documentReceive from "view/document/receive/receive";
+import documentArrange from "view/document/arrange/arrange";
 
-// 页面
-const pages = [{
+import {
+  funcGetPath
+} from './pathConfig'
+
+// 公文管理
+const pagesDocument = [{
+    path: '/document/:type/do',
+    name: 'tableDo',
+    components: {
+      default: documentDoSponse,
+      paths: breadcurmb
+    },
+    props: {
+      paths: funcGetPath
+    }
+  }, {
     path: "/document/sponse",
     name: "documentSponse",
     components: {
@@ -14,18 +30,7 @@ const pages = [{
       paths: breadcurmb
     },
     props: {
-      paths: () => ({
-        paths: [{
-            name: "公文管理",
-            url: "/"
-          },
-          {
-            name: "公文发起",
-            url: ""
-          }
-        ],
-        showName: true
-      })
+      paths: funcGetPath
     }
   },
   {
@@ -36,76 +41,97 @@ const pages = [{
       paths: breadcurmb
     },
     props: {
-      paths: () => ({
-        paths: [{
-            name: "公文管理",
-            url: "/"
-          },
-          {
-            name: "收文分派",
-            url: ""
-          }
-        ],
-        showName: true
-      })
+      paths: funcGetPath
     }
   },
   {
-    path: "/document/sponse/do",
-    name: "documentDoSponse",
+    path: "/document/done",
+    name: "documentDone",
     components: {
-      default: documentDoSponse,
+      default: documentDone,
       paths: breadcurmb
     },
     props: {
-      paths: () => ({
-        paths: [{
-            name: "公文管理",
-            url: "/"
-          },
-          {
-            name: "公文发起",
-            url: "/document/sponse"
-          },
-          {
-            name: "发起公文",
-            url: ""
-          }
-        ],
-        showName: true
-      })
+      paths: funcGetPath
     }
   },
   {
-    path: "/document/assign/do",
-    name: "documentDoAssign",
+    path: "/document/receive",
+    name: "documentReceive",
     components: {
-      default: documentDoAssign,
+      default: documentReceive,
       paths: breadcurmb
     },
     props: {
-      paths: () => ({
-        paths: [{
-            name: "公文管理",
-            url: "/"
-          },
-          {
-            name: "收文分派",
-            url: "/document/assign"
-          },
-          {
-            name: "待分派",
-            url: "/document/assign"
-          }, {
-            name: "分派",
-            url: ""
-          }
-        ],
-        showName: true
-      })
+      paths: funcGetPath
     }
-  }
+  },
+  {
+    path: "/document/arrange",
+    name: "documentArrange",
+    components: {
+      default: documentArrange,
+      paths: breadcurmb
+    },
+    props: {
+      paths: funcGetPath
+    }
+  },
+
 ];
+
+
+import taskMine from "view/task/mine/mine";
+import taskDone from "view/task/done/done";
+import taskSub from "view/task/subList/subList";
+
+// 任务管理
+const pagesTask = [{
+  path: '/task/mine',
+  name: 'taskMine',
+  components: {
+    default: taskMine,
+    paths: breadcurmb
+  },
+  props: {
+    paths: funcGetPath
+  }
+}, {
+  path: '/task/done',
+  name: 'taskDone',
+  components: {
+    default: taskDone,
+    paths: breadcurmb
+  },
+  props: {
+    paths: funcGetPath
+  }
+}, {
+  path: '/task/sub',
+  name: 'taskSub',
+  components: {
+    default: taskSub,
+    paths: breadcurmb
+  },
+  props: {
+    paths: funcGetPath
+  }
+}]
+
+import schedualSearch from "view/schedual/search/search";
+// 排班管理
+const pagesSchedual = [{
+  path: '/schedual/search',
+  name: 'schedualSearch',
+  components: {
+    default: schedualSearch,
+    paths: breadcurmb
+  },
+  props: {
+    paths: funcGetPath
+  }
+}, ]
+
 // 错误页面
 const errorPage = [{
   path: "/404",
@@ -119,7 +145,7 @@ const routes = [{
     // name: 'Normal',
     // component: Home
   }]
-  .concat(pages)
+  .concat(pagesDocument, pagesTask, pagesSchedual)
   .concat(errorPage);
 
 export default routes;

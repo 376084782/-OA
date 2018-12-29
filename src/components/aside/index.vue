@@ -17,7 +17,7 @@
       background-color="#020C16"
       active-text-color="#fff"
     >
-      <el-submenu v-for="(item ,key) in menuList" :key="key" :index="item.path">
+      <el-submenu v-for="(item ,key) in menuList" :key="key" :index="item.path||''+key">
         <template slot="title">
           <i :class="`anticon icon-${item.icon}`"></i>
           <span>{{item.title}}</span>

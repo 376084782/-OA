@@ -8,13 +8,13 @@
     </span>
     <!-- 邮件 -->
     <span class="menu-item">
-      <el-badge :value="news">
+      <el-badge is-dot :value="news">
         <i class="anticon icon-mail"></i>
       </el-badge>
     </span>
     <!-- codepen -->
     <span class="menu-item">
-      <el-badge :value="news">
+      <el-badge is-dot :value="news">
         <i class="anticon icon-codepen"></i>
       </el-badge>
     </span>

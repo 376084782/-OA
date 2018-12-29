@@ -9,7 +9,7 @@
       background
       class="pull-right mgTop10 mgBottom10"
       @current-change="onPageChange"
-      :current-page.sync="currentPage"
+      :current-page="currentPage"
       :page-size="size"
       layout="prev, pager, next, jumper"
       :total="total"
@@ -22,6 +22,7 @@ export default {
   props: ["total", "currentPage", "size"],
   methods: {
     onPageChange() {
+      this.$emit("update:currentPage", this.currentPage);
       this.$emit("onPageChange", this.currentPage);
     }
   }

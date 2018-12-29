@@ -34,18 +34,37 @@ const menuList = {
         path: '/document/assign'
       }, {
         title: '待办已办',
-        path: '/document/sponse'
+        path: '/document/done'
       }, {
         title: '待收已收',
-        path: '/document/sponse'
+        path: '/document/receive'
       }, {
         title: '归档公文',
-        path: '/document/sponse'
+        path: '/document/arrange'
       }]
     }, {
       title: '任务管理',
       icon: 'book',
-      subMenu: []
+      subMenu: [{
+        title: '我发起的',
+        path: '/task/mine'
+      }, {
+        title: '待办已办',
+        path: '/task/done'
+      }]
+    }, {
+      title: '排班管理',
+      icon: 'calendar',
+      subMenu: [{
+        title: '排班查询',
+        path: '/schedual/search'
+      }, {
+        title: '排班申请',
+        path: '/schedual/apply'
+      }, {
+        title: '调班申请',
+        path: '/schedual/applyChange'
+      }]
     }, ]
   },
   mutations: {

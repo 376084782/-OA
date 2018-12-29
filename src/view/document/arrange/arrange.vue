@@ -2,9 +2,6 @@
   <section>
     <el-card class="mgTop24">
       <list-search @search="onSearch"></list-search>
-      <el-row class="bottom-row mgTop24">
-        <el-button type="primary" size="small" @click="$router.push('/document/sponse/do')">发起公文</el-button>
-      </el-row>
       <section class="mgTop24">
         <el-table v-loading="bLoading" :data="dataSource" style="min-height: 400px">
           <el-table-column prop label="编号"></el-table-column>
@@ -16,13 +13,10 @@
           <el-table-column prop="recharge" label="限办日期"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button @click="showFormDetail(scope.row)" type="text">详情</el-button>
-              <i class="grey">|</i>
-              <el-button @click="showReceiveDetail(scope.row)" type="text">接收情况</el-button>
+              <el-button @click="showReceiveDetail(scope.row)" type="text">归档</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <pagination :total="200" :currentPage="1" :size="20" @onPageChange="onPageChange"></pagination>
       </section>
     </el-card>
     <modal-detail :visible.sync="showDetail"></modal-detail>
@@ -31,6 +25,7 @@
 <script>
 import listSearch from "./components/search";
 import modalDetail from "./components/modalDetail";
+
 import { getClubList } from "api/index";
 export default {
   components: { listSearch, modalDetail },
@@ -38,16 +33,7 @@ export default {
     return {
       showDetail: false,
       bLoading: false,
-      searchParams: {
-        level: "", // 俱乐部等级
-        state: "", // 状态
-        guildid: "", // 俱乐部ID
-        guildname: "", // 俱乐部名称
-        numid: "", // 会长ID
-        nickname: "", // 会长名称
-        phone: "", // 手机号
-        dateRange: [] // 创建日期
-      },
+      searchParams: {},
       dataSource: [{}],
       oPagination: {}
     };
@@ -80,11 +66,6 @@ export default {
     // 搜索
     onSearch(params) {
       Object.assign(this.searchParams, params, { page: 1 });
-      this.loadData();
-    },
-    // 翻页
-    onPageChange(page) {
-      Object.assign(this.searchParams, { page: page });
       this.loadData();
     }
   },

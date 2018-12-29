@@ -80,9 +80,11 @@
 .mgLeft10 {
   margin-left: 10px;
 }
+
 .mgLeft75 {
   margin-left: 75px;
 }
+
 .mgLeft185 {
   margin-left: 185px;
 }
@@ -107,6 +109,7 @@
 .mgLeft20 {
   margin-left: 20px;
 }
+
 .mgLeft120 {
   margin-left: 120px;
 }
@@ -228,21 +231,26 @@
   i.grey {
     color: #d9d9d9;
   }
+
   thead th {
     background-color: #fafafa;
     color: #000000;
     opacity: 0.85;
   }
 }
+
 h1 {
   font-size: 20px;
 }
+
 h2 {
   font-size: 18px;
 }
+
 h3 {
   font-size: 16px;
 }
+
 h4 {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.85);
@@ -253,6 +261,7 @@ h4 {
   height: 0;
   border-top: 1px solid #e8e8e8;
 }
+
 .file-name {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.45);
@@ -268,12 +277,19 @@ h4 {
     align-items: center;
     color: rgba(0, 0, 0, 0.85);
     border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+
     .el-dialog__title {
       font-size: 16px;
     }
+
     .el-dialog__headerbtn {
       top: 12px;
     }
+  }
+
+  .el-dialog__footer {
+    border-top: 1px solid rgba(0, 0, 0, .09);
+    padding-top: 16px;
   }
 }
 
@@ -281,12 +297,15 @@ h4 {
   margin: 0 -24px;
   background-color: white;
   padding: 0 24px;
+
   .el-tabs {
     height: 40px;
   }
+
   .el-tabs__header.is-top {
     margin: 0;
   }
+
   .el-tabs__nav-wrap.is-top {
     &::after {
       display: none;
@@ -295,15 +314,26 @@ h4 {
 }
 
 .analyse-entry .el-form-item__content {
-  & > span {
-    padding: 9px 12px;
+  display: flex;
+
+  &>span {
+    display: flex;
+    padding: 0px 12px;
+    height: 32px;
     margin-right: 20px;
     background: rgba(244, 249, 252, 1);
     border-radius: 4px;
     font-size: 14px;
     color: rgba(0, 0, 0, .65);
-    .el-button{
+    line-height: 32px;
+
+    .el-upload {
+      height: auto;
+    }
+
+    .el-button {
       margin-left: 30px;
+      padding: 0;
     }
   }
 }

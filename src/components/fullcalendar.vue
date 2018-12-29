@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div ref="main" class="fullcalendar-wrap"></div>
+  <div class="fullcalendar-outer">
+    <div ref="main" class="fullcalendar-wrap" :style="{width,height}"></div>
   </div>
 </template>
 <script>
@@ -8,7 +8,19 @@ import fullcalendar from "fullcalendar";
 import "assets/css/common/fullcalendar.min.css";
 import "assets/css/fullcalendar.scss";
 export default {
-  props: ["list"],
+  props: {
+    height: {
+      type: String,
+      default: "620px"
+    },
+    list: {
+      type: Array
+    },
+    width: {
+      type: String,
+      default: "660px"
+    }
+  },
   data() {
     return {
       root: null,
@@ -19,16 +31,17 @@ export default {
     list(list) {
       this.eventList = list;
       // 触发视图更新
-      this.resetCalender();
+      this.reset();
     }
   },
   methods: {
-    resetCalender() {
+    reset() {
       this.root.fullCalendar("destroy");
       this.initCalender();
     },
     initCalender() {
       var event = this.root.fullCalendar({
+        height: "parent",
         monthNames: [
           "一月",
           "二月",

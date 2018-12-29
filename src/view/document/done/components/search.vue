@@ -1,14 +1,14 @@
 <template>
   <div class="search-area">
-    <el-form label-width="70px">
+    <el-form label-width="80px">
       <el-row class="row" :gutter="20">
         <el-col :span="8">
-          <el-form-item label="标题">
+          <el-form-item label="标题:">
             <el-input v-model="searchForm.searchKey" placeholder="请输入" size="small"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="状态">
+          <el-form-item label="状态:">
             <el-select v-model="searchForm.status" style="width:100%;" type="small" placeholder="请选择">
             </el-select>
           </el-form-item>
@@ -20,7 +20,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="限办日期">
+          <el-form-item label="收发日期:">
             <el-date-picker
               v-model="searchForm.dateRange"
               type="date"
@@ -33,7 +33,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="编号">
+          <el-form-item label="编号:">
             <el-input placeholder="请输入" size="small"></el-input>
           </el-form-item>
         </el-col>

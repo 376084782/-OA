@@ -12,7 +12,6 @@
 }
 
 .common-step {
-  padding-bottom: 40px;
 
   .el-textarea__inner,
   .el-input__inner {
@@ -22,6 +21,10 @@
   }
 
   .section {
+    .area {
+      min-height: 130px;
+    }
+
     .circle {
       width: 50px;
       height: 50px;
@@ -49,8 +52,14 @@
       }
     }
 
+    .line-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
     .line-dash {
-      height: 46px;
+      height: 0;
+      flex-grow: 1;
       width: 0;
       border-left: 1px dashed #4b9ffd;
       margin: 6px 25px;
@@ -66,6 +75,10 @@
     font-weight: 400;
     color: rgba(0, 0, 0, 0.85);
 
+    .detail-name {
+      color: rgba(0, 0, 0, .65);
+    }
+
     .action {
       &.success {
         color: rgba(102, 200, 86, 1);
@@ -73,6 +86,12 @@
 
       &.danger {
         color: rgba(235, 106, 94, 1);
+      }
+
+      &.text-right {
+        width: 60px;
+        display: inline-block;
+        text-align: right;
       }
     }
   }
@@ -84,6 +103,7 @@
 
   .detail {
     margin-top: 8px;
+    padding-bottom: 60px;
   }
 
   .el-tag {
@@ -100,19 +120,15 @@
     }
   }
 
-  .bubble-wrap {
-    position: relative;
-  }
-
   .bubble {
     z-index: 99;
-    position: absolute;
     width: 518px;
     min-height: 120px;
     background: rgba(244, 249, 252, 1);
     border-radius: 4px;
-    top: -30px;
+    margin-top: -30px;
     padding: 24px 0;
+    position: relative;
 
     .el-form-item {
       margin: 8px;

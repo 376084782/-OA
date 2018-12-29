@@ -4,13 +4,12 @@
       <el-row class="row" :gutter="20">
         <el-col :span="8">
           <el-form-item label="标题">
-            <el-input v-model="searchForm.searchKey" placeholder="请输入" size="small"></el-input>
+            <el-input placeholder="请输入" size="small"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="状态">
-            <el-select v-model="searchForm.status" style="width:100%;" type="small" placeholder="请选择">
-            </el-select>
+          <el-form-item label="类型">
+            <el-input placeholder="请输入" size="small"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="7" :offset="1">
@@ -20,7 +19,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="限办日期">
+          <el-form-item label="收发日期">
             <el-date-picker
               v-model="searchForm.dateRange"
               type="date"
@@ -48,25 +47,8 @@
 export default {
   data() {
     return {
-      expand: false,
       searchForm: {
-        level: "", // 俱乐部等级
-        state: "", // 状态
-        guildid: "", // 俱乐部ID
-        guildname: "", // 俱乐部名称
-        numid: "", // 会长ID
-        // nickname: '', // 会长名称
-        phone: "", // 手机号
-        dateRange: [] // 创建日期
-      },
-      selectGuild: "guildid",
-      selectClub: "numid",
-      statusList: [
-        { id: 0, label: "关闭" },
-        { id: 1, label: "开启" },
-        { id: 2, label: "解散" },
-        { id: 3, label: "禁封" }
-      ]
+      }
     };
   },
   methods: {
