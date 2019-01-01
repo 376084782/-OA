@@ -17,6 +17,10 @@
   .back-top.back-top-show {
     display: block
   }
+  .bolck-date{
+    width: 330px;
+    height: 330px;
+  }
   .back-top-inner {
     background-color: rgba(0,0,0,.6);
     border-radius: 2px;

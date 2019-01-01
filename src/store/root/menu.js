@@ -22,7 +22,10 @@ const menuList = {
     list: [{
       title: '系统首页',
       icon: 'home',
-      subMenu: []
+      subMenu: [{
+        title: '系统首页',
+        path: '/hp'
+      }]
     }, {
       title: '公文管理',
       icon: 'folder',
