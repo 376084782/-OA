@@ -8,14 +8,13 @@ import 'assets/css/index.js';
 import Vue from 'vue';
 import Router from 'router';
 import store from 'store';
-import LayoutDefault from 'layouts/default';
+import Main from 'layouts/main';
 import filter from 'plugins/filter';
 
 import $ from 'jquery';
 window.$ = $;
 filter(Vue);
 
-store.dispatch('login/login');
 
 var vue = new Vue();
 Vue.use(Common)
@@ -31,5 +30,5 @@ new Vue({
   el: '#app',
   router: Router,
   store,
-  render: h => h(LayoutDefault)
+  render: h => h(Main)
 });

@@ -51,9 +51,11 @@
       display: inline-block;
       vertical-align: top;
       height: 100%;
-      padding: 0 12px;
+      padding: 0 8px;
       cursor: pointer;
-
+      .anticon{
+        font-size: 18px;
+      }
       &:not(.search):hover {
         background-color: #e6f7ff;
       }

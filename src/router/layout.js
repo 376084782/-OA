@@ -13,70 +13,70 @@ import {
 
 // 公文管理
 const pagesDocument = [{
-  path: '/document/:type/do',
-  name: 'tableDo',
-  components: {
-    default: documentDoSponse,
-    paths: breadcurmb
+    path: '/document/:type/do',
+    name: 'tableDo',
+    components: {
+      default: documentDoSponse,
+      paths: breadcurmb
+    },
+    props: {
+      paths: funcGetPath
+    }
+  }, {
+    path: "/document/sponse",
+    name: "documentSponse",
+    components: {
+      default: documentSponse,
+      paths: breadcurmb
+    },
+    props: {
+      paths: funcGetPath
+    }
   },
-  props: {
-    paths: funcGetPath
-  }
-}, {
-  path: "/document/sponse",
-  name: "documentSponse",
-  components: {
-    default: documentSponse,
-    paths: breadcurmb
+  {
+    path: "/document/assign",
+    name: "documentAssign",
+    components: {
+      default: documentAssign,
+      paths: breadcurmb
+    },
+    props: {
+      paths: funcGetPath
+    }
   },
-  props: {
-    paths: funcGetPath
-  }
-},
-{
-  path: "/document/assign",
-  name: "documentAssign",
-  components: {
-    default: documentAssign,
-    paths: breadcurmb
+  {
+    path: "/document/done",
+    name: "documentDone",
+    components: {
+      default: documentDone,
+      paths: breadcurmb
+    },
+    props: {
+      paths: funcGetPath
+    }
   },
-  props: {
-    paths: funcGetPath
-  }
-},
-{
-  path: "/document/done",
-  name: "documentDone",
-  components: {
-    default: documentDone,
-    paths: breadcurmb
+  {
+    path: "/document/receive",
+    name: "documentReceive",
+    components: {
+      default: documentReceive,
+      paths: breadcurmb
+    },
+    props: {
+      paths: funcGetPath
+    }
   },
-  props: {
-    paths: funcGetPath
-  }
-},
-{
-  path: "/document/receive",
-  name: "documentReceive",
-  components: {
-    default: documentReceive,
-    paths: breadcurmb
+  {
+    path: "/document/arrange",
+    name: "documentArrange",
+    components: {
+      default: documentArrange,
+      paths: breadcurmb
+    },
+    props: {
+      paths: funcGetPath
+    }
   },
-  props: {
-    paths: funcGetPath
-  }
-},
-{
-  path: "/document/arrange",
-  name: "documentArrange",
-  components: {
-    default: documentArrange,
-    paths: breadcurmb
-  },
-  props: {
-    paths: funcGetPath
-  }
-},
 
 ];
 
@@ -133,41 +133,47 @@ const pagesSchedual = [{
     paths: funcGetPath
   }
 }, {
-    path: '/schedual/apply',
-    name: 'schedualApply',
-    components: {
-      default: schedualApply,
-      paths: breadcurmb
-    },
-    props: {
-      paths: funcGetPath
-    }
-  }, {
-    path: '/schedual/applyChange',
-    name: 'schedualApplyChange',
-    components: {
-      default: schedualApplyChange,
-      paths: breadcurmb
-    },
-    props: {
-      paths: funcGetPath
-    }
-  },]
+  path: '/schedual/apply',
+  name: 'schedualApply',
+  components: {
+    default: schedualApply,
+    paths: breadcurmb
+  },
+  props: {
+    paths: funcGetPath
+  }
+}, {
+  path: '/schedual/applyChange',
+  name: 'schedualApplyChange',
+  components: {
+    default: schedualApplyChange,
+    paths: breadcurmb
+  },
+  props: {
+    paths: funcGetPath
+  }
+}, ]
 
-// 错误页面
-const errorPage = [{
-  path: "/404",
-  name: "Error404",
-  component: Error404
-}];
 
+import Default from 'layouts/default'
+import Login from 'layouts/login'
 const routes = [{
   path: "/",
-  redirect: "/document/sponse"
-  // name: 'Normal',
-  // component: Home
+  component: Default,
+  children: [].concat(pagesDocument, pagesTask, pagesSchedual)
+}, {
+  path: "/404",
+  name: "Error404",
+  component: Error404,
+  meta: {
+    noLogin: true
+  }
+}, {
+  path: "/login",
+  component: Login,
+  meta: {
+    noLogin: true
+  }
 }]
-  .concat(pagesDocument, pagesTask, pagesSchedual)
-  .concat(errorPage);
 
 export default routes;

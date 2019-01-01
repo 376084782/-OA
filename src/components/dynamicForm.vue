@@ -1,12 +1,11 @@
 <template>
   <el-form :label-width="labelWidth" :model="editData">
     <template v-for="(conf,index) in config">
-      <template v-if="getVisible(conf)&&conf.type=='assignExcelAnalyse'">
-        <el-form-item :label="conf.label" :key="index">
+      <template v-if="getVisible(conf)&&conf.type=='workPlan-file'">
+        <el-form-item label="选择时间" :key="index">
           <el-date-picker
             :style="{width:inputWidth}"
             v-model="editData.date"
-            :disabled="conf.readOnly"
             @change="changeImportDate"
             type="daterange"
             range-separator="至"
@@ -15,13 +14,13 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item label :key="index+10000" class="analyse-entry">
-          <span v-for="(type , index) in conf.meta.showType||[]" :key="index">
+          <span v-for="(type , index) in conf.data.params||[]" :key="index">
             <span>{{getAnalyseName(type)}}</span>
             <el-upload
-              action="http://rap2api.taobao.org/app/mock/46476/post/oa/flow/workPlanExcel/file/analysis"
+              :action="`${baseUrl}/oa/flow/workPlanExcel/file/analysis`"
               :headers="analyseHeader"
               name="excelFile"
-              :on-success="afterImport"
+              :http-request="rewriteUpload"
               :on-error="importErr"
               :before-upload="beforeImport(type)"
               :file-list="fileList"
@@ -32,17 +31,31 @@
           </span>
         </el-form-item>
       </template>
-      <el-form-item :label="conf.label" :key="index" v-else-if="getVisible(conf)">
+      <el-form-item :label="conf.name" :key="index" v-else-if="getVisible(conf)">
         <template v-if="conf.type=='select'">
           <el-select
             :disabled="conf.readOnly"
             :multiple="conf.meta.multiple"
             :filterable="conf.meta.filterable"
-            v-model="editData[conf.key]"
+            v-model="editData[conf.code]"
             :style="{width:inputWidth}"
           >
             <el-option
-              v-for="item in selectData[conf.meta.selectType]"
+              v-for="item in getDataByFuncName(conf)"
+              :key="item.key"
+              :label="item.value"
+              :value="item.key"
+            ></el-option>
+          </el-select>
+        </template>
+        <template v-else-if="conf.type=='one-select'">
+          <el-select
+            :disabled="conf.readOnly"
+            v-model="editData[conf.code]"
+            :style="{width:inputWidth}"
+          >
+            <el-option
+              v-for="item in getDataByFuncName(conf)"
               :key="item.key"
               :label="item.value"
               :value="item.key"
@@ -53,7 +66,7 @@
           <el-input
             :disabled="conf.readOnly"
             :style="{width:inputWidth}"
-            v-model="editData[conf.key]"
+            v-model="editData[conf.code]"
           ></el-input>
         </template>
         <template v-else-if="conf.type=='textarea'">
@@ -61,18 +74,18 @@
             :disabled="conf.readOnly"
             type="textarea"
             :style="{width:inputWidth}"
-            v-model="editData[conf.key]"
+            v-model="editData[conf.code]"
           ></el-input>
         </template>
         <template v-else-if="conf.type=='date'">
           <el-date-picker
             :disabled="conf.readOnly"
             :style="{width:inputWidth}"
-            v-model="editData[conf.key]"
+            v-model="editData[conf.code]"
           ></el-date-picker>
         </template>
         <template v-else-if="conf.type=='radio'">
-          <el-radio-group v-model="editData[conf.key]">
+          <el-radio-group v-model="editData[conf.code]">
             <el-radio
               :disabled="conf.readOnly"
               v-for="(item , index) in conf.meta.list"
@@ -100,8 +113,8 @@
             </el-upload>
           </template>
         </template>
-        <template v-else-if="conf.type=='fullcalendar'">
-          <fullcalendar :list="editData.eventList"></fullcalendar>
+        <template v-else-if="conf.type=='workPlan-calendar'">
+          <fullcalendar :list="eventList"></fullcalendar>
         </template>
       </el-form-item>
     </template>
@@ -110,7 +123,10 @@
 
 <script>
 import fullcalendar from "components/fullcalendar.vue";
-import { analyseExcel } from "api/index";
+import { analyseExcel, uploadSchedualFile } from "api/index";
+import { baseUrl } from "utils/axios.js";
+import { getToken, dateFormater } from "utils/assist";
+import { funcMap } from "./dynamicFuncDefine";
 export default {
   components: { fullcalendar },
   props: {
@@ -124,16 +140,24 @@ export default {
     inputWidth: {
       type: String,
       default: "660px"
+    },
+    editData: {
+      type: Object,
+      default() {
+        return {};
+      }
     }
   },
+  computed: {},
   watch: {
     config(val) {}
   },
   data() {
     return {
+      eventList: [],
+      baseUrl,
       fileList: [],
       analyseHeader: { type: 0, startDate: "", endDate: "" },
-      editData: {},
       selectData: {
         gw: [
           {
@@ -149,23 +173,52 @@ export default {
     };
   },
   methods: {
-    changeImportDate(val) {
-      this.analyseHeader.startDate = val[0];
-      this.analyseHeader.endDate = val[1];
+    getDataByFuncName(conf) {
+      if (conf && conf.data && conf.data.function) {
+        let list = funcMap[conf.data.function]();
+        console.log(list, "list");
+        return list;
+      }
+      console.log(conf,'conf')
     },
-    importErr(err, file, fileList) {
-      this.$alert(decodeURIComponent(err.message), "错误");
-    },
-    afterImport(response, file, fileList) {
-      let { workPlanDateList } = response;
+    formatEventList(list1) {
       let list = [];
-      workPlanDateList.forEach(item => {
+      list1.forEach(item => {
         list.push({
           start: item.date,
           title: `${item.name} ${item.typeDictionary}`
         });
       });
-      this.$set(this.editData, "eventList", list);
+      return list;
+    },
+    changeImportDate(val) {
+      let tokenConfig = getToken();
+      this.analyseHeader.startDate = dateFormater(val[0], "yyyy-MM-dd");
+      this.analyseHeader.endDate = dateFormater(val[1], "yyyy-MM-dd");
+    },
+    importErr(err, file, fileList) {
+      this.$alert(decodeURIComponent(err.message), "错误");
+    },
+    rewriteUpload(e) {
+      var data = new FormData(); //重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
+      data.append("excelFile", e.file);
+      uploadSchedualFile({
+        data,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          startDate: this.analyseHeader.startDate,
+          endDate: this.analyseHeader.endDate,
+          type: this.analyseHeader.type
+        }
+      })
+        .then(({ workPlanDateList }) => {
+          this.eventList = this.eventList.concat(
+            this.formatEventList(workPlanDateList)
+          );
+        })
+        .catch(({ message }) => {
+          this.$alert(message, "错误");
+        });
     },
     beforeImport(type) {
       this.analyseHeader.type = type;

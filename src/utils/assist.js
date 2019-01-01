@@ -94,26 +94,29 @@ export function numToStr(num) {
   }
   return re;
 };
+
 const TOKEN_KEY = 'TOKEN_KEY'
-export const setToken = (token, dateTo = new Date().getTime()) => {
-  localStorage.setItem(TOKEN_KEY, JSON.stringify({
-    dateTo: dateTo,
-    token
-  }));
+export const setTokenSystem = (token) => {
+  let config = getToken();
+  console.log(config)
+  config.tokenSystem = token;
+  localStorage.setItem(TOKEN_KEY, JSON.stringify(config));
+}
+export const setTokenPlatform = (token) => {
+  let config = getToken();
+  config.tokenPlatform = token;
+  localStorage.setItem(TOKEN_KEY, JSON.stringify(config));
 }
 
 export const getToken = () => {
   // 如果当天本地记录有token,直接用于登录
-  const tokenData = localStorage.getItem(TOKEN_KEY);
+  let tokenData = localStorage.getItem(TOKEN_KEY);
   if (tokenData) {
-    let config = JSON.parse(tokenData);
-    let lastDate = new Date(config.dateTo);
-    let nowDate = new Date();
-    let token = config.token;
-    // return token && nowDate.getTime() < lastDate.getTime() ? token : false;
-    return token;
+    tokenData = JSON.parse(tokenData);
+  } else {
+    tokenData = {};
   }
-  return false
+  return tokenData;
 }
 
 /**

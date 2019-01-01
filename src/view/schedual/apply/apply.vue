@@ -8,7 +8,7 @@
     <el-card class="mgTop24">
       <list-search @search="onSearch"></list-search>
       <el-row class="bottom-row mgTop24">
-        <el-button type="primary" size="small" @click="showFormDo(scope.row)">申请排班</el-button>
+        <el-button type="primary" size="small" @click="showFormDo()">申请排班</el-button>
       </el-row>
       <section class="mgTop24">
         <el-table v-loading="bLoading" :data="dataSource" style="min-height: 400px">
@@ -69,18 +69,15 @@ export default {
     },
     showFormDetail(data) {
       this.$router.push({
-        path: "/document/seeSchedual/do",
+        path: "/document/seeSchedualApply/do",
         query: {
           id: data.id
         }
       });
     },
-    showFormDo(data) {
+    showFormDo() {
       this.$router.push({
-        path: "/document/schedual/do",
-        query: {
-          id: data.id
-        }
+        path: "/document/schedualApply/do"
       });
     },
     // 搜索

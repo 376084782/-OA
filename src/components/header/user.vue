@@ -3,8 +3,10 @@
     <el-dropdown trigger="click" @command="handleMenu">
       <section class="user-info">
         <img class="user-avatar" :src="avatar">
-        <span class="user-name">{{name}} <i class="el-icon-caret-bottom"></i></span>
-        
+        <span class="user-name">
+          {{name}}
+          <i class="el-icon-caret-bottom"></i>
+        </span>
       </section>
       <el-dropdown-menu class="user-dropdown-menu" slot="dropdown">
         <el-dropdown-item command="logout">
@@ -23,17 +25,19 @@ export default {
   data() {
     return {
       name: "用户名",
-      avatar: "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1114585158,1026985006&fm=27&gp=0.jpg"
+      avatar:
+        "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1114585158,1026985006&fm=27&gp=0.jpg"
     };
   },
   components: {},
   computed: {},
   methods: {
     handleMenu(menu) {
-      console.log(menu);
       switch (menu) {
         case "logout":
-          location.href = "https://box.imeete.com/v2/auth/logout";
+          this.$store.dispatch("userLogout").then(e=>{
+            this.$router.push('/login')
+          })
           break;
       }
     }

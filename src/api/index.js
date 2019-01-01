@@ -1,5 +1,78 @@
 import md5 from "js-md5";
-import Ajax from "utils/axios";
+import {
+  Ajax
+} from "utils/axios";
+
+
+export const createFlow = (data) => {
+  return Ajax.request({
+    url: "/oa/flow/processUser/create",
+    method: "post",
+    data
+  });
+};
+
+export const getPeopleList = ({
+  organizationRoleIdList
+}) => {
+  return Ajax.request({
+    url: "/oa/ums/organizationRoleMember/list",
+    method: "post",
+    data: {
+      organizationRoleIdList
+    }
+  });
+};
+
+
+export const uploadSchedualFile = ({
+  headers,
+  data
+}) => {
+  return Ajax.request({
+    url: "/oa/flow/workPlanExcel/file/analysis",
+    method: "post",
+    headers,
+    data
+  });
+};
+
+export const getInfo = () => {
+  console.log('login')
+  return Ajax.request({
+    url: "/oa/ums/user/info",
+    method: "post"
+  });
+};
+
+export const login = ({
+  loginAccount = '',
+  password = ''
+}) => {
+  const data = {
+    loginAccount,
+    password: md5(password)
+  };
+  return Ajax.request({
+    url: "/oa/ums/login/password",
+    data,
+    method: "post"
+  });
+};
+
+export const loginLP = () => {
+  return Ajax.request({
+    url: "/oa/ums/login/token",
+    method: "post"
+  });
+};
+export const logout = () => {
+  return Ajax.request({
+    url: "/oa/ums/login/logout",
+    method: "post"
+  });
+};
+
 
 export const getClubList = ({
   loginAccount,
@@ -64,14 +137,18 @@ export const scedualSearch = ({
   });
 };
 
-export const getDetail = ({
-  type
+export const getFormTemp = ({
+  modelType = 400,
+  fatherProcessUserWatchId = ''
 }) => {
-  // return Ajax.request({
-  //   url: '/oa/flow/processUserDetail/list',
-  //   data,
-  //   method: 'post'
-  // })
+  return Ajax.request({
+    url: '/oa/flow/processOrganization/list/modelType',
+    data: {
+      modelType,
+      fatherProcessUserWatchId
+    },
+    method: 'post'
+  })
   return new Promise(rsv => {
     rsv(getTestDyFormData(type));
   });
@@ -90,8 +167,18 @@ export const getDetail = ({
  */
 let testData = {
   schedualApply: {
+    processOrganizationList: {
+      title: '发起排班',
+
+      processOrganizationDetailList: [{
+
+      }]
+    }
+  },
+  seeSchedualApply: {
     activeStep: 1,
     contentStep: [{
+      readOnly: true,
       stepName: '申请',
       name: '发起人名',
       roleName: '职员',
@@ -168,6 +255,7 @@ let testData = {
       }]
     }],
     contentTop: [{
+      readOnly: true,
       label: '选择时间：',
       type: 'assignExcelAnalyse',
       key: "assignList",
@@ -175,14 +263,17 @@ let testData = {
         showType: ['1', '2']
       }
     }, {
+      readOnly: true,
       label: '标题：',
       type: 'input',
       required: true
     }, {
+      readOnly: true,
       label: '申请人：',
       type: 'input',
       required: true
     }, {
+      readOnly: true,
       label: '申请部门：',
       type: 'input',
       required: true
@@ -195,7 +286,6 @@ let testData = {
 }
 
 function getTestDyFormData(type) {
-  console.log(testData, type, testData[type])
   return testData[type] || [];
 }
 
