@@ -65,7 +65,17 @@ const menuList = {
         title: '调班申请',
         path: '/schedual/applyChange'
       }]
-    }, ]
+    }, {
+      title: '权限管理',
+      icon: 'lock',
+      subMenu: [{
+        title: '组织架构',
+        path: '/permission/organization'
+      }, {
+        title: '角色权限',
+        path: '/permission/character'
+      }]
+    }]
   },
   mutations: {
     setMenu(state, data) {

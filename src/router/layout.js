@@ -132,6 +132,21 @@ const pagesSchedual = [{
   }
 }, ]
 
+import permission from "view/permission/index";
+// 权限管理
+const pagesPermission = [{
+  path: '/permission/:type',
+  name: 'permissionSearch',
+  components: {
+    default: permission,
+    paths: breadcurmb
+  },
+  props: {
+    default: true,
+    paths: funcGetPath
+  }
+}, ]
+
 // 错误页面
 const errorPage = [{
   path: "/404",
@@ -145,7 +160,7 @@ const routes = [{
     // name: 'Normal',
     // component: Home
   }]
-  .concat(pagesDocument, pagesTask, pagesSchedual)
+  .concat(pagesDocument, pagesTask, pagesSchedual, pagesPermission)
   .concat(errorPage);
 
 export default routes;
