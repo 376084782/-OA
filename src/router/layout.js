@@ -132,11 +132,30 @@ const pagesSchedual = [{
   }
 }, ]
 
+import home from 'view/hp/hp'
+import login from 'view/login/index'
+import LayoutBase from 'layouts/base'
+
+
+// 系统首页
+const homePage = [{
+  path: '/hp',
+  name: 'homePage',
+  component: home
+  
+}]
 // 错误页面
 const errorPage = [{
   path: "/404",
   name: "Error404",
   component: Error404
+}];
+
+const loginPage = [{
+  path: "/login",
+  name: "login",
+  layouts: LayoutBase,
+  component: login
 }];
 
 const routes = [{
@@ -146,6 +165,8 @@ const routes = [{
     // component: Home
   }]
   .concat(pagesDocument, pagesTask, pagesSchedual)
-  .concat(errorPage);
+  .concat(errorPage)
+  .concat(homePage)
+  .concat(loginPage)
 
 export default routes;
