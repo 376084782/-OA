@@ -356,7 +356,28 @@ var configSchedual = {
     },
   ],
 }
-export const pathsConfig = Object.assign({}, configDocument, configTask, configSchedual)
+
+var configPermission = {
+  '/permission/organization': [{
+      name: "权限管理",
+      url: "/permission/organization"
+    },
+    {
+      name: "组织架构",
+      url: ""
+    }
+  ],
+  '/permission/character': [{
+      name: "权限管理",
+      url: "/permission/character"
+    },
+    {
+      name: "角色权限",
+      url: ""
+    }
+  ]
+}
+export const pathsConfig = Object.assign({}, configDocument, configTask, configSchedual, configPermission)
 export const funcGetPath = (route) => {
   return {
     paths: pathsConfig[route.path]

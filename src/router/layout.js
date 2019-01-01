@@ -155,12 +155,38 @@ const pagesSchedual = [{
 }, ]
 
 
+import home from 'view/hp/hp'
+import LayoutBase from 'layouts/base'
+
+import permission from "view/permission/index";
+// 权限管理
+const pagesPermission = [{
+  path: '/permission/:type',
+  name: 'permissionSearch',
+  components: {
+    default: permission,
+    paths: breadcurmb
+  },
+  props: {
+    default: true,
+    paths: funcGetPath
+  }
+}, ]
+
+// 系统首页
+const homePage = [{
+  path: '/hp',
+  name: 'homePage',
+  component: home
+  
+}]
+
 import Default from 'layouts/default'
 import Login from 'layouts/login'
 const routes = [{
   path: "/",
   component: Default,
-  children: [].concat(pagesDocument, pagesTask, pagesSchedual)
+  children: [].concat(pagesDocument, pagesTask, pagesSchedual,pagesPermission,homePage)
 }, {
   path: "/404",
   name: "Error404",

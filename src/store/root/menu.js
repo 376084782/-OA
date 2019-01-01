@@ -22,7 +22,10 @@ const menuList = {
     list: [{
       title: '系统首页',
       icon: 'home',
-      subMenu: []
+      subMenu: [{
+        title: '系统首页',
+        path: '/hp'
+      }]
     }, {
       title: '公文管理',
       icon: 'folder',
@@ -65,7 +68,17 @@ const menuList = {
         title: '调班申请',
         path: '/schedual/applyChange'
       }]
-    }, ]
+    }, {
+      title: '权限管理',
+      icon: 'lock',
+      subMenu: [{
+        title: '组织架构',
+        path: '/permission/organization'
+      }, {
+        title: '角色权限',
+        path: '/permission/character'
+      }]
+    }]
   },
   mutations: {
     setMenu(state, data) {

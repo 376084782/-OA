@@ -1,0 +1,59 @@
+.wrapper{
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  background: url(../images/beijing.png);
+  background-size: 100% 102%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+
+  .login-panel {
+    width: 392px;
+    height: 394px;
+    margin: 0 auto;
+    background-size: 100% 100%;
+    background-color: #fff;
+    padding: 40px 30px;
+      .title {
+        // margin-top: 100px;
+        height:30px;
+        font-size:24px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:#4B9FFD;
+        margin-top: 50px;
+        line-height: 30px;
+      }
+      .subtitle{
+        height:25px;
+        font-size:14px;
+        line-height: 25px;
+        font-family:ArialMT;
+        font-weight:400;
+        color:rgba(149,149,149,1);
+        opacity:0.8;
+        margin-bottom: 30px;
+      }
+    .btn-login{
+      width:392px;
+      height:56px;
+      line-height: 56px;
+      color: #fff;
+      text-align: center;
+      font-size: 24px;
+      letter-spacing: 5px;
+      margin-top: 40px;
+      background:#4B9FFD;
+      font-family:PingFangSC-Regular;
+      cursor: pointer;
+    }
+    }
+   
+}
+.app-header{
+  // display: none;
+}
