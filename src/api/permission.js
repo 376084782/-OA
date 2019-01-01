@@ -1,5 +1,5 @@
 import md5 from "js-md5";
-import Ajax from "utils/axios";
+import {Ajax} from "utils/axios";
 
 /* 获取部门树 */
 export const getDepartmentTree = ({

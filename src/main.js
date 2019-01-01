@@ -2,7 +2,6 @@
 // import 'assets/css/reset.scss';
 import 'plugins/element-ui';
 import 'plugins/viser';
-import 'plugins/ajax';
 import Common from 'plugins/common'
 import 'assets/css/index.js';
 import Vue from 'vue';
