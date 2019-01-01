@@ -13,70 +13,70 @@ import {
 
 // 公文管理
 const pagesDocument = [{
-    path: '/document/:type/do',
-    name: 'tableDo',
-    components: {
-      default: documentDoSponse,
-      paths: breadcurmb
-    },
-    props: {
-      paths: funcGetPath
-    }
-  }, {
-    path: "/document/sponse",
-    name: "documentSponse",
-    components: {
-      default: documentSponse,
-      paths: breadcurmb
-    },
-    props: {
-      paths: funcGetPath
-    }
+  path: '/document/:type/do',
+  name: 'tableDo',
+  components: {
+    default: documentDoSponse,
+    paths: breadcurmb
   },
-  {
-    path: "/document/assign",
-    name: "documentAssign",
-    components: {
-      default: documentAssign,
-      paths: breadcurmb
-    },
-    props: {
-      paths: funcGetPath
-    }
+  props: {
+    paths: funcGetPath
+  }
+}, {
+  path: "/document/sponse",
+  name: "documentSponse",
+  components: {
+    default: documentSponse,
+    paths: breadcurmb
   },
-  {
-    path: "/document/done",
-    name: "documentDone",
-    components: {
-      default: documentDone,
-      paths: breadcurmb
-    },
-    props: {
-      paths: funcGetPath
-    }
+  props: {
+    paths: funcGetPath
+  }
+},
+{
+  path: "/document/assign",
+  name: "documentAssign",
+  components: {
+    default: documentAssign,
+    paths: breadcurmb
   },
-  {
-    path: "/document/receive",
-    name: "documentReceive",
-    components: {
-      default: documentReceive,
-      paths: breadcurmb
-    },
-    props: {
-      paths: funcGetPath
-    }
+  props: {
+    paths: funcGetPath
+  }
+},
+{
+  path: "/document/done",
+  name: "documentDone",
+  components: {
+    default: documentDone,
+    paths: breadcurmb
   },
-  {
-    path: "/document/arrange",
-    name: "documentArrange",
-    components: {
-      default: documentArrange,
-      paths: breadcurmb
-    },
-    props: {
-      paths: funcGetPath
-    }
+  props: {
+    paths: funcGetPath
+  }
+},
+{
+  path: "/document/receive",
+  name: "documentReceive",
+  components: {
+    default: documentReceive,
+    paths: breadcurmb
   },
+  props: {
+    paths: funcGetPath
+  }
+},
+{
+  path: "/document/arrange",
+  name: "documentArrange",
+  components: {
+    default: documentArrange,
+    paths: breadcurmb
+  },
+  props: {
+    paths: funcGetPath
+  }
+},
 
 ];
 
@@ -119,6 +119,8 @@ const pagesTask = [{
 }]
 
 import schedualSearch from "view/schedual/search/search";
+import schedualApply from "view/schedual/apply/apply";
+import schedualApplyChange from "view/schedual/applyChange/applyChange";
 // 排班管理
 const pagesSchedual = [{
   path: '/schedual/search',
@@ -130,7 +132,27 @@ const pagesSchedual = [{
   props: {
     paths: funcGetPath
   }
-}, ]
+}, {
+    path: '/schedual/apply',
+    name: 'schedualApply',
+    components: {
+      default: schedualApply,
+      paths: breadcurmb
+    },
+    props: {
+      paths: funcGetPath
+    }
+  }, {
+    path: '/schedual/applyChange',
+    name: 'schedualApplyChange',
+    components: {
+      default: schedualApplyChange,
+      paths: breadcurmb
+    },
+    props: {
+      paths: funcGetPath
+    }
+  },]
 
 import home from 'view/hp/hp'
 import login from 'view/login/index'
@@ -159,11 +181,11 @@ const loginPage = [{
 }];
 
 const routes = [{
-    path: "/",
-    redirect: "/document/sponse"
-    // name: 'Normal',
-    // component: Home
-  }]
+  path: "/",
+  redirect: "/document/sponse"
+  // name: 'Normal',
+  // component: Home
+}]
   .concat(pagesDocument, pagesTask, pagesSchedual)
   .concat(errorPage)
   .concat(homePage)
