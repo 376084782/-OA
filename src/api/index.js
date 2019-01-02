@@ -1,10 +1,7 @@
 import md5 from "js-md5";
-import {
-  Ajax
-} from "utils/axios";
+import { Ajax } from "utils/axios";
 
-
-export const createFlow = (data) => {
+export const createFlow = data => {
   return Ajax.request({
     url: "/oa/flow/processUser/create",
     method: "post",
@@ -12,9 +9,7 @@ export const createFlow = (data) => {
   });
 };
 
-export const getPeopleList = ({
-  organizationRoleIdList
-}) => {
+export const getPeopleListByRole = ({ organizationRoleIdList }) => {
   return Ajax.request({
     url: "/oa/ums/organizationRoleMember/list",
     method: "post",
@@ -23,12 +18,16 @@ export const getPeopleList = ({
     }
   });
 };
-
-
-export const uploadSchedualFile = ({
-  headers,
-  data
-}) => {
+export const getPeopleListByOrg = ({ organizationGroupIdList }) => {
+  return Ajax.request({
+    url: "/oa/ums/organizationRoleMember/list",
+    method: "post",
+    data: {
+      organizationGroupIdList
+    }
+  });
+};
+export const uploadSchedualFile = ({ headers, data }) => {
   return Ajax.request({
     url: "/oa/flow/workPlanExcel/file/analysis",
     method: "post",
@@ -38,17 +37,14 @@ export const uploadSchedualFile = ({
 };
 
 export const getInfo = () => {
-  console.log('login')
+  console.log("login");
   return Ajax.request({
     url: "/oa/ums/user/info",
     method: "post"
   });
 };
 
-export const login = ({
-  loginAccount = '',
-  password = ''
-}) => {
+export const login = ({ loginAccount = "", password = "" }) => {
   const data = {
     loginAccount,
     password: md5(password)
@@ -73,11 +69,7 @@ export const logout = () => {
   });
 };
 
-
-export const getClubList = ({
-  loginAccount,
-  password
-}) => {
+export const getClubList = ({ loginAccount, password }) => {
   const data = {
     loginAccount,
     password: 2
@@ -90,12 +82,7 @@ export const getClubList = ({
 };
 
 // 解析排班excel
-export const analyseExcel = ({
-  type,
-  startDate,
-  endDate,
-  excelFile
-}) => {
+export const analyseExcel = ({ type, startDate, endDate, excelFile }) => {
   const data = {
     type,
     startDate,
@@ -119,10 +106,10 @@ export const analyseExcel = ({
 // 查询排班
 
 export const scedualSearch = ({
-  groupName = '',
-  startDate = '',
-  endDate = '',
-  name = ''
+  groupName = "",
+  startDate = "",
+  endDate = "",
+  name = ""
 }) => {
   const data = {
     groupName,
@@ -139,16 +126,16 @@ export const scedualSearch = ({
 
 export const getFormTemp = ({
   modelType = 400,
-  fatherProcessUserWatchId = ''
+  fatherProcessUserWatchId = ""
 }) => {
   return Ajax.request({
-    url: '/oa/flow/processOrganization/list/modelType',
+    url: "/oa/flow/processOrganization/list/modelType",
     data: {
       modelType,
       fatherProcessUserWatchId
     },
-    method: 'post'
-  })
+    method: "post"
+  });
   return new Promise(rsv => {
     rsv(getTestDyFormData(type));
   });
@@ -168,127 +155,153 @@ export const getFormTemp = ({
 let testData = {
   schedualApply: {
     processOrganizationList: {
-      title: '发起排班',
+      title: "发起排班",
 
-      processOrganizationDetailList: [{
-
-      }]
+      processOrganizationDetailList: [{}]
     }
   },
   seeSchedualApply: {
     activeStep: 1,
-    contentStep: [{
-      readOnly: true,
-      stepName: '申请',
-      name: '发起人名',
-      roleName: '职员',
-      showEdit: false,
-      detailList: [{
-        title1: '发起',
-        title3: '2018.08.27 10:57:30',
-        remark: '备注',
-      }],
-      content: [{
-        label: '下一步执行人：',
-        type: 'radio',
-        key: "nextPeople",
-        meta: {
-          list: [{
-            key: "0",
-            value: "李丽"
-          }, {
-            key: "1",
-            value: "曹云霞"
-          }]
-        }
-      }, {
-        label: '下一级办结时限：',
-        type: 'date',
-        key: "nextDate"
-      }]
-    }, {
-      stepName: '审核',
-      name: '李小丽',
-      roleName: '科长',
-      showEdit: true,
-      detailList: [{
-        className: 'success',
-        title1: '同意',
-        title2: '(这个人)',
-        title3: '2018.08.27 10:57:30',
-        remark: '备注',
-      }, {
-        className: 'danger',
-        title1: '同意',
-        title2: '(那个人)',
-        title3: '2018.08.27 10:57:30',
-        remark: '备注',
-      }, {
-        className: 'text-right',
-        title1: '主送单位',
-        title3: '杭州文文科技有限公司',
-      }, {
-        className: 'text-right',
-        title1: '传阅人',
-        title3: '李小花',
-      }, {
-        className: 'text-right',
-        title3: '2018.08.27 10:57:30',
-      }],
-      content: [{
-        label: '意见：',
-        type: 'radio',
-        key: "agree",
-        meta: {
-          list: [{
-            key: "0",
-            value: "同意"
-          }, {
-            key: "1",
-            value: "不同意"
-          }]
-        }
-      }, {
-        label: '',
-        type: 'textarea',
-        key: "reason"
-      }]
-    }],
-    contentTop: [{
-      readOnly: true,
-      label: '选择时间：',
-      type: 'assignExcelAnalyse',
-      key: "assignList",
-      meta: {
-        showType: ['1', '2']
+    contentStep: [
+      {
+        readOnly: true,
+        stepName: "申请",
+        name: "发起人名",
+        roleName: "职员",
+        showEdit: false,
+        detailList: [
+          {
+            title1: "发起",
+            title3: "2018.08.27 10:57:30",
+            remark: "备注"
+          }
+        ],
+        content: [
+          {
+            label: "下一步执行人：",
+            type: "radio",
+            key: "nextPeople",
+            meta: {
+              list: [
+                {
+                  key: "0",
+                  value: "李丽"
+                },
+                {
+                  key: "1",
+                  value: "曹云霞"
+                }
+              ]
+            }
+          },
+          {
+            label: "下一级办结时限：",
+            type: "date",
+            key: "nextDate"
+          }
+        ]
+      },
+      {
+        stepName: "审核",
+        name: "李小丽",
+        roleName: "科长",
+        showEdit: true,
+        detailList: [
+          {
+            className: "success",
+            title1: "同意",
+            title2: "(这个人)",
+            title3: "2018.08.27 10:57:30",
+            remark: "备注"
+          },
+          {
+            className: "danger",
+            title1: "同意",
+            title2: "(那个人)",
+            title3: "2018.08.27 10:57:30",
+            remark: "备注"
+          },
+          {
+            className: "text-right",
+            title1: "主送单位",
+            title3: "杭州文文科技有限公司"
+          },
+          {
+            className: "text-right",
+            title1: "传阅人",
+            title3: "李小花"
+          },
+          {
+            className: "text-right",
+            title3: "2018.08.27 10:57:30"
+          }
+        ],
+        content: [
+          {
+            label: "意见：",
+            type: "radio",
+            key: "agree",
+            meta: {
+              list: [
+                {
+                  key: "0",
+                  value: "同意"
+                },
+                {
+                  key: "1",
+                  value: "不同意"
+                }
+              ]
+            }
+          },
+          {
+            label: "",
+            type: "textarea",
+            key: "reason"
+          }
+        ]
       }
-    }, {
-      readOnly: true,
-      label: '标题：',
-      type: 'input',
-      required: true
-    }, {
-      readOnly: true,
-      label: '申请人：',
-      type: 'input',
-      required: true
-    }, {
-      readOnly: true,
-      label: '申请部门：',
-      type: 'input',
-      required: true
-    }, {
-      type: "fullcalendar",
-      label: "排班预览",
-      key: "assignList"
-    }]
+    ],
+    contentTop: [
+      {
+        readOnly: true,
+        label: "选择时间：",
+        type: "assignExcelAnalyse",
+        key: "assignList",
+        meta: {
+          showType: ["1", "2"]
+        }
+      },
+      {
+        readOnly: true,
+        label: "标题：",
+        type: "input",
+        required: true
+      },
+      {
+        readOnly: true,
+        label: "申请人：",
+        type: "input",
+        required: true
+      },
+      {
+        readOnly: true,
+        label: "申请部门：",
+        type: "input",
+        required: true
+      },
+      {
+        type: "fullcalendar",
+        label: "排班预览",
+        key: "assignList"
+      }
+    ]
   }
-}
+};
 
 function getTestDyFormData(type) {
   return testData[type] || [];
 }
-
 
 // contentTop: [{
 //   readOnly: true,

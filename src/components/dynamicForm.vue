@@ -21,7 +21,6 @@
               :headers="analyseHeader"
               name="excelFile"
               :http-request="rewriteUpload"
-              :on-error="importErr"
               :before-upload="beforeImport(type)"
               :file-list="fileList"
               :show-file-list="false"
@@ -176,10 +175,14 @@ export default {
     getDataByFuncName(conf) {
       if (conf && conf.data && conf.data.function) {
         let list = funcMap[conf.data.function]();
-        console.log(list, "list");
+        if (
+          conf.data.function == "getCurrentUserInfo" ||
+          conf.data.function == "getCurrentUserGroupList"
+        ) {
+          this.$set(this.editData, conf.code, list[0].key);
+        }
         return list;
       }
-      console.log(conf,'conf')
     },
     formatEventList(list1) {
       let list = [];
@@ -192,15 +195,16 @@ export default {
       return list;
     },
     changeImportDate(val) {
-      let tokenConfig = getToken();
       this.analyseHeader.startDate = dateFormater(val[0], "yyyy-MM-dd");
       this.analyseHeader.endDate = dateFormater(val[1], "yyyy-MM-dd");
     },
-    importErr(err, file, fileList) {
-      this.$alert(decodeURIComponent(err.message), "错误");
-    },
     rewriteUpload(e) {
-      var data = new FormData(); //重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
+      if (!this.analyseHeader.startDate || !this.analyseHeader.endDate) {
+        // 没选择时间
+        this.$alert("清先选择时间", "错误");
+        return;
+      }
+      let data = new FormData();
       data.append("excelFile", e.file);
       uploadSchedualFile({
         data,

@@ -24,7 +24,12 @@
   </section>
 </template>
 <script>
-import { getFormTemp, createFlow, getPeopleList } from "api/index";
+import {
+  getFormTemp,
+  createFlow,
+  getPeopleListByOrg,
+  getPeopleListByRole
+} from "api/index";
 import ModalJs from "./components/modalJS";
 import ModalZb from "./components/modalZB";
 export default {
@@ -64,69 +69,72 @@ export default {
           });
           if (step == 0) {
             this.contentTop = confContent;
-            console.log(this.contentTop);
-
             let listPeople = config.nextProcessUserDetailList;
-            let organizationRoleIdList = [];
-            let organizationGroupIdList = [];
-            listPeople.forEach(item => {
-              if (item.persionType == 3) {
-                organizationRoleIdList.push(item.businessId);
-              } else if (item.persionType == 2) {
-                organizationGroupIdList.push(item.businessId);
-              }
-            });
-            // this.createConfNext({
-            //   organizationRoleIdList,
-            //   organizationGroupIdList
-            // }).then(e => {
-            //   console.log(e, 222);
-            //   this.confNext = e;
-            //   this.$set(this.stepConfig[0], "content", confNext);
-            //   this.stepConfig[0].showEdit = true;
-            //   this.stepConfig[0].content = confNext;
-            // });
+            this.createConfNext(listPeople);
           }
         });
       });
     },
-    createConfNext({ organizationRoleIdList, organizationGroupIdList }) {
-      let listNext = [
-        {
-          value: "一号",
-          key: 0
-        },
-        {
-          value: "二号",
-          key: 2
-        }
-      ];
+    createConfNext(listPeople) {
+      let listNext = [];
       let list = [
         {
-          label: "下一步执行人",
+          name: "下一步执行人",
           type: "radio",
-          key: "next",
+          code: "next",
           meta: {
             list: listNext
           }
         },
         {
-          label: "下一步办结时限",
+          name: "下一步办结时限",
           type: "date"
         }
       ];
-      return new Promise((rsv, rej) => {
-        if (organizationGroupIdList.length > 0) {
-        } else if (organizationRoleIdList.length > 0) {
-          getPeopleList({ organizationRoleIdList })
-            .then(e => {
-              console.log(e, "organizationRoleIdList");
-              rsv(list);
-            })
-            .catch(e => {
-              rej(e);
-            });
+      this.$set(this.stepConfig[0], "content", list);
+      this.$set(this.stepConfig[0], "showEdit", true);
+      let organizationRoleIdList = [];
+      let organizationGroupIdList = [];
+      listPeople.forEach(item => {
+        if (item.persionType == 3) {
+          organizationRoleIdList.push(item.businessId);
+        } else if (item.persionType == 2) {
+          organizationGroupIdList.push(item.businessId);
         }
+      });
+      return new Promise((rsv, rej) => {
+        let prArr = [];
+        let resMap = {};
+        if (organizationGroupIdList.length > 0) {
+          prArr.push(getPeopleListByOrg({ organizationGroupIdList }));
+          resMap.resGroup = prArr.length - 1;
+        }
+        if (organizationRoleIdList.length > 0) {
+          prArr.push(getPeopleListByRole({ organizationRoleIdList }));
+          resMap.resRole = prArr.length - 1;
+        }
+        Promise.all(prArr).then(e => {
+          // e = [
+          //   [{ key: 1, value: 2 }, { key: 2, value: 3 }],
+          //   [{ key: 2, value: 9 }]
+          // ];
+          e.forEach((item, index) => {
+            if (index == 0) {
+              // 设置第一步执行人
+              this.stepConfig[0].content[0].meta.list = item;
+            } else {
+              this.stepConfig[0].content.splice(this.stepConfig[0].content.length - 1, 0, {
+                name: "",
+                type: "radio",
+                code: "next" + index,
+                meta: {
+                  list: item
+                }
+              });
+            }
+          });
+          console.log(this.stepConfig)
+        });
       });
     },
     /** 点击按钮部分 */
