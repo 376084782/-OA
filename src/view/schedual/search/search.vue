@@ -29,6 +29,7 @@ export default {
       scedualSearch(this.searchParams)
         .then(({ workPlanDateInfoList }) => {
           let list = [];
+          workPlanDateInfoList = workPlanDateInfoList || [];
           workPlanDateInfoList.forEach(item => {
             let className = "";
             if (item.date == dateFormater(new Date(), "YYYY-MM-DD")) {

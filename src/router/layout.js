@@ -185,6 +185,7 @@ import Default from 'layouts/default'
 import Login from 'layouts/login'
 const routes = [{
   path: "/",
+  redirect:'/hp',
   component: Default,
   children: [].concat(pagesDocument, pagesTask, pagesSchedual,pagesPermission,homePage)
 }, {
