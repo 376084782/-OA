@@ -18,6 +18,7 @@
       <task-current></task-current>
     </el-col>
   </el-row>
+    <modal-system :visible.sync="showSystem"></modal-system>
 </section>
 </template>
 <script>
@@ -27,17 +28,20 @@ import taskNotice from './components/notice'
 import taskSchedule from './components/schedule'
 import taskCurrent from './components/taskCurrent'
 import taskDispatch from './components/taskDispatch'
+import modalSystem from './components/modalSystem'
 
 export default {
   data() {
     return {
-      name: '王存'
+      name: '王存',
+      showSystem: true
     }
   },
   components: {
     hpHeader,
     taskMail,
     taskNotice,
+    modalSystem,
     // mail,
     // notice,
     taskSchedule,

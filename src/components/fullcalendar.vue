@@ -1,5 +1,5 @@
 <template>
-  <div class="fullcalendar-outer">
+  <div class="fullcalendar-outer noraml">
     <div ref="main" class="fullcalendar-wrap" :style="{width,height}"></div>
   </div>
 </template>
