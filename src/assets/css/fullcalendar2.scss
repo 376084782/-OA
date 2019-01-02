@@ -1,56 +1,64 @@
-.fc-view-container{
- 
-}
-.fc-unthemed .fc-content, .fc-unthemed .fc-divider, .fc-unthemed .fc-list-heading td, .fc-unthemed .fc-list-view, .fc-unthemed .fc-popover, .fc-unthemed .fc-row, .fc-unthemed tbody, .fc-unthemed td, .fc-unthemed th, .fc-unthemed thead{
-  border:none !important;
-}
-.fc-basic-view .fc-body .fc-row {
-  height: 40px;
-  line-height: 40px;
-}
-.fc-basic-view .fc-body .fc-row {
-  min-height: 40px !important;
-}
-.fc td, .fc th {
-  border-style: solid;
-  border-width: 1px;
-  padding: 0;
-   vertical-align: middle !important;
-   text-align: center; 
-}
-.fc-day-number{
-  width: 100%;
-  text-align: center;
-  height: 36px;
-  line-height: 36px !important;
-}
-.fc-today {
-  span{
-    width: 36px;
+.wrap-fullcalendar2{
+  .fc-unthemed .fc-content, .fc-unthemed .fc-divider, .fc-unthemed .fc-list-heading td, .fc-unthemed .fc-list-view, .fc-unthemed .fc-popover, .fc-unthemed .fc-row, .fc-unthemed tbody, .fc-unthemed td, .fc-unthemed th, .fc-unthemed thead{
+    border:none !important;
+  }
+  .fc-basic-view .fc-body .fc-row {
+    height: 40px;
+    line-height: 40px;
+  }
+  .fc-basic-view .fc-body .fc-row {
+    min-height: 40px !important;
+  }
+  .fc td, .fc th {
+    border-style: solid;
+    border-width: 1px;
+    padding: 0;
+     vertical-align: middle !important;
+     text-align: center; 
+  }
+  .fc-day-number{
+    width: 100%;
+    text-align: center;
     height: 36px;
-    border-radius: 36px;
-    background-color: #5C88F6 !important;
-    color: #fff;
+    line-height: 36px !important;
+    display: inline-block;
+    float: none !important;
   }
-}
-.fullcalendar-outer .fullcalendar-wrap .fc-toolbar{
-  height: 35px !important;
-  background-color: #fff !important;
-  margin-bottom: 10px;
-  h2{
-    line-height: 35px!important;
+  .fc-today {
+    span{
+      width: 36px;
+      height: 36px;
+      border-radius: 36px;
+      background-color: #5C88F6 !important;
+      color: #fff;
+    }
+  }
+  & {
+  width: 100%;
+  .fullcalendar-wrap {
+    width: 100%;
+    .fc-toolbar{
     height: 35px !important;
+    background-color: #fff !important;
+    margin-bottom: 10px;
+    h2{
+      line-height: 35px!important;
+      height: 35px !important;
+    }
+    .fc-button{
+      line-height: 35px!important;
+      height: 35px !important;
+    }
   }
-  .fc-button{
-    line-height: 35px!important;
-    height: 35px !important;
   }
-}
-.fc td, .fc th span{
-  font-size:14px;
-font-family:PingFangSC-Regular;
-font-weight:400;
-color:rgba(0,0,0,1);
-line-height:32px;
-opacity:0.65;
+  }
+  .fc td, .fc th span{
+    font-size:14px;
+  font-family:PingFangSC-Regular;
+  font-weight:400;
+  color:rgba(0,0,0,1);
+  line-height:32px;
+  opacity:0.65;
+  }
+  
 }

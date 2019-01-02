@@ -1,5 +1,5 @@
 <template>
-  <div class="fullcalendar-outer">
+  <div class="fullcalendar-outer wrap-fullcalendar2">
     <div ref="main" class="fullcalendar-wrap" :style="{width,height}"></div>
   </div>
 </template>
@@ -18,7 +18,7 @@ export default {
     },
     width: {
       type: String,
-      default: "320px"
+      default: ""
     }
   },
   data() {
@@ -42,6 +42,7 @@ export default {
     initCalender() {
       var event = this.root.fullCalendar({
         height: "parent",
+        // width: "parent",
         monthNames: [
           "一月",
           "二月",

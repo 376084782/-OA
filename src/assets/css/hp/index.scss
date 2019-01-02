@@ -18,10 +18,12 @@
     height: 90px;
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    margin-left: -20px;
     .card{
       width: 272px;
       height: 90px;
+      margin-left: 20px;
       background-color: #fff;
       h5 {
         font-size: 14px;
