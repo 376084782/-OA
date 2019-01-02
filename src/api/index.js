@@ -1,5 +1,63 @@
 import md5 from "js-md5";
-import { Ajax } from "utils/axios";
+import {
+  Ajax
+} from "utils/axios";
+
+export const getListProcess = ({
+  modelType = 100,
+  keyWord = '',
+  startTime = '',
+  deadTime = '',
+  pageNo = 1,
+  pageSize = 20,
+  dateFormat = '%Y%m%d',
+  organization = null,
+  pageSearchStatus = null
+}) => {
+  return Ajax.request({
+    url: "/oa/flow/processUser/page/user",
+    method: "post",
+    data: {
+      modelType,
+      keyWord,
+      startTime,
+      deadTime,
+      pageNo,
+      pageSize,
+      dateFormat,
+      organization,
+      pageSearchStatus
+    }
+  });
+};
+
+export const getListMySendProcess = ({
+  modelType = 100,
+  keyWord = '',
+  startTime = '',
+  deadTime = '',
+  pageNo = 1,
+  pageSize = 20,
+  dateFormat = '%Y%m%d',
+  organization = null,
+  pageSearchStatus = null
+}) => {
+  return Ajax.request({
+    url: "/oa/flow/processUser/page/send",
+    method: "post",
+    data: {
+      modelType,
+      keyWord,
+      startTime,
+      deadTime,
+      pageNo,
+      pageSize,
+      dateFormat,
+      organization,
+      pageSearchStatus
+    }
+  });
+};
 
 export const createFlow = data => {
   return Ajax.request({
@@ -9,7 +67,9 @@ export const createFlow = data => {
   });
 };
 
-export const getPeopleListByRole = ({ organizationRoleIdList }) => {
+export const getPeopleListByRole = ({
+  organizationRoleIdList
+}) => {
   return Ajax.request({
     url: "/oa/ums/organizationRoleMember/list",
     method: "post",
@@ -18,16 +78,21 @@ export const getPeopleListByRole = ({ organizationRoleIdList }) => {
     }
   });
 };
-export const getPeopleListByOrg = ({ organizationGroupIdList }) => {
+export const getPeopleListByOrg = ({
+  organizationGroupIdList
+}) => {
   return Ajax.request({
-    url: "/oa/ums/organizationRoleMember/list",
+    url: "/oa/ums/organizationGroupMember/list",
     method: "post",
     data: {
       organizationGroupIdList
     }
   });
 };
-export const uploadSchedualFile = ({ headers, data }) => {
+export const uploadSchedualFile = ({
+  headers,
+  data
+}) => {
   return Ajax.request({
     url: "/oa/flow/workPlanExcel/file/analysis",
     method: "post",
@@ -44,7 +109,10 @@ export const getInfo = () => {
   });
 };
 
-export const login = ({ loginAccount = "", password = "" }) => {
+export const login = ({
+  loginAccount = "",
+  password = ""
+}) => {
   const data = {
     loginAccount,
     password: md5(password)
@@ -69,7 +137,10 @@ export const logout = () => {
   });
 };
 
-export const getClubList = ({ loginAccount, password }) => {
+export const getClubList = ({
+  loginAccount,
+  password
+}) => {
   const data = {
     loginAccount,
     password: 2
@@ -82,7 +153,12 @@ export const getClubList = ({ loginAccount, password }) => {
 };
 
 // 解析排班excel
-export const analyseExcel = ({ type, startDate, endDate, excelFile }) => {
+export const analyseExcel = ({
+  type,
+  startDate,
+  endDate,
+  excelFile
+}) => {
   const data = {
     type,
     startDate,
@@ -162,28 +238,23 @@ let testData = {
   },
   seeSchedualApply: {
     activeStep: 1,
-    contentStep: [
-      {
+    contentStep: [{
         readOnly: true,
         stepName: "申请",
         name: "发起人名",
         roleName: "职员",
         showEdit: false,
-        detailList: [
-          {
-            title1: "发起",
-            title3: "2018.08.27 10:57:30",
-            remark: "备注"
-          }
-        ],
-        content: [
-          {
+        detailList: [{
+          title1: "发起",
+          title3: "2018.08.27 10:57:30",
+          remark: "备注"
+        }],
+        content: [{
             label: "下一步执行人：",
             type: "radio",
             key: "nextPeople",
             meta: {
-              list: [
-                {
+              list: [{
                   key: "0",
                   value: "李丽"
                 },
@@ -206,8 +277,7 @@ let testData = {
         name: "李小丽",
         roleName: "科长",
         showEdit: true,
-        detailList: [
-          {
+        detailList: [{
             className: "success",
             title1: "同意",
             title2: "(这个人)",
@@ -236,14 +306,12 @@ let testData = {
             title3: "2018.08.27 10:57:30"
           }
         ],
-        content: [
-          {
+        content: [{
             label: "意见：",
             type: "radio",
             key: "agree",
             meta: {
-              list: [
-                {
+              list: [{
                   key: "0",
                   value: "同意"
                 },
@@ -262,8 +330,7 @@ let testData = {
         ]
       }
     ],
-    contentTop: [
-      {
+    contentTop: [{
         readOnly: true,
         label: "选择时间：",
         type: "assignExcelAnalyse",

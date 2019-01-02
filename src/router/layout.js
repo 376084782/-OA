@@ -1,11 +1,11 @@
-import Error404 from "layouts/404";
 import breadcurmb from "components/breadcurmb";
-import documentSponse from "view/document/sponse/sponse";
-import documentDoSponse from "view/form/do";
-import documentAssign from "view/document/assign/assign";
-import documentDone from "view/document/done/done";
-import documentReceive from "view/document/receive/receive";
-import documentArrange from "view/document/arrange/arrange";
+const Error404 = () => import('layouts/404')
+const documentSponse = () => import('view/document/sponse/sponse')
+const documentDoSponse = () => import('view/form/do')
+const documentAssign = () => import('view/document/assign/assign')
+const documentDone = () => import('view/document/done/done')
+const documentReceive = () => import('view/document/receive/receive')
+const documentArrange = () => import('view/document/arrange/arrange')
 
 import {
   funcGetPath
@@ -81,9 +81,9 @@ const pagesDocument = [{
 ];
 
 
-import taskMine from "view/task/mine/mine";
-import taskDone from "view/task/done/done";
-import taskSub from "view/task/subList/subList";
+const taskMine = () => import('view/task/mine/mine')
+const taskDone = () => import('view/task/done/done')
+const taskSub = () => import('view/task/subList/subList')
 
 // 任务管理
 const pagesTask = [{
@@ -118,9 +118,10 @@ const pagesTask = [{
   }
 }]
 
-import schedualSearch from "view/schedual/search/search";
-import schedualApply from "view/schedual/apply/apply";
-import schedualApplyChange from "view/schedual/applyChange/applyChange";
+const schedualSearch = () => import('view/schedual/search/search')
+const schedualApply = () => import('view/schedual/apply/apply')
+const schedualApplyChange = () => import('view/schedual/applyChange/applyChange')
+
 // 排班管理
 const pagesSchedual = [{
   path: '/schedual/search',
@@ -155,10 +156,10 @@ const pagesSchedual = [{
 }, ]
 
 
-import home from 'view/hp/hp'
-import LayoutBase from 'layouts/base'
+const home = () => import('view/hp/hp')
+const LayoutBase = () => import('layouts/base')
+const permission = () => import('view/permission/index')
 
-import permission from "view/permission/index";
 // 权限管理
 const pagesPermission = [{
   path: '/permission/:type',
@@ -181,8 +182,9 @@ const homePage = [{
   
 }]
 
-import Default from 'layouts/default'
-import Login from 'layouts/login'
+const Default = () => import('layouts/default')
+const Login = () => import('layouts/login')
+
 const routes = [{
   path: "/",
   redirect:'/hp',

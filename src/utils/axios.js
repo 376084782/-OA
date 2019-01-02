@@ -33,7 +33,6 @@ class HttpRequest {
   }
   getInsideConfig() {
     let tokenConfig = getToken();
-    console.log(tokenConfig)
     const config = {
       baseURL: this.baseUrl,
       headers: {

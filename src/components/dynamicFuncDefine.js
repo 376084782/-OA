@@ -1,6 +1,6 @@
 import store from 'store'
 
-let getCurrentUserInfo = () => {
+export function getCurrentUserInfo() {
   let {
     userInfo,
   } = store.state.login;
@@ -10,7 +10,7 @@ let getCurrentUserInfo = () => {
   }]
 }
 
-function getCurrentUserGroupList() {
+export function getCurrentUserGroupList() {
   let {
     groupList
   } = store.state.login;
@@ -26,5 +26,5 @@ function getCurrentUserGroupList() {
 
 export const funcMap = {
   getCurrentUserInfo,
-  getCurrentUserGroupList
+  getCurrentUserGroupList,
 }

@@ -20,6 +20,7 @@
               :action="`${baseUrl}/oa/flow/workPlanExcel/file/analysis`"
               :headers="analyseHeader"
               name="excelFile"
+              :data="conf"
               :http-request="rewriteUpload"
               :before-upload="beforeImport(type)"
               :file-list="fileList"
@@ -199,6 +200,7 @@ export default {
       this.analyseHeader.endDate = dateFormater(val[1], "yyyy-MM-dd");
     },
     rewriteUpload(e) {
+      let conf = e.data;
       if (!this.analyseHeader.startDate || !this.analyseHeader.endDate) {
         // 没选择时间
         this.$alert("清先选择时间", "错误");
@@ -216,6 +218,12 @@ export default {
         }
       })
         .then(({ workPlanDateList }) => {
+          let list = [];
+          if (this.editData[conf.code]) {
+            list = list.concat(this.editData[conf.code]);
+          }
+          list = list.concat(workPlanDateList);
+          this.$set(this.editData, conf.code, list);
           this.eventList = this.eventList.concat(
             this.formatEventList(workPlanDateList)
           );

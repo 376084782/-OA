@@ -1,8 +1,8 @@
 <template>
-  <section>
+  <section v-loading="loading">
     <el-card class="mgTop24">
       <!-- <h3>发文拟稿</h3> -->
-      <dynamic-form :edit-data="editData" class="mgTop24" :config="contentTop"></dynamic-form>
+      <dynamic-form ref="editTop" :edit-data="editData" class="mgTop24" :config="contentTop"></dynamic-form>
       <div class="line mgTop40"></div>
       <h4 class="mgTop40 mgLeft75">公文处理流程图：</h4>
       <step
@@ -13,10 +13,14 @@
         class="mgTop24 mgLeft185"
       ></step>
       <el-row class="mgLeft185">
-        <el-button type="primary" @click="clickFP">分派</el-button>
-        <el-button @click="clickJS">拒收</el-button>
-        <el-button @click="clickZB">转办</el-button>
-        <el-button type="primary" @click="clickTJ">提交</el-button>
+        <template v-if="isStep1">
+          <el-button type="primary" @click="clickTJ">提交</el-button>
+        </template>
+        <template v-else>
+          <el-button type="primary" @click="clickFP">分派</el-button>
+          <el-button @click="clickJS">拒收</el-button>
+          <el-button @click="clickZB">转办</el-button>
+        </template>
       </el-row>
     </el-card>
     <modal-js :visible.sync="showJS"></modal-js>
@@ -34,8 +38,14 @@ import ModalJs from "./components/modalJS";
 import ModalZb from "./components/modalZB";
 export default {
   components: { ModalJs, ModalZb },
+  computed: {
+    isStep1() {
+      return true;
+    }
+  },
   data() {
     return {
+      loading: true,
       showJS: false,
       showZB: false,
       activeStep: 0,
@@ -43,7 +53,6 @@ export default {
       nextPeople: 0,
       radio2: 0,
       contentTop: [],
-      contentStep: [],
       stepConfig: [],
       editData: {}
     };
@@ -56,6 +65,7 @@ export default {
       let typeMap = {
         schedualApply: 400
       };
+      this.loading = true;
       getFormTemp({
         type: typeMap[this.$route.params.type]
       }).then(e => {
@@ -73,6 +83,7 @@ export default {
             this.createConfNext(listPeople);
           }
         });
+        this.loading = false;
       });
     },
     createConfNext(listPeople) {
@@ -114,28 +125,38 @@ export default {
           resMap.resRole = prArr.length - 1;
         }
         Promise.all(prArr).then(e => {
-          // e = [
-          //   [{ key: 1, value: 2 }, { key: 2, value: 3 }],
-          //   [{ key: 2, value: 9 }]
-          // ];
           e.forEach((item, index) => {
+            let list = this.formatUserList(item.userList);
             if (index == 0) {
               // 设置第一步执行人
-              this.stepConfig[0].content[0].meta.list = item;
+              this.stepConfig[0].content[0].meta.list = list;
             } else {
-              this.stepConfig[0].content.splice(this.stepConfig[0].content.length - 1, 0, {
-                name: "",
-                type: "radio",
-                code: "next" + index,
-                meta: {
-                  list: item
+              this.stepConfig[0].content.splice(
+                this.stepConfig[0].content.length - 1,
+                0,
+                {
+                  name: "",
+                  type: "radio",
+                  code: "next" + index,
+                  meta: {
+                    list: list
+                  }
                 }
-              });
+              );
             }
           });
-          console.log(this.stepConfig)
         });
       });
+    },
+    formatUserList(list) {
+      let res = [];
+      list.forEach(item => {
+        res.push({
+          key: item.userId,
+          value: item.userName
+        });
+      });
+      return res;
     },
     /** 点击按钮部分 */
     clickFP() {},
@@ -148,10 +169,17 @@ export default {
     clickTJ() {
       let valueContent = [];
       this.contentTop.forEach(item => {
-        console.log(item);
         valueContent.push({
-          code: item.key,
-          value: this.editData[item.key],
+          code: item.code,
+          value: this.editData[item.code],
+          type: item.type,
+          fixed: item.fixed
+        });
+      });
+      this.stepConfig[0].content.forEach(item => {
+        valueContent.push({
+          code: item.code,
+          value: this.editData[item.code],
           type: item.type,
           fixed: item.fixed
         });

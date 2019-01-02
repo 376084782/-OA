@@ -25,7 +25,6 @@ const PATH_LOGIN = '/login'
 config.beforeEach((to, from, next) => {
   const tokenConfig = getToken();
   let flagGetInfo = store.state.login.flagGetInfo;
-  console.log(flagGetInfo, store)
   let token = tokenConfig.tokenSystem;
   let funcJump = () => {
     if (token && to.path === PATH_LOGIN) {
