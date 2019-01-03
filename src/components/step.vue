@@ -2,20 +2,22 @@
   <div ref="root" class="common-step" :style="{'min-height':minHeight}">
     <div class="section">
       <slot></slot>
-      <el-row type="flex" v-for="(conf,index) in data" :key="index" class="area">
+      <el-row type="flex" v-for="(conf,index) in config" :key="index" class="area">
         <el-col style="width:50px;margin-right:20px;" class="line-wrap">
           <div class="circle" :class="circleClass(index)">{{conf.stepName}}</div>
           <div
-            v-if="index<data.length-1"
+            v-if="index<config.length-1"
             class="line-dash"
             :class="index<active?'success':'disabled'"
           ></div>
         </el-col>
         <el-col>
           <el-row type="flex" class="detail">
-            <el-col style="width:80px;">
-              <span class="name">{{conf.name}}</span>
-              <el-tag class="role">{{conf.roleName}}</el-tag>
+            <el-col class="left">
+              <el-row class="user-list-wrap" v-for="(item,index) in conf.userList" :key="index" type="flex">
+                <span class="name">{{item.name}}</span>
+                <el-tag class="role">{{item.roleName}}</el-tag>
+              </el-row>
             </el-col>
             <el-col>
               <div>
@@ -26,6 +28,7 @@
                         <dynamic-form
                           input-width="280px"
                           label-width="160px"
+                          :edit-data="data"
                           :config="conf.content||[]"
                         ></dynamic-form>
                       </el-row>
@@ -55,6 +58,12 @@ import "assets/css/step.scss";
 export default {
   props: {
     data: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
+    config: {
       type: Array,
       default() {
         return [

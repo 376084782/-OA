@@ -150,7 +150,8 @@ export default {
   },
   computed: {},
   watch: {
-    config(val) {}
+    editData(val) {
+    }
   },
   data() {
     return {

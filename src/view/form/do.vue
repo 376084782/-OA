@@ -9,18 +9,15 @@
         ref="step"
         :style="{height:activeStep==3?'650px':'auto'}"
         :active="activeStep"
-        :data="stepConfig"
+        :config="stepConfig"
+        :data="stepData"
         class="mgTop24 mgLeft185"
       ></step>
       <el-row class="mgLeft185">
-        <template v-if="isStep1">
-          <el-button type="primary" @click="clickTJ">提交</el-button>
-        </template>
-        <template v-else>
-          <el-button type="primary" @click="clickFP">分派</el-button>
+        <form-btn v-for="(conf,index) in buttonConfig" :key="index" :conf="conf" @clickTJ="clickTJ"></form-btn>
+        <!-- <el-button type="primary" @click="clickFP">分派</el-button>
           <el-button @click="clickJS">拒收</el-button>
-          <el-button @click="clickZB">转办</el-button>
-        </template>
+        <el-button @click="clickZB">转办</el-button>-->
       </el-row>
     </el-card>
     <modal-js :visible.sync="showJS"></modal-js>
@@ -34,10 +31,11 @@ import {
   getPeopleListByOrg,
   getPeopleListByRole
 } from "api/index";
+import FormBtn from "./components/FormBtn";
 import ModalJs from "./components/modalJS";
 import ModalZb from "./components/modalZB";
 export default {
-  components: { ModalJs, ModalZb },
+  components: { ModalJs, ModalZb, FormBtn },
   computed: {
     isStep1() {
       return true;
@@ -54,6 +52,8 @@ export default {
       radio2: 0,
       contentTop: [],
       stepConfig: [],
+      stepData: {},
+      buttonConfig: [],
       editData: {}
     };
   },
@@ -69,25 +69,51 @@ export default {
       getFormTemp({
         type: typeMap[this.$route.params.type]
       }).then(e => {
-        let { processOrganizationList } = e;
-        let config = processOrganizationList[0] || {};
-        let stepList = config.processOrganizationDetailList;
+        let { processUserDetailResponseList } = e;
+        let config = processUserDetailResponseList[0] || {};
+        let confContent = JSON.parse(config.processUser.content);
+        this.contentTop = confContent;
+        if (config.valueContent) {
+          let valueContent = JSON.parse(config.valueContent);
+          Object.assign(this.editData, valueContent);
+        }
+        this.buttonConfig = config.processButtonInfoList;
+        let stepList = config.processUserStepList;
         stepList.forEach((item, step) => {
-          let confContent = JSON.parse(item.content);
-          this.stepConfig.push({
-            stepName: item.title
+          let stepData = this.stepConfig[item.step - 1] || {};
+          this.$set(this.stepConfig, item.step - 1, stepData);
+          let userList = [];
+          item.processUserDetailList.forEach(userItem => {
+            userList.push({
+              name: userItem.businessName,
+              roleName: "测试角色"
+            });
+            if (item.isDoingStep && userItem.isCurrentUserStep) {
+              let cnt = [];
+              if (userItem.content) {
+                cnt = JSON.parse(userItem.content);
+              }
+              stepData.content = cnt;
+            }
           });
-          if (step == 0) {
-            this.contentTop = confContent;
-            let listPeople = config.nextProcessUserDetailList;
-            this.createConfNext(listPeople);
-          }
+          stepData.userList = userList;
+          stepData.stepName = item.stepName;
+          stepData.showEdit = item.isDoingStep;
+          this.$set(this.stepConfig, item.step - 1, stepData);
+          this.createConfNext(item.processUserDetailList, step);
         });
         this.loading = false;
       });
     },
-    createConfNext(listPeople) {
+    createConfNext(listPeople, step) {
+      if (step == this.stepConfig.length) {
+        // 已经是最后一步时没有下一步执行人
+        return;
+      }
       let listNext = [];
+      if (!this.stepConfig[step].content) {
+        this.stepConfig[step].content = [];
+      }
       let list = [
         {
           name: "下一步执行人",
@@ -102,8 +128,12 @@ export default {
           type: "date"
         }
       ];
-      this.$set(this.stepConfig[0], "content", list);
-      this.$set(this.stepConfig[0], "showEdit", true);
+      this.$set(
+        this.stepConfig[step],
+        "content",
+        this.stepConfig[step].content.concat(list)
+      );
+      let indexNextPeople = this.stepConfig[step].content.length - 1;
       let organizationRoleIdList = [];
       let organizationGroupIdList = [];
       listPeople.forEach(item => {
@@ -111,6 +141,21 @@ export default {
           organizationRoleIdList.push(item.businessId);
         } else if (item.persionType == 2) {
           organizationGroupIdList.push(item.businessId);
+        } else {
+          this.stepConfig[step].content[0] = {
+            name: "下一步执行人",
+            type: "radio",
+            code: "next",
+            meta: {
+              list: [
+                {
+                  key: item.businessId,
+                  value: item.businessName
+                }
+              ]
+            }
+          };
+          this.$set(this.stepData, "next", item.businessId);
         }
       });
       return new Promise((rsv, rej) => {
@@ -129,10 +174,10 @@ export default {
             let list = this.formatUserList(item.userList);
             if (index == 0) {
               // 设置第一步执行人
-              this.stepConfig[0].content[0].meta.list = list;
+              this.stepConfig[step].content[0].meta.list = list;
             } else {
-              this.stepConfig[0].content.splice(
-                this.stepConfig[0].content.length - 1,
+              this.stepConfig[step].content.splice(
+                this.stepConfig[step].content.length - 1,
                 0,
                 {
                   name: "",

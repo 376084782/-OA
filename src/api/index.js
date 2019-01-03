@@ -61,7 +61,7 @@ export const getListMySendProcess = ({
 
 export const createFlow = data => {
   return Ajax.request({
-    url: "/oa/flow/processUser/create",
+    url: "/oa/flow/processOrganizationDetail/create",
     method: "post",
     data
   });
@@ -205,7 +205,7 @@ export const getFormTemp = ({
   fatherProcessUserWatchId = ""
 }) => {
   return Ajax.request({
-    url: "/oa/flow/processOrganization/list/modelType",
+    url: "/oa/flow/processOrganization/list/model",
     data: {
       modelType,
       fatherProcessUserWatchId
