@@ -181,7 +181,9 @@ export default {
           conf.data.function == "getCurrentUserInfo" ||
           conf.data.function == "getCurrentUserGroupList"
         ) {
-          this.$set(this.editData, conf.code, list[0].key);
+          if(list[0]){
+            this.$set(this.editData, conf.code, list[0].key);
+          }
         }
         return list;
       }

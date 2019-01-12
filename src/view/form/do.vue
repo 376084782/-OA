@@ -63,7 +63,8 @@ export default {
   methods: {
     createForm() {
       let typeMap = {
-        schedualApply: 400
+        schedualApply: 400,
+        seeSchedualApply:400
       };
       this.loading = true;
       getFormTemp({
