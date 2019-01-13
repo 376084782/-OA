@@ -1,6 +1,8 @@
 <template>
   <div>
-    <template v-if="conf.code=='permitSubmit'"></template>
+    <template v-if="conf.code=='permitSubmit'">
+      
+    </template>
     <el-button type="primary" @click="clickBtn">{{conf.showValue}}</el-button>
   </div>
 </template>

@@ -21,7 +21,7 @@
             </el-col>
             <el-col>
               <div>
-                <div v-if="conf.showEdit">
+                <div v-if="conf.showEdit&&conf.content&&conf.content.length>0">
                   <div class="bubble-wrap">
                     <div class="bubble">
                       <el-row>

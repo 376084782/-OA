@@ -107,11 +107,12 @@ export default {
         });
     },
     showFormDetail(data) {
-      console.log(data,222)
+      console.log('dddd',data)
       this.$router.push({
         path: "/document/seeSchedualApply/do",
         query: {
-          id: data.detailId
+          processUserId: data.processUserId,
+          processUserDetailId:data.detailId
         }
       });
     },
