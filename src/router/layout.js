@@ -158,21 +158,31 @@ const pagesSchedual = [{
 
 const home = () => import('view/hp/hp')
 const LayoutBase = () => import('layouts/base')
-const permission = () => import('view/permission/index')
+const permissionOrganization = () => import('view/permission/organization/index')
+const permissionRole = () => import('view/permission/role/index')
 
 // 权限管理
 const pagesPermission = [{
-  path: '/permission/:type',
-  name: 'permissionSearch',
+  path: '/permission/organization',
+  name: 'permissionOrganization',
   components: {
-    default: permission,
+    default: permissionOrganization,
     paths: breadcurmb
   },
   props: {
-    default: true,
     paths: funcGetPath
   }
-}, ]
+}, {
+  path: '/permission/role',
+  name: 'permissionRole',
+  components: {
+    default: permissionRole,
+    paths: breadcurmb
+  },
+  props: {
+    paths: funcGetPath
+  }
+}]
 
 // 系统首页
 const homePage = [{

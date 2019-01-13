@@ -158,7 +158,7 @@ class HttpRequest {
 }
 
 export const baseUrl =
-  // "http://rap2api.taobao.org/app/mock/46476/post" 
+  // "http://rap2api.taobao.org/app/mock/46476" 
   "http://47.110.51.157:9030"
 
 export const Ajax = new HttpRequest(baseUrl);

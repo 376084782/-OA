@@ -5,28 +5,23 @@
     </el-input>
     <el-button-group class="permission-btn-group">
       <router-link :to="{path: '/permission/organization'}">
-        <el-button :type="value == 'organization' ? 'primary' : ''">组织架构</el-button>
+        <el-button type="primary">组织架构</el-button>
       </router-link>
-      <router-link :to="{path: '/permission/character'}">
-        <el-button :type="value == 'character' ? 'primary' : ''">角色权限</el-button>
+      <router-link :to="{path: '/permission/role'}">
+        <el-button>角色权限</el-button>
       </router-link>
-    </el-button-group>
-    <el-button-group class="mgBottom20" v-if="value == 'character'">
-      <el-button size="small">新增角色组</el-button>
-      <el-button size="small">新增角色</el-button>
     </el-button-group>
     <el-tree :data="treeData" :props="defaultProps" v-loading="bLoading"
-      node-key="organizationId" :default-expanded-keys="defaultExpand"
+      node-key="organizationGroupId" :default-expanded-keys="defaultExpand"
       @current-change="handleNodeClick"></el-tree>
   </el-card>
 </template>
 <script>
 export default {
-  props: ['value', 'info', 'data'],
+  props: ['info', 'data', 'defaultExpand'],
   data () {
     return {
       searchValue: '',
-      defaultExpand: [],
       defaultProps: {
         children: 'chlidOrganizationGroupList',
         label: 'name'
@@ -40,16 +35,12 @@ export default {
       // immediate: true,
       handler (val) {
         this.treeData = val;
-        this.defaultExpand = [this.treeData[0].organizationId];
-        this.$emit('update:info', JSON.stringify(this.treeData[0]));
       }
     }
   },
   methods: {
     handleNodeClick (data) {
-      if (data.path === '/-1/') {
-        this.$emit('update:info', JSON.stringify(data));
-      }
+      this.$emit('update:info', JSON.stringify(data));
     }
   }
 };
