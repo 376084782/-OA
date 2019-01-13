@@ -15,7 +15,7 @@ export const getListProcess = ({
   pageSearchStatus = null
 }) => {
   return Ajax.request({
-    url: "/oa/flow/processUser/page/user",
+    url: "/oa/flow/processUser/page/receive",
     method: "post",
     data: {
       modelType,
@@ -66,6 +66,21 @@ export const createFlow = data => {
     data
   });
 };
+export const agree = data => {
+  return Ajax.request({
+    url: "/oa/flow/processUserButton/agree",
+    method: "post",
+    data
+  });
+};
+export const disAgree = data => {
+  return Ajax.request({
+    url: "/oa/flow/processUserButton/unAgree",
+    method: "post",
+    data
+  });
+};
+
 
 export const getPeopleListByRole = ({
   organizationRoleIdList
@@ -212,8 +227,19 @@ export const getFormTemp = ({
     },
     method: "post"
   });
-  return new Promise(rsv => {
-    rsv(getTestDyFormData(type));
+};
+
+export const getProcessDetail = ({
+  processUserId = 0,
+  processUserDetailId = ""
+}) => {
+  return Ajax.request({
+    url: "/oa/flow/processUserDetail/list",
+    data: {
+      processUserId,
+      processUserDetailId
+    },
+    method: "post"
   });
 };
 

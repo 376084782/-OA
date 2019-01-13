@@ -34,7 +34,7 @@
       <el-form-item :label="conf.name" :key="index" v-else-if="getVisible(conf)">
         <template v-if="conf.type=='select'">
           <el-select
-            :disabled="conf.readOnly"
+            :disabled="disabled&&conf.readOnly"
             :multiple="conf.meta.multiple"
             :filterable="conf.meta.filterable"
             v-model="editData[conf.code]"
@@ -50,7 +50,7 @@
         </template>
         <template v-else-if="conf.type=='one-select'">
           <el-select
-            :disabled="conf.readOnly"
+            :disabled="disabled&&conf.readOnly"
             v-model="editData[conf.code]"
             :style="{width:inputWidth}"
           >
@@ -64,14 +64,14 @@
         </template>
         <template v-else-if="conf.type=='input'">
           <el-input
-            :disabled="conf.readOnly"
+            :disabled="disabled&&conf.readOnly"
             :style="{width:inputWidth}"
             v-model="editData[conf.code]"
           ></el-input>
         </template>
         <template v-else-if="conf.type=='textarea'">
           <el-input
-            :disabled="conf.readOnly"
+            :disabled="disabled&&conf.readOnly"
             type="textarea"
             :style="{width:inputWidth}"
             v-model="editData[conf.code]"
@@ -79,7 +79,7 @@
         </template>
         <template v-else-if="conf.type=='date'">
           <el-date-picker
-            :disabled="conf.readOnly"
+            :disabled="disabled&&conf.readOnly"
             :style="{width:inputWidth}"
             v-model="editData[conf.code]"
           ></el-date-picker>
@@ -87,7 +87,7 @@
         <template v-else-if="conf.type=='radio'">
           <el-radio-group v-model="editData[conf.code]">
             <el-radio
-              :disabled="conf.readOnly"
+              :disabled="disabled&&conf.readOnly"
               v-for="(item , index) in conf.meta.list"
               :key="index"
               :label="+item.key"
@@ -97,7 +97,7 @@
         <template v-else-if="conf.type=='upload'">
           <template v-if="conf.meta.type=='image'">
             <el-upload
-              :disabled="conf.readOnly"
+              :disabled="disabled&&conf.readOnly"
               :action="conf.meta.action"
               list-type="picture-card"
             >
@@ -106,7 +106,7 @@
             </el-upload>
           </template>
           <template v-else>
-            <el-upload :disabled="conf.readOnly" :action="conf.meta.action">
+            <el-upload :disabled="disabled&&conf.readOnly" :action="conf.meta.action">
               <el-button size="small">
                 <i class="anticon icon-upload"></i> 上传文件
               </el-button>
@@ -130,6 +130,10 @@ import { funcMap } from "./dynamicFuncDefine";
 export default {
   components: { fullcalendar },
   props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     config: {
       type: Array
     },
@@ -151,11 +155,11 @@ export default {
   computed: {},
   watch: {
     editData(val) {
+      console.log(val);
     }
   },
   data() {
     return {
-      eventList: [],
       baseUrl,
       fileList: [],
       analyseHeader: { type: 0, startDate: "", endDate: "" },
@@ -173,6 +177,11 @@ export default {
       }
     };
   },
+  computed: {
+    eventList() {
+      return this.formatEventList(this.editData.workPlanDateInfoList || []);
+    }
+  },
   methods: {
     getDataByFuncName(conf) {
       if (conf && conf.data && conf.data.function) {
@@ -181,18 +190,30 @@ export default {
           conf.data.function == "getCurrentUserInfo" ||
           conf.data.function == "getCurrentUserGroupList"
         ) {
-          this.$set(this.editData, conf.code, list[0].key);
+          if (list[0]) {
+            this.$set(this.editData, conf.code, list[0].key);
+          }
         }
         return list;
       }
     },
     formatEventList(list1) {
       let list = [];
+      console.log("list1", list1);
       list1.forEach(item => {
-        list.push({
-          start: item.date,
-          title: `${item.name} ${item.typeDictionary}`
-        });
+        if (item.workPlanDateDetailInfoList) {
+          item.workPlanDateDetailInfoList.forEach(subItem => {
+            list.push({
+              start: item.date,
+              title: `${subItem.name} ${subItem.typeDictionary}`
+            });
+          });
+        } else {
+          list.push({
+            start: item.date,
+            title: `${item.name} ${item.typeDictionary}`
+          });
+        }
       });
       return list;
     },
@@ -220,14 +241,13 @@ export default {
       })
         .then(({ workPlanDateList }) => {
           let list = [];
-          if (this.editData[conf.code]) {
+          if (!this.editData[conf.code]) {
             list = list.concat(this.editData[conf.code]);
           }
           list = list.concat(workPlanDateList);
+          this.$set(this.editData, "workPlanDateInfoList", list);
           this.$set(this.editData, conf.code, list);
-          this.eventList = this.eventList.concat(
-            this.formatEventList(workPlanDateList)
-          );
+          console.log(this.editData,'edit')
         })
         .catch(({ message }) => {
           this.$alert(message, "错误");

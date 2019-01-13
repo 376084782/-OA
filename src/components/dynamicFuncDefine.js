@@ -21,6 +21,7 @@ export function getCurrentUserGroupList() {
       value: item.name
     })
   })
+  console.log(store.state.login,'22223232')
   return list;
 }
 
