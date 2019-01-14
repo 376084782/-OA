@@ -43,7 +43,7 @@ export const getOrganizationMembers = (params) => {
 /* 获取部门上级领导列表 */
 export const getOrganizationLeaders = (params) => {
   return Ajax.request({
-    url: "oa/ums/organizationGroupMember",
+    url: "oa/ums/organizationGroupMember/fatherLeaderList",
     data: params,
     method: "post"
   });
@@ -152,7 +152,7 @@ export const roleOperate = (params, type) => {
 /* 获取角色权限信息 */
 export const getPermissionInfo = (params) => {
   return Ajax.request({
-    url: params ? "/oa/ums/resource/tree/role" : "/oa/ums/resource/tree",
+    url: params.roleId ? "/oa/ums/resource/tree/role" : "/oa/ums/resource/tree",
     data: params,
     method: "post"
   });

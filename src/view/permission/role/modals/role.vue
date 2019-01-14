@@ -44,7 +44,7 @@
   </el-dialog>
 </template>
 <script>
-import { editPermission, getPermissionInfo } from 'api/permission';
+import { roleOperate, getPermissionInfo } from 'api/permission';
 export default {
   data () {
     return {
@@ -59,9 +59,9 @@ export default {
         label: 'name'
       },
       form: {
-        account: '',
+        organizationRoleGroupId: '',
         name: '',
-        is_all: 0
+        description: ''
       },
       rules: {
         organizationRoleGroupId: [
@@ -98,7 +98,6 @@ export default {
           this.loadPermission({roleId: parseInfo.organizationRoleId});
         } else {
           this.editTitle = '新增角色';
-          this.loadPermission();
         }
       }
     }
@@ -128,8 +127,9 @@ export default {
     },
     onClose () {
       this.form = {
-        account: '',
-        name: ''
+        organizationRoleGroupId: '',
+        name: '',
+        description: ''
       };
       this.$refs.paramForm.resetFields();
       this.$emit('update:info', '');
@@ -139,15 +139,24 @@ export default {
       this.$refs.paramForm.validate(valid => {
         if (valid) {
           let {...param} = this.form;
-          param.list = this.$refs.paramFormTree.getCheckedKeys().filter(key => key.indexOf('-0') < 0);
-          editPermission(param).then(() => {
+          param.resourceIdList = this.$refs.paramFormTree.getCheckedKeys();
+          let ajaxType = this.form.organizationRoleId ? 'edit' : 'add';
+          roleOperate(param, ajaxType).then(() => {
             this.$message.success('操作成功');
-            this.$emit('edit');
+            if (this.form.organizationRoleId) {
+              this.$emit('edit', param);
+            } else {
+              this.$emit('add');
+            }
             this.onClose();
           });
         }
       });
     },
+  },
+  created () {
+    console.log('in');
+    this.loadPermission({});
   }
 };
 </script>

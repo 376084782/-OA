@@ -4,7 +4,7 @@
     <template v-else>
       <div class="content-header">
         <span class="font-large">{{currentInfo && currentInfo.name}}</span>
-        <el-button size="small" class="mgLeft20" @click="showRole = true;">编辑</el-button>
+        <el-button size="small" class="mgLeft20" @click="showRole = true;modalInfo = info;">编辑</el-button>
       </div>
       <el-row>
         <el-col :span="3">
@@ -24,17 +24,17 @@
         </el-col>
         <el-col :span="20">
           <el-tree v-loading="bloading"
-          :data="treeData"
-          :props="defaultProps"
-          node-key="resourceId"
-          default-expand-all>
+            :data="treeData"
+            :props="defaultProps"
+            node-key="resourceId"
+            default-expand-all>
           </el-tree>
         </el-col>
       </el-row>
     </template>
-    <modal-role v-model="showRole" :info="info"
+    <modal-role v-model="showRole" :info.sync="modalInfo"
       :data="data"
-      @edit="$emit('load')"></modal-role>
+      @edit="editCallback"></modal-role>
   </el-card>
 </template>
 <script>
@@ -45,12 +45,10 @@ export default {
   props: ['info', 'data'],
   watch: {
     info (val) {
+      this.modalInfo = val;
       this.currentInfo = JSON.parse(val);
       if (val) {
-        this.bloading = true;
-        getPermissionInfo({roleId: this.currentInfo.organizationRoleId}).then(data => {
-          this.treeData = data.chlidren;
-        }).finally(() => {this.bloading = false;});
+        this.loadPermission();
       }
     }
   },
@@ -58,6 +56,7 @@ export default {
     return {
       bloading: false,
       showRole: false,
+      modalInfo: '',
       currentInfo: {},
       treeData: [],
       defaultProps: {
@@ -66,7 +65,22 @@ export default {
       },
     };
   },
-  methods: {}
+  methods: {
+    loadPermission () {
+      this.bloading = true;
+      getPermissionInfo({roleId: this.currentInfo.organizationRoleId}).then(data => {
+        let filter_data = data.chlidren.map(tag => {
+          tag.children = tag.chlidren.filter(cate => cate.hasPermission);
+          return tag;
+        });
+        this.treeData = filter_data.filter(role => role.hasPermission || role.children.length != 0);
+      }).finally(() => {this.bloading = false;});
+    },
+    editCallback (item) {
+      Object.assign(this.currentInfo, item);
+      this.loadPermission();
+    }
+  }
 };
 </script>
 <style lang="scss">
