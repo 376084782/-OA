@@ -45,7 +45,7 @@ export default {
         url: this.$route.path
       },
       {
-        name: "公文归档",
+        name: "归档公文",
         url: this.$route.path
       }
     ]);

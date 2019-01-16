@@ -59,6 +59,18 @@ export default {
   },
   created() {
     this.onSearch();
+  },
+  mounted() {
+    this.$store.dispatch("updateBreadCurmbList", [
+      {
+        name: "排班管理",
+        url: this.$route.path
+      },
+      {
+        name: "排班查询",
+        url: this.$route.path
+      }
+    ]);
   }
 };
 </script>

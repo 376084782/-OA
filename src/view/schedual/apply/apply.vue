@@ -67,11 +67,11 @@ export default {
   mounted() {
     this.$store.dispatch("updateBreadCurmbList", [
       {
-        name: "公文管理",
+        name: "排班管理",
         url: this.$route.path
       },
       {
-        name: "公文收发",
+        name: "排班申请",
         url: this.$route.path
       }
     ]);

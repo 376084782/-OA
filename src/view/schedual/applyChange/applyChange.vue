@@ -66,6 +66,16 @@ export default {
   },
   mounted() {
     this.activeName = this.$route.query.activeNav || "10";
+    this.$store.dispatch("updateBreadCurmbList", [
+      {
+        name: "排班管理",
+        url: this.$route.path
+      },
+      {
+        name: "调班申请",
+        url: this.$route.path
+      }
+    ]);
   },
   methods: {
     updateTable() {
