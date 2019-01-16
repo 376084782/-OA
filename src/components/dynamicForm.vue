@@ -1,77 +1,44 @@
 <template>
-  <el-form :label-width="labelWidth" :model="editData">
+  <el-form ref="form" :label-width="labelWidth" :model="editData" :rules="rules">
     <template v-for="(conf,index) in config">
-      <template v-if="getVisible(conf)&&conf.type=='workPlan-file'">
-        <el-form-item label="选择时间" :key="index">
-          <el-date-picker
-            :style="{width:inputWidth}"
-            v-model="editData.date"
-            @change="changeImportDate"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label :key="index+10000" class="analyse-entry">
-          <span v-for="(type , index) in conf.data.params||[]" :key="index">
-            <span>{{getAnalyseName(type)}}</span>
-            <el-upload
-              :action="`${baseUrl}/oa/flow/workPlanExcel/file/analysis`"
-              :headers="analyseHeader"
-              name="excelFile"
-              :data="conf"
-              :http-request="rewriteUpload"
-              :before-upload="beforeImport(type)"
-              :file-list="fileList"
-              :show-file-list="false"
-            >
-              <el-button type="text">导入</el-button>
-            </el-upload>
-          </span>
-        </el-form-item>
+      <template v-if="conf.type=='workPlan-file'">
+        <dym-work-plan-import
+          @import="workPlanImportHandler"
+          :inputWidth="inputWidth"
+          :conf="conf"
+          :key="index"
+          v-model="editData[conf.code]"
+        ></dym-work-plan-import>
       </template>
-      <el-form-item :label="conf.name" :key="index" v-else-if="getVisible(conf)">
-        <template v-if="conf.type=='select'">
-          <el-select
-            :disabled="disabled&&conf.readOnly"
-            :multiple="conf.meta.multiple"
-            :filterable="conf.meta.filterable"
+      <el-form-item :label="conf.name" :prop="conf.code" :key="index" v-else>
+        <template v-if="conf.type=='one-select'">
+          <dym-select
+            :auto-select="conf.autoSelect"
+            :inputWidth="inputWidth"
+            :disabled="disabled"
+            :conf="conf"
             v-model="editData[conf.code]"
-            :style="{width:inputWidth}"
-          >
-            <el-option
-              v-for="item in getDataByFuncName(conf)"
-              :key="item.key"
-              :label="item.value"
-              :value="item.key"
-            ></el-option>
-          </el-select>
+          ></dym-select>
         </template>
-        <template v-else-if="conf.type=='one-select'">
-          <el-select
-            :disabled="disabled&&conf.readOnly"
+        <template v-else-if="conf.type=='multi-select'">
+          <dym-select
+            :multiple="true"
+            :inputWidth="inputWidth"
+            :disabled="disabled"
+            :conf="conf"
             v-model="editData[conf.code]"
-            :style="{width:inputWidth}"
-          >
-            <el-option
-              v-for="item in getDataByFuncName(conf)"
-              :key="item.key"
-              :label="item.value"
-              :value="item.key"
-            ></el-option>
-          </el-select>
+          ></dym-select>
         </template>
         <template v-else-if="conf.type=='input'">
           <el-input
-            :disabled="disabled&&conf.readOnly"
+            :disabled="disabled||conf.readOnly"
             :style="{width:inputWidth}"
             v-model="editData[conf.code]"
           ></el-input>
         </template>
         <template v-else-if="conf.type=='textarea'">
           <el-input
-            :disabled="disabled&&conf.readOnly"
+            :disabled="disabled||conf.readOnly"
             type="textarea"
             :style="{width:inputWidth}"
             v-model="editData[conf.code]"
@@ -79,25 +46,39 @@
         </template>
         <template v-else-if="conf.type=='date'">
           <el-date-picker
-            :disabled="disabled&&conf.readOnly"
+            :disabled="disabled||conf.readOnly"
             :style="{width:inputWidth}"
             v-model="editData[conf.code]"
+            value-format="yyyy-MM-dd hh:mm:ss"
           ></el-date-picker>
         </template>
         <template v-else-if="conf.type=='radio'">
-          <el-radio-group v-model="editData[conf.code]">
-            <el-radio
-              :disabled="disabled&&conf.readOnly"
-              v-for="(item , index) in conf.meta.list"
-              :key="index"
-              :label="+item.key"
-            >{{item.value}}</el-radio>
-          </el-radio-group>
+          <dym-radio
+            :auto-select="true"
+            :conf="conf"
+            :disabled="disabled||conf.readOnly"
+            v-model="editData[conf.code]"
+          ></dym-radio>
+        </template>
+        <template v-else-if="conf.type=='radio-next-user'">
+          <dym-radio-next-user
+            :auto-select="true"
+            :conf="conf"
+            :disabled="disabled||conf.readOnly"
+            v-model="editData[conf.code]"
+          ></dym-radio-next-user>
+        </template>
+        <template v-else-if="conf.type=='multi-file'">
+          <el-upload :disabled="disabled||conf.readOnly" action="22">
+            <el-button size="small">
+              <i class="anticon icon-upload"></i> 上传文件
+            </el-button>
+          </el-upload>
         </template>
         <template v-else-if="conf.type=='upload'">
           <template v-if="conf.meta.type=='image'">
             <el-upload
-              :disabled="disabled&&conf.readOnly"
+              :disabled="disabled||conf.readOnly"
               :action="conf.meta.action"
               list-type="picture-card"
             >
@@ -106,7 +87,7 @@
             </el-upload>
           </template>
           <template v-else>
-            <el-upload :disabled="disabled&&conf.readOnly" :action="conf.meta.action">
+            <el-upload :disabled="disabled||conf.readOnly" :action="conf.meta.action">
               <el-button size="small">
                 <i class="anticon icon-upload"></i> 上传文件
               </el-button>
@@ -114,7 +95,10 @@
           </template>
         </template>
         <template v-else-if="conf.type=='workPlan-calendar'">
-          <fullcalendar :list="eventList"></fullcalendar>
+          <dym-work-plan-calender v-model="editData[conf.code]"></dym-work-plan-calender>
+        </template>
+        <template v-else-if="conf.type=='combine'">
+          <el-button @click="showCombine">关联公文</el-button>
         </template>
       </el-form-item>
     </template>
@@ -122,14 +106,29 @@
 </template>
 
 <script>
-import fullcalendar from "components/fullcalendar.vue";
-import { analyseExcel, uploadSchedualFile } from "api/index";
-import { baseUrl } from "utils/axios.js";
 import { getToken, dateFormater } from "utils/assist";
 import { funcMap } from "./dynamicFuncDefine";
+import { mapGetters } from "vuex";
+import dymSelect from "./dym-components/dym-select";
+import dymRadio from "./dym-components/dym-radio";
+import dymRadioNextUser from "./dym-components/dym-radio-next-user";
+import dymWorkPlanImport from "./dym-components/dym-work-plan-import";
+import dymWorkPlanCalender from "./dym-components/dym-work-plan-calender";
 export default {
-  components: { fullcalendar },
+  components: {
+    dymSelect,
+    dymRadio,
+    dymRadioNextUser,
+    dymWorkPlanImport,
+    dymWorkPlanCalender
+  },
   props: {
+    rules: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
     disabled: {
       type: Boolean,
       default: false
@@ -152,124 +151,17 @@ export default {
       }
     }
   },
-  computed: {},
   watch: {
     editData(val) {
-      console.log(val);
-    }
-  },
-  data() {
-    return {
-      baseUrl,
-      fileList: [],
-      analyseHeader: { type: 0, startDate: "", endDate: "" },
-      selectData: {
-        gw: [
-          {
-            key: 1,
-            value: "选项一"
-          },
-          {
-            key: 2,
-            value: "选项二"
-          }
-        ]
-      }
-    };
-  },
-  computed: {
-    eventList() {
-      return this.formatEventList(this.editData.workPlanDateInfoList || []);
+      // console.log(val);
     }
   },
   methods: {
-    getDataByFuncName(conf) {
-      if (conf && conf.data && conf.data.function) {
-        let list = funcMap[conf.data.function]();
-        if (
-          conf.data.function == "getCurrentUserInfo" ||
-          conf.data.function == "getCurrentUserGroupList"
-        ) {
-          if (list[0]) {
-            this.$set(this.editData, conf.code, list[0].key);
-          }
-        }
-        return list;
-      }
+    workPlanImportHandler(list) {
+      this.$set(this.editData, "workPlanDateInfoList", list);
     },
-    formatEventList(list1) {
-      let list = [];
-      console.log("list1", list1);
-      list1.forEach(item => {
-        if (item.workPlanDateDetailInfoList) {
-          item.workPlanDateDetailInfoList.forEach(subItem => {
-            list.push({
-              start: item.date,
-              title: `${subItem.name} ${subItem.typeDictionary}`
-            });
-          });
-        } else {
-          list.push({
-            start: item.date,
-            title: `${item.name} ${item.typeDictionary}`
-          });
-        }
-      });
-      return list;
-    },
-    changeImportDate(val) {
-      this.analyseHeader.startDate = dateFormater(val[0], "yyyy-MM-dd");
-      this.analyseHeader.endDate = dateFormater(val[1], "yyyy-MM-dd");
-    },
-    rewriteUpload(e) {
-      let conf = e.data;
-      if (!this.analyseHeader.startDate || !this.analyseHeader.endDate) {
-        // 没选择时间
-        this.$alert("清先选择时间", "错误");
-        return;
-      }
-      let data = new FormData();
-      data.append("excelFile", e.file);
-      uploadSchedualFile({
-        data,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          startDate: this.analyseHeader.startDate,
-          endDate: this.analyseHeader.endDate,
-          type: this.analyseHeader.type
-        }
-      })
-        .then(({ workPlanDateList }) => {
-          let list = [];
-          if (!this.editData[conf.code]) {
-            list = list.concat(this.editData[conf.code]);
-          }
-          list = list.concat(workPlanDateList);
-          this.$set(this.editData, "workPlanDateInfoList", list);
-          this.$set(this.editData, conf.code, list);
-          console.log(this.editData,'edit')
-        })
-        .catch(({ message }) => {
-          this.$alert(message, "错误");
-        });
-    },
-    beforeImport(type) {
-      this.analyseHeader.type = type;
-    },
-    getAnalyseName(type) {
-      let map = {
-        1: "夜班：导入Excel排班",
-        2: "节假日：导入Excel排班",
-        3: "领导值班：导入Excel排班"
-      };
-      return map[type];
-    },
-    getVisible(conf) {
-      if (conf.bindKeyVal && this.editData[conf.bindKey]) {
-        return conf.bindKeyVal.indexOf(this.editData[conf.bindKey]) > -1;
-      } else {
-        return true;
-      }
+    showCombine() {
+      this.$emit("showModalCombine");
     }
   }
 };

@@ -4,13 +4,13 @@
       <list-search @search="onSearch"></list-search>
       <section class="mgTop24">
         <el-table v-loading="bLoading" :data="dataSource" style="min-height: 400px">
-          <el-table-column prop label="编号"></el-table-column>
+          <el-table-column prop label="文号"></el-table-column>
           <el-table-column prop="region" label="标题"></el-table-column>
           <el-table-column prop="numid" label="紧急程度"></el-table-column>
-          <el-table-column prop="usercnt" label="来文单位"></el-table-column>
-          <el-table-column prop="consume" label="类型"></el-table-column>
           <el-table-column prop="recharge" label="状态"></el-table-column>
-          <el-table-column prop="recharge" label="限办日期"></el-table-column>
+          <el-table-column prop="usercnt" label="来文单位"></el-table-column>
+          <el-table-column prop="recharge" label="办结日期"></el-table-column>
+          <el-table-column prop="consume" label="类型"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click="showReceiveDetail(scope.row)" type="text">归档</el-button>
@@ -37,6 +37,18 @@ export default {
       dataSource: [{}],
       oPagination: {}
     };
+  },
+  mounted() {
+    this.$store.dispatch("updateBreadCurmbList", [
+      {
+        name: "公文管理",
+        url: this.$route.path
+      },
+      {
+        name: "公文归档",
+        url: this.$route.path
+      }
+    ]);
   },
   methods: {
     showReceiveDetail(data) {

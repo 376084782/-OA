@@ -1,12 +1,15 @@
 .tur-table-box {
   padding: 24px 32px;
+
   .el-pagination {
     margin: 24px 0;
   }
 }
+
 .tur-chart-box {
   padding: 24px 32px 24px 0;
 }
+
 .tur-with-whiteblock {
   &:before {
     content: '';
@@ -16,25 +19,30 @@
     background: #fff;
   }
 }
+
 .tur-with-breadcurmb {
   margin: 0 -24px;
   padding: 16px 24px 0;
   background: #fff;
 }
+
 .tab-with-breadcurmb {
   .el-tabs__header {
     margin: 0 -24px;
     padding: 0 32px 0;
     background: #fff;
   }
+
   .el-tabs__nav-wrap:after {
     height: 0 !important;
   }
+
   .el-tabs__content {
     margin-top: 24px;
     background: #fff;
   }
 }
+
 .tab-content-form {
   .el-tabs__content {
     margin-top: 0;
@@ -46,26 +54,117 @@
   .el-date-editor {
     width: 100%;
   }
+
   .el-select {
     display: block;
   }
 }
+
 .el-table__empty-block {
   min-height: 300px;
 }
 
-.el-form-item.is-required .el-form-item__label:before{
+.el-form-item.is-required .el-form-item__label:before {
   font-family: SimSun;
 }
 
 .el-form-item.with-button {
   margin-bottom: 0;
 }
+
 .tab-header-with-content {
   .el-tabs__header {
     margin-bottom: 2px;
   }
+
   .el-tabs__nav-wrap:after {
     height: 0 !important;
   }
+}
+.el-table{
+  td,tr{
+    height: 48px!important;
+    padding: 4px 0;
+  }
+}
+.no-expand {
+  &>.el-table__header-wrapper,
+  &>.el-table__body-wrapper {
+    &>table {
+      &>colgroup>col:first-child {
+        width: 0;
+      }
+    }
+  }
+
+  .el-table__expand-column,
+  .el-table_1_column_2 {
+    overflow: hidden;
+  }
+
+  .el-table__expanded-cell {
+    padding: 0;
+
+    .el-table__header-wrapper {
+      display: none;
+    }
+  }
+}
+
+
+.icon-expand {
+  border: 1px solid rgba(217, 217, 217, 1);
+  width: 15px;
+  height: 15px;
+  position: relative;
+  display: inline-block;
+  top: 2px;
+
+  i {
+    position: absolute;
+    transform: scale(.7);
+    color: rgba(217, 217, 217, 1);
+    font-weight: bold;
+  }
+}
+
+.cell{
+  overflow: visible!important;
+}
+.table-task{
+  td:not(:nth-child(3)){
+    .cell{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  th:not(:nth-child(3)){
+    .cell{
+      text-align: center;
+    }
+  }
+}
+
+.subCol1 {
+  &>td:nth-child(3) {
+    padding-left: 30px;
+    .cell{
+      display: block;
+    }
+  }
+}
+.subCol2 {
+  td{
+    background-color: rgba(244, 249, 252, 1);
+  }
+  &>td:nth-child(3) {
+    padding-left: 60px;
+    .cell{
+      display: block;
+    }
+  }
+}
+.el-form-item__error{
+  display: none!important;
 }

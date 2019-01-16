@@ -92,7 +92,7 @@ export default {
     },
     active: {
       type: Number,
-      default: 3
+      default: 2
     }
   },
   data() {

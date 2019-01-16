@@ -65,6 +65,16 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch("updateBreadCurmbList", [
+      {
+        name: "公文管理",
+        url: this.$route.path
+      },
+      {
+        name: "公文收发",
+        url: this.$route.path
+      }
+    ]);
     this.activeName = this.$route.query.activeNav || "10";
   },
   methods: {
@@ -107,18 +117,21 @@ export default {
         });
     },
     showFormDetail(data) {
-      console.log('dddd',data)
+      console.log("dddd", data);
       this.$router.push({
         path: "/document/seeSchedualApply/do",
         query: {
           processUserId: data.processUserId,
-          processUserDetailId:data.detailId
+          processUserDetailId: data.detailId
         }
       });
     },
     showFormDo() {
       this.$router.push({
-        path: "/document/schedualApply/do"
+        path: "/document/schedualApply/do",
+        query: {
+          modelType: 400
+        }
       });
     },
     // 搜索

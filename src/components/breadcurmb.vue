@@ -1,7 +1,7 @@
 <template>
   <div class="breadcrumb">
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item v-for="(item, index) in paths" :key="index">
+      <el-breadcrumb-item v-for="(item, index) in breadcurmbList" :key="index">
         <router-link
           :to="{
           path:item.url,
@@ -15,8 +15,10 @@
 <script>
 export default {
   name: "turBreadcurmb",
-  props: {
-    paths: Array
+  computed: {
+    breadcurmbList() {
+      return this.$store.state.breadcurmb.list;
+    }
   },
   watch: {
     paths(val) {

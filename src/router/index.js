@@ -46,6 +46,7 @@ config.beforeEach((to, from, next) => {
     })
   } else if (!flagGetInfo) {
     store.dispatch("userGetInfo").then(e => {
+      console.log(store.state.login.userInfo)
       funcJump()
     }).catch(e => {
     })

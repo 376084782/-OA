@@ -1,8 +1,14 @@
 <template>
-  <el-dialog title="归档" :visible.sync="visible" width="680px" :before-close="handleClose">
-    <el-form label-width="85px" style="padding:0 100px;">
-      <el-form-item label="归档类型：">
-        <el-input type="textarea" placeholder="归档字段待提供；若未提供，点击归档时，提示“此功能暂 未开发”" :rows="4"></el-input>
+  <el-dialog title="归档公文" :visible.sync="visible" width="680px" :before-close="handleClose">
+    <el-form label-width="85px" style="padding:0 100px;" :data="data" :rules="rules">
+      <el-form-item prop="a" label="保密性">
+        <el-radio-group v-model="data.a">
+          <el-radio :label="1">保密</el-radio>
+          <el-radio :label="0">不保密</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="备注:">
+        <el-input type="textarea" placeholder="请输入备注" :rows="4"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -20,6 +26,11 @@ export default {
   },
   data() {
     return {
+      rules:{
+        a:[{
+          required:true
+        }]
+      },
       bLoading: false,
       data: []
     };

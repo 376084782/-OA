@@ -1,20 +1,16 @@
 <template>
   <div>
-    <el-tabs class="top-sec-tab" v-model="activeName">
-      <el-tab-pane label="已分派" name="1"></el-tab-pane>
-      <el-tab-pane label="未分派" name="-1"></el-tab-pane>
-    </el-tabs>
     <el-card class="mgTop24">
       <list-search @search="onSearch"></list-search>
       <section class="mgTop24">
         <el-table v-loading="bLoading" :data="dataSource" style="min-height: 400px">
-          <el-table-column prop label="编号"></el-table-column>
+          <el-table-column prop label="文号"></el-table-column>
           <el-table-column prop="region" label="标题"></el-table-column>
           <el-table-column prop="numid" label="紧急程度"></el-table-column>
-          <el-table-column prop="usercnt" label="发文单位"></el-table-column>
           <el-table-column prop="recharge" label="状态"></el-table-column>
+          <el-table-column prop="usercnt" label="发文单位"></el-table-column>
           <el-table-column prop="recharge" label="限办日期"></el-table-column>
-          <el-table-column prop="recharge" label="发文日期"></el-table-column>
+          <el-table-column prop="recharge" label="类型"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <template v-if="scope.$index%3==0">
@@ -44,7 +40,6 @@ export default {
   data() {
     return {
       showDetail: false,
-      activeName: "1",
       bLoading: false,
       dataSource: [{}],
       listDone: [{}, {}, {}],
@@ -52,12 +47,18 @@ export default {
     };
   },
   watch: {
-    activeName(val) {
-      this.dataSource = val == "1" ? this.listDone : this.listNotDone;
-    }
   },
   mounted() {
-    this.activeName = this.$route.query.activeNav || "1";
+    this.$store.dispatch("updateBreadCurmbList", [
+      {
+        name: "公文管理",
+        url: this.$route.path
+      },
+      {
+        name: "公文办理",
+        url: this.$route.path
+      }
+    ]);
   },
   methods: {
     onSearch(params) {},

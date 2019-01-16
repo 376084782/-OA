@@ -17,6 +17,22 @@ const state = {
 
 const getters = {
   // 角色
+  name: state => {
+    return state.userInfo.name
+  },
+  mobile: state => state.userInfo.mobile,
+  currentOrgInfo: state => {
+    return {
+      name: state.groupList[0].name,
+      value: state.groupList[0].organizationId + ''
+    }
+  },
+  currentUserInfo: state => {
+    return {
+      name: state.userInfo.userName,
+      value: state.userInfo.userId + ''
+    }
+  }
 };
 
 const mutations = {};

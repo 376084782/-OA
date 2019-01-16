@@ -3,13 +3,10 @@ const Error404 = () => import('layouts/404')
 const documentSponse = () => import('view/document/sponse/sponse')
 const documentDoSponse = () => import('view/form/do')
 const documentAssign = () => import('view/document/assign/assign')
-const documentDone = () => import('view/document/done/done')
-const documentReceive = () => import('view/document/receive/receive')
 const documentArrange = () => import('view/document/arrange/arrange')
+const documentWHGL = () => import('view/document/whgl/whgl')
 
-import {
-  funcGetPath
-} from './pathConfig'
+
 
 // 公文管理
 const pagesDocument = [{
@@ -19,9 +16,6 @@ const pagesDocument = [{
       default: documentDoSponse,
       paths: breadcurmb
     },
-    props: {
-      paths: funcGetPath
-    }
   }, {
     path: "/document/sponse",
     name: "documentSponse",
@@ -29,9 +23,6 @@ const pagesDocument = [{
       default: documentSponse,
       paths: breadcurmb
     },
-    props: {
-      paths: funcGetPath
-    }
   },
   {
     path: "/document/assign",
@@ -40,31 +31,6 @@ const pagesDocument = [{
       default: documentAssign,
       paths: breadcurmb
     },
-    props: {
-      paths: funcGetPath
-    }
-  },
-  {
-    path: "/document/done",
-    name: "documentDone",
-    components: {
-      default: documentDone,
-      paths: breadcurmb
-    },
-    props: {
-      paths: funcGetPath
-    }
-  },
-  {
-    path: "/document/receive",
-    name: "documentReceive",
-    components: {
-      default: documentReceive,
-      paths: breadcurmb
-    },
-    props: {
-      paths: funcGetPath
-    }
   },
   {
     path: "/document/arrange",
@@ -73,49 +39,28 @@ const pagesDocument = [{
       default: documentArrange,
       paths: breadcurmb
     },
-    props: {
-      paths: funcGetPath
-    }
+  }, {
+    path: "/document/whgl",
+    name: "documentWHGL",
+    components: {
+      default: documentWHGL,
+      paths: breadcurmb
+    },
   },
 
 ];
 
 
-const taskMine = () => import('view/task/mine/mine')
-const taskDone = () => import('view/task/done/done')
-const taskSub = () => import('view/task/subList/subList')
+const taskCenter = () => import('view/task/center/center')
 
 // 任务管理
 const pagesTask = [{
-  path: '/task/mine',
-  name: 'taskMine',
+  path: '/task/center',
+  name: 'taskCenter',
   components: {
-    default: taskMine,
+    default: taskCenter,
     paths: breadcurmb
   },
-  props: {
-    paths: funcGetPath
-  }
-}, {
-  path: '/task/done',
-  name: 'taskDone',
-  components: {
-    default: taskDone,
-    paths: breadcurmb
-  },
-  props: {
-    paths: funcGetPath
-  }
-}, {
-  path: '/task/sub',
-  name: 'taskSub',
-  components: {
-    default: taskSub,
-    paths: breadcurmb
-  },
-  props: {
-    paths: funcGetPath
-  }
 }]
 
 const schedualSearch = () => import('view/schedual/search/search')
@@ -130,9 +75,6 @@ const pagesSchedual = [{
     default: schedualSearch,
     paths: breadcurmb
   },
-  props: {
-    paths: funcGetPath
-  }
 }, {
   path: '/schedual/apply',
   name: 'schedualApply',
@@ -140,9 +82,6 @@ const pagesSchedual = [{
     default: schedualApply,
     paths: breadcurmb
   },
-  props: {
-    paths: funcGetPath
-  }
 }, {
   path: '/schedual/applyChange',
   name: 'schedualApplyChange',
@@ -150,9 +89,6 @@ const pagesSchedual = [{
     default: schedualApplyChange,
     paths: breadcurmb
   },
-  props: {
-    paths: funcGetPath
-  }
 }, ]
 
 
@@ -170,7 +106,6 @@ const pagesPermission = [{
   },
   props: {
     default: true,
-    paths: funcGetPath
   }
 }, ]
 
@@ -179,7 +114,7 @@ const homePage = [{
   path: '/hp',
   name: 'homePage',
   component: home
-  
+
 }]
 
 const Default = () => import('layouts/default')
@@ -187,9 +122,9 @@ const Login = () => import('layouts/login')
 
 const routes = [{
   path: "/",
-  redirect:'/hp',
+  redirect: '/hp',
   component: Default,
-  children: [].concat(pagesDocument, pagesTask, pagesSchedual,pagesPermission,homePage)
+  children: [].concat(pagesDocument, pagesTask, pagesSchedual, pagesPermission, homePage)
 }, {
   path: "/404",
   name: "Error404",

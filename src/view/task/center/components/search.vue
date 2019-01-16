@@ -3,12 +3,12 @@
     <el-form label-width="70px">
       <el-row class="row" :gutter="20">
         <el-col :span="8">
-          <el-form-item label="标题">
-            <el-input placeholder="请输入" size="small" v-model="searchForm.keyWord"></el-input>
+          <el-form-item label="任务名称">
+            <el-input placeholder="请输入" size="small"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="类型">
+          <el-form-item label="状态">
             <el-input placeholder="请输入" size="small"></el-input>
           </el-form-item>
         </el-col>
@@ -19,20 +19,12 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="收发日期">
-            <el-date-picker
-              v-model="searchForm.dateRange"
-              type="date"
-              size="small"
-              style="width: 100%"
-              :unlink-panels="true"
-              value-format="yyyy-MM-dd"
-              placeholder="请选择日期"
-            ></el-date-picker>
+          <el-form-item label="级别">
+            <el-input placeholder="请输入" size="small"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="编号">
+          <el-form-item label="发起人">
             <el-input placeholder="请输入" size="small"></el-input>
           </el-form-item>
         </el-col>
@@ -47,9 +39,7 @@
 export default {
   data() {
     return {
-      expand: false,
-      searchForm: {
-      },
+      searchForm: {}
     };
   },
   methods: {

@@ -7,7 +7,9 @@
         :edit-data="editData"
         class="mgTop24"
         :config="contentTop"
-        :disabled="canEditTop"
+        :rules="rulesTop"
+        :disabled="!canEditTop"
+        @showModalCombine="showModalCombine"
       ></dynamic-form>
       <div class="line mgTop40"></div>
       <h4 class="mgTop40 mgLeft75">公文处理流程图：</h4>
@@ -30,6 +32,8 @@
     </el-card>
     <modal-js :visible.sync="showJS"></modal-js>
     <modal-zb :visible.sync="showZB"></modal-zb>
+    <modal-change-name :visible.sync="showChangeName"></modal-change-name>
+    <modal-combine :visible.sync="visibleModalCombine"></modal-combine>
   </section>
 </template>
 <script>
@@ -45,8 +49,11 @@ import {
 import FormBtn from "./components/FormBtn";
 import ModalJs from "./components/modalJS";
 import ModalZb from "./components/modalZB";
+import modalChangeName from "./components/modalChangeName";
+import modalCombine from "./components/modalCombine";
+import { setTimeout } from "timers";
 export default {
-  components: { ModalJs, ModalZb, FormBtn },
+  components: { ModalJs, ModalZb, FormBtn, modalChangeName, modalCombine },
   computed: {
     isStep1() {
       return true;
@@ -54,6 +61,9 @@ export default {
   },
   data() {
     return {
+      visibleModalCombine: false,
+      showChangeName: false,
+      processOrganizationId: 1,
       canEditTop: false,
       loading: true,
       showJS: false,
@@ -63,6 +73,7 @@ export default {
       nextPeople: 0,
       radio2: 0,
       contentTop: [],
+      rulesTop: {},
       stepConfig: [],
       stepData: {},
       buttonConfig: [],
@@ -70,7 +81,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.$route, "route");
     if (this.$route.query.processUserId) {
       this.getFormDetail({
         processUserId: this.$route.query.processUserId,
@@ -81,27 +91,38 @@ export default {
     }
   },
   methods: {
+    showModalCombine() {
+      this.visibleModalCombine = true;
+    },
     clickEvents(data) {
-      switch (data.code) {
-        case "saveEdit": {
-          console.log("提交修改");
-          this.clickTJ();
-          break;
+      let flagValiRequired = this.$refs.editTop.$refs.form.validate(vali => {
+        if (!vali) {
+          this.$alert("必填项尚未填写，请检查输入。");
+          return;
+        } else {
+          switch (data.code) {
+            case "saveEdit": {
+              this.clickTJ();
+              break;
+            }
+            case "permitAgree": {
+              this.clickAgree();
+              break;
+            }
+            case "permitUnAgree": {
+              this.clickDisagree();
+              break;
+            }
+            case "permitSubmit": {
+              this.clickTJ();
+              break;
+            }
+            case "permitViewLog": {
+              break;
+            }
+          }
         }
-        case "permitAgree": {
-          this.clickAgree();
-          break;
-        }
-        case "2": {
-          this.clickDisagree();
-          break;
-        }
-        case "permitSubmit": {
-          this.clickTJ();
-          break;
-        }
-      }
-      // console.log('data',data)
+      });
     },
     getFormDetail(data) {
       getProcessDetail(data).then(e => {
@@ -109,19 +130,16 @@ export default {
       });
     },
     createForm() {
-      let typeMap = {
-        schedualApply: 400,
-        seeSchedualApply: 400
-      };
       this.loading = true;
       getFormTemp({
-        type: typeMap[this.$route.params.type]
+        modelType: this.$route.query.modelType,
+        fatherProcessUserWatchId: this.$route.query.fatherProcessUserWatchId
       }).then(e => {
         this.renderTemp(e);
       });
     },
     renderTemp(e) {
-      console.log("renderTemp", e);
+      this.canEditTop = true;
       let { processUserDetailResponseList } = e;
       let config = {};
       if (processUserDetailResponseList) {
@@ -130,12 +148,23 @@ export default {
         config = e;
       }
       let confContent = JSON.parse(config.processUser.content);
+      this.processOrganizationId = config.processUser.processOrganizationId;
       this.contentTop = confContent;
+      confContent.forEach(item => {
+        if (item.required) {
+          this.rulesTop[item.code] = [{ required: true }];
+        }
+        if (
+          item.code == "organizationGroup" ||
+          item.code == "mobile" ||
+          item.code == "user"
+        ) {
+          this.$set(item, "autoSelect", true);
+        }
+      });
       if (config.processUser.valueContent) {
         let valueContent = JSON.parse(config.processUser.valueContent);
-        this.editData = {};
         valueContent.forEach(item => {
-          console.log("item", item);
           let value = item.value;
           if (
             item.type == "workPlan-file" ||
@@ -154,11 +183,13 @@ export default {
         let userList = [];
         item.processUserDetailList &&
           item.processUserDetailList.forEach(userItem => {
-            console.log("userItem", userItem);
             userList.push({
               name: userItem.businessName,
               roleName: "测试角色"
             });
+            if (item.isDoingStep) {
+              this.activeStep = step;
+            }
             if (item.isDoingStep && userItem.isCurrentUserStep) {
               let cnt = [];
               if (userItem.content) {
@@ -167,16 +198,12 @@ export default {
               stepData.content = cnt;
             }
           });
-        // let selfHasAccess=item.processUserDetailList.some(item=>{
-        //   return item.isCurrentUserStep
-        // })
         stepData.userList = userList;
         stepData.stepName = item.stepName;
         stepData.showEdit = item.isDoingStep;
         this.$set(this.stepConfig, item.step - 1, stepData);
-        console.log(step, stepList, 222);
         if (step < stepList.length - 1) {
-          this.createConfNext(item.processUserDetailList, step);
+          this.createConfNext(stepList[step + 1].processUserDetailList, step);
         }
       });
       this.loading = false;
@@ -193,15 +220,20 @@ export default {
       let list = [
         {
           name: "下一步执行人",
-          type: "radio",
-          code: "next",
-          meta: {
-            list: listNext
+          type: "radio-next-user",
+          dataType: 2,
+          code: "nextUserId",
+          fixed: false,
+          autoSelect: true,
+          data: {
+            list: listPeople
           }
         },
         {
           name: "下一步办结时限",
-          type: "date"
+          type: "date",
+          code: "nextDeadTime",
+          fixed: false
         }
       ];
       this.$set(
@@ -209,75 +241,71 @@ export default {
         "content",
         this.stepConfig[step].content.concat(list)
       );
-      let indexNextPeople = this.stepConfig[step].content.length - 1;
-      let organizationRoleIdList = [];
-      let organizationGroupIdList = [];
-      listPeople.forEach(item => {
-        if (item.persionType == 3) {
-          organizationRoleIdList.push(item.businessId);
-        } else if (item.persionType == 2) {
-          organizationGroupIdList.push(item.businessId);
+    },
+    getValueContent() {
+      let valueContent = [];
+      let indexMap = {};
+      this.contentTop.forEach(item => {
+        let value = "";
+        let valOld = this.editData[item.code];
+        if (valOld && typeof valOld == "object") {
+          value = JSON.stringify(valOld);
+        } else if (value != undefined) {
+          value = valOld + "";
+        }
+        let dataIndex = indexMap[item.code];
+        let resData = {
+          fixed: item.fixed,
+          code: item.code,
+          value: value,
+          type: item.type
+        };
+        if (dataIndex != undefined) {
+          valueContent[dataIndex] = resData;
         } else {
-          this.stepConfig[step].content[0] = {
-            name: "下一步执行人",
-            type: "radio",
-            code: "next",
-            meta: {
-              list: [
-                {
-                  key: item.businessId,
-                  value: item.businessName
-                }
-              ]
-            }
-          };
-          this.$set(this.stepData, "next", item.businessId);
+          valueContent.push(resData);
         }
       });
-      return new Promise((rsv, rej) => {
-        let prArr = [];
-        let resMap = {};
-        if (organizationGroupIdList.length > 0) {
-          prArr.push(getPeopleListByOrg({ organizationGroupIdList }));
-          resMap.resGroup = prArr.length - 1;
-        }
-        if (organizationRoleIdList.length > 0) {
-          prArr.push(getPeopleListByRole({ organizationRoleIdList }));
-          resMap.resRole = prArr.length - 1;
-        }
-        Promise.all(prArr).then(e => {
-          e.forEach((item, index) => {
-            let list = this.formatUserList(item.userList);
-            if (index == 0) {
-              // 设置第一步执行人
-              this.stepConfig[step].content[0].meta.list = list;
-            } else {
-              this.stepConfig[step].content.splice(
-                this.stepConfig[step].content.length - 1,
-                0,
-                {
-                  name: "",
-                  type: "radio",
-                  code: "next" + index,
-                  meta: {
-                    list: list
-                  }
-                }
-              );
+      this.stepConfig.forEach(conf => {
+        if (conf.content) {
+          conf.content.forEach(item => {
+            if (item.code != "nextUserId" && item.code != "nextDeadTime") {
+              let value = "";
+              if (typeof this.stepData[item.code] == "object") {
+                value = JSON.stringify(this.stepData[item.code]);
+              } else {
+                value = this.stepData[item.code] + "";
+              }
+
+              let dataIndex = indexMap[item.code];
+              let resData = {
+                fixed: item.fixed,
+                code: item.code,
+                value: value,
+                type: item.type
+              };
+              if (dataIndex != undefined) {
+                valueContent[dataIndex] = resData;
+              } else {
+                valueContent.push(resData);
+                indexMap[item.code] = valueContent.length - 1;
+              }
             }
           });
-        });
+        }
       });
+      return valueContent;
     },
-    formatUserList(list) {
-      let res = [];
-      list.forEach(item => {
-        res.push({
-          key: item.userId,
-          value: item.userName
+    routerBack() {
+      let listBread = this.$store.state.breadcurmb.list;
+      let target = listBread[listBread.length - 2];
+      listBread.pop();
+      if (target) {
+        this.$router.push({
+          path: target.url,
+          query: target.query
         });
-      });
-      return res;
+      }
     },
     /** 点击按钮部分 */
     clickFP() {},
@@ -287,55 +315,19 @@ export default {
     clickZB() {
       this.showZB = true;
     },
-    getValueContent() {
-      let valueContent = [];
-      this.contentTop.forEach(item => {
-        let value = "";
-        let valOld = this.editData[item.code];
-        if (valOld && typeof valOld == "object") {
-          value = JSON.stringify(valOld);
-        } else {
-          value = valOld + "";
-        }
-        valueContent.push({
-          code: item.code,
-          value: value,
-          type: item.type,
-          fixed: item.fixed
-        });
-      });
-      this.stepConfig.forEach(conf => {
-        if (conf.content) {
-          conf.content.forEach(item => {
-            let value = "";
-            if (typeof this.stepData[item.code] == "object") {
-              value = JSON.stringify(this.stepData[item.code]);
-            } else {
-              value += "";
-            }
-            valueContent.push({
-              code: item.code,
-              value: value,
-              type: item.type,
-              fixed: item.fixed
-            });
-          });
-        }
-      });
-      return valueContent;
-    },
     clickTJ() {
       let valueContent = this.getValueContent();
       createFlow({
-        processOrganizationId: 1,
+        processOrganizationId: this.processOrganizationId,
         processDetailRequest: {
-          nextUserId: 0,
-          nextDeadTime: "",
+          nextUserId: this.stepData.nextUserId,
+          nextDeadTime: this.stepData.nextDeadTime,
           valueContent
         }
       })
         .then(e => {
           this.$alert("提交成功", "提示");
+          this.routerBack();
         })
         .catch(({ message }) => {
           this.$alert(message, "错误");
@@ -352,7 +344,7 @@ export default {
         // excuteUserInfoList: []
       };
       agree(data).then(e => {
-        console.log("同意成功");
+        console.log("agree success");
       });
     },
     clickDisagree() {
@@ -362,7 +354,7 @@ export default {
         valueContent
       };
       disAgree(data).then(e => {
-        console.log("同意成功");
+        console.log("disAgree success");
       });
     }
   }

@@ -23,7 +23,7 @@
           <el-form-item label="限办日期">
             <el-date-picker
               v-model="searchForm.dateRange"
-              type="date"
+              type="daterange"
               size="small"
               style="width: 100%"
               :unlink-panels="true"

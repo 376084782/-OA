@@ -1,31 +1,77 @@
 import store from 'store'
-
+import {
+  getDepartmentTree
+} from 'api/permission'
 export function getCurrentUserInfo() {
-  let {
-    userInfo,
-  } = store.state.login;
-  return [{
-    key: userInfo.userId,
-    value: userInfo.userName
-  }]
+  return new Promise(rsv => {
+    let {
+      userInfo,
+    } = store.state.login;
+    rsv([{
+      value: userInfo.userId,
+      name: userInfo.userName
+    }])
+  })
 }
 
 export function getCurrentUserGroupList() {
   let {
     groupList
   } = store.state.login;
-  let list = [];
-  groupList.forEach(item => {
-    list.push({
-      key: item.organizationGroupId,
-      value: item.name
+  return new Promise(rsv => {
+
+    let list = [];
+    groupList.forEach(item => {
+      list.push({
+        value: item.organizationGroupId,
+        name: item.name
+      })
+    })
+    rsv(list);
+  })
+}
+
+export function getGroupList() {
+  return new Promise(rsv => {
+    getDepartmentTree({
+      organizationGroupId: -1
+    }).then(({
+      organizationGroupList
+    }) => {
+      let list = []
+      organizationGroupList.forEach(item => {
+        list.push({
+          name: item.name,
+          value: item.organizationCode
+        })
+      })
+      console.log(list,'list')
+      rsv(list);
     })
   })
-  console.log(store.state.login,'22223232')
-  return list;
 }
+
+export function getProcessUserList(modalType) {
+  let {
+    groupList
+  } = store.state.login;
+  return new Promise(rsv => {
+
+    let list = [];
+    groupList.forEach(item => {
+      list.push({
+        key: item.organizationGroupId,
+        value: item.name
+      })
+    })
+    rsv(list);
+  })
+}
+
 
 export const funcMap = {
   getCurrentUserInfo,
   getCurrentUserGroupList,
+  getGroupList,
+  getProcessUserList
 }

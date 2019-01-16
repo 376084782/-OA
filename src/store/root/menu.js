@@ -30,30 +30,24 @@ const menuList = {
       title: '公文管理',
       icon: 'folder',
       subMenu: [{
-        title: '公文发起',
+        title: '公文收发',
         path: '/document/sponse'
       }, {
-        title: '收文分派',
+        title: '公文办理',
         path: '/document/assign'
-      }, {
-        title: '待办已办',
-        path: '/document/done'
-      }, {
-        title: '待收已收',
-        path: '/document/receive'
       }, {
         title: '归档公文',
         path: '/document/arrange'
+      },{
+        title:'文号管理',
+        path:'/document/whgl'
       }]
     }, {
       title: '任务管理',
       icon: 'book',
       subMenu: [{
-        title: '我发起的',
-        path: '/task/mine'
-      }, {
-        title: '待办已办',
-        path: '/task/done'
+        title: '任务中心',
+        path: '/task/center'
       }]
     }, {
       title: '排班管理',
