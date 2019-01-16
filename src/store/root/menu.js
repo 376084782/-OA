@@ -70,7 +70,7 @@ const menuList = {
         path: '/permission/organization'
       }, {
         title: '角色权限',
-        path: '/permission/character'
+        path: '/permission/role'
       }]
     }]
   },
