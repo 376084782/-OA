@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import store from 'store'
 import {
-  getDepartmentTree
+  getOrganizationTree
 } from 'api/permission'
 const state = {
   data: {},
@@ -42,7 +42,7 @@ const actions = {
   getCurrentUserGroupInfo({
     state
   }) {
-    getDepartmentTree({
+    getOrganizationTree({
       organizationGroupId: -1
     }).then(({
       organizationGroupList
@@ -60,7 +60,7 @@ const actions = {
   getGroupList({
     state
   }) {
-    getDepartmentTree({
+    getOrganizationTree({
       organizationGroupId: -1
     }).then(({
       organizationGroupList

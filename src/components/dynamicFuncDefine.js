@@ -1,6 +1,6 @@
 import store from 'store'
 import {
-  getDepartmentTree
+  getOrganizationTree
 } from 'api/permission'
 export function getCurrentUserInfo() {
   return new Promise(rsv => {
@@ -33,7 +33,7 @@ export function getCurrentUserGroupList() {
 
 export function getGroupList() {
   return new Promise(rsv => {
-    getDepartmentTree({
+    getOrganizationTree({
       organizationGroupId: -1
     }).then(({
       organizationGroupList
