@@ -2,7 +2,7 @@ import Vue from 'vue'
 import store from 'store'
 import {
   getOrganizationTree
-} from 'api/permission'
+} from 'api/index'
 const state = {
   data: {},
   currentUserInfo: {},
@@ -47,11 +47,11 @@ const actions = {
     }).then(({
       organizationGroupList
     }) => {
-      let list = []
+      let list = [];
       organizationGroupList.forEach(item => {
         list.push({
           name: item.name,
-          value: item.organizationCode + ''
+          value: item.organizationGroupId + ''
         })
       })
       Vue.set(state.data, 'getCurrentUserGroupInfo', list);
@@ -69,7 +69,7 @@ const actions = {
       organizationGroupList.forEach(item => {
         list.push({
           name: item.name,
-          value: item.organizationCode + ''
+          value: item.organizationGroupId + ''
         })
       })
       Vue.set(state.data, 'getGroupList', list);

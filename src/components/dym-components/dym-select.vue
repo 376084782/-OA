@@ -4,6 +4,7 @@
     v-model="val"
     :style="{width:inputWidth}"
     :multiple="multiple"
+    filterable
   >
     <el-option v-for="item in selectDataList" :key="item.value" :label="item.name" :value="item"></el-option>
   </el-select>

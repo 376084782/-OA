@@ -8,8 +8,13 @@
   </el-dialog>
 </template>
 <script>
+import { getDetailListReceive } from "api/document";
 export default {
   props: {
+    id: {
+      type: Number,
+      default: 0
+    },
     visible: {
       type: Boolean
     }
@@ -19,6 +24,18 @@ export default {
       bLoading: false,
       data: []
     };
+  },
+  watch: {
+    visible(flag) {
+      if (flag) {
+        console.log("idddd", this.id);
+        getDetailListReceive({
+          processUserId: this.id
+        }).then(e => {
+          console.log(2321331, e);
+        });
+      }
+    }
   },
   methods: {
     handleClose() {

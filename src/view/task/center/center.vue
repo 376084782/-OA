@@ -9,6 +9,7 @@
       <el-button class="mgTop10" type="primary" size="small">发起任务</el-button>
       <section class="mgTop24">
         <el-table
+          :cell-class-name="cellClass"
           :row-key="getRowKeys"
           ref="table"
           class="table-task no-expand"
@@ -19,6 +20,7 @@
           <el-table-column type="expand">
             <template slot-scope="scope">
               <el-table
+                :cell-class-name="cellClass"
                 :data="scope.row.subList"
                 row-class-name="subCol1"
                 ref="subTab1"
@@ -26,7 +28,12 @@
               >
                 <el-table-column type="expand">
                   <template slot-scope="scope">
-                    <el-table :data="scope.row.subList" row-class-name="subCol2" class="no-expand">
+                    <el-table
+                      :cell-class-name="cellClass"
+                      :data="scope.row.subList"
+                      row-class-name="subCol2"
+                      class="no-expand"
+                    >
                       <el-table-column type="expand"></el-table-column>
                       <el-table-column prop label="序号"></el-table-column>
                       <el-table-column prop="name" label="任务名称" width="400px"></el-table-column>
@@ -155,6 +162,16 @@ export default {
     ]);
   },
   methods: {
+    cellClass({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex == 5) {
+        return "table-cell-grey1";
+      } else if(columnIndex==7){
+        return 'table-cell-grey2'
+      } else if(columnIndex==6){
+        // 状态，判断颜色
+        return 'font-danger'
+      }
+    },
     expandIcon(scope) {
       if (this.expandList.indexOf(scope.row.id) == -1) {
         return "el-icon-plus";

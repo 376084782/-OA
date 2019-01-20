@@ -11,16 +11,18 @@
         :disabled="!canEditTop"
         @showModalCombine="showModalCombine"
       ></dynamic-form>
-      <div class="line mgTop40"></div>
-      <h4 class="mgTop40 mgLeft75">公文处理流程图：</h4>
-      <step
-        ref="step"
-        :style="{height:activeStep==3?'650px':'auto'}"
-        :active="activeStep"
-        :config="stepConfig"
-        :data="stepData"
-        class="mgTop24 mgLeft185"
-      ></step>
+      <template v-if="stepConfig.length>0">
+        <div class="line mgTop40"></div>
+        <h4 class="mgTop40 mgLeft75">公文处理流程图：</h4>
+        <step
+          ref="step"
+          :style="{height:activeStep==3?'650px':'auto'}"
+          :active="activeStep"
+          :config="stepConfig"
+          :data="stepData"
+          class="mgTop24 mgLeft185"
+        ></step>
+      </template>
       <el-row class="mgLeft185">
         <template v-for="(conf,index) in buttonConfig">
           <el-button type="primary" :key="index" @click="clickEvents(conf)">{{conf.showValue}}</el-button>
@@ -44,7 +46,9 @@ import {
   getPeopleListByRole,
   getProcessDetail,
   agree,
-  disAgree
+  disAgree,
+  processRecall,
+  showWen
 } from "api/index";
 import FormBtn from "./components/FormBtn";
 import ModalJs from "./components/modalJS";
@@ -81,13 +85,25 @@ export default {
     };
   },
   mounted() {
-    if (this.$route.query.processUserId) {
-      this.getFormDetail({
+    let query = this.$route.query;
+    let flagStart =
+      query.permitButton &&
+      (query.permitButton == 1 || query.permitButton == 2);
+    if (query.processUserId) {
+      let data = {
         processUserId: this.$route.query.processUserId,
         processUserDetailId: this.$route.query.processUserDetailId
+      };
+      if (query.permitButton == 3) {
+        data.processUserWatcherId = query.processUserWatcherId;
+      }
+      this.getFormDetail(data, flagStart);
+    }
+    if (flagStart) {
+      this.createForm({
+        modelType: query.modelType || query.permitModelType,
+        fatherProcessUserWatchId: this.$route.query.fatherProcessUserWatchId
       });
-    } else {
-      this.createForm();
     }
   },
   methods: {
@@ -120,25 +136,30 @@ export default {
             case "permitViewLog": {
               break;
             }
+            case "permitRecall": {
+              this.clickRecall();
+              return;
+            }
+            case "permitReceive": {
+              this.clickShowWen();
+              return;
+            }
           }
         }
       });
     },
-    getFormDetail(data) {
+    getFormDetail(data, isStart) {
       getProcessDetail(data).then(e => {
-        this.renderTemp(e);
+        this.renderTemp(e, isStart);
       });
     },
-    createForm() {
+    createForm(data) {
       this.loading = true;
-      getFormTemp({
-        modelType: this.$route.query.modelType,
-        fatherProcessUserWatchId: this.$route.query.fatherProcessUserWatchId
-      }).then(e => {
+      getFormTemp(data).then(e => {
         this.renderTemp(e);
       });
     },
-    renderTemp(e) {
+    renderTemp(e, isStart) {
       this.canEditTop = true;
       let { processUserDetailResponseList } = e;
       let config = {};
@@ -149,7 +170,9 @@ export default {
       }
       let confContent = JSON.parse(config.processUser.content);
       this.processOrganizationId = config.processUser.processOrganizationId;
-      this.contentTop = confContent;
+      if (!isStart) {
+        this.contentTop = confContent;
+      }
       confContent.forEach(item => {
         if (item.required) {
           this.rulesTop[item.code] = [{ required: true }];
@@ -168,7 +191,9 @@ export default {
           let value = item.value;
           if (
             item.type == "workPlan-file" ||
-            item.type == "workPlan-calendar"
+            item.type == "workPlan-calendar" ||
+            item.type.indexOf("multi") > -1 ||
+            item.type.indexOf("select") > -1
           ) {
             value = JSON.parse(value);
           }
@@ -176,7 +201,7 @@ export default {
         });
       }
       this.buttonConfig = config.processButtonInfoList;
-      let stepList = config.processUserStepList;
+      let stepList = config.processUserStepList || [];
       stepList.forEach((item, step) => {
         let stepData = this.stepConfig[item.step - 1] || {};
         this.$set(this.stepConfig, item.step - 1, stepData);
@@ -190,7 +215,11 @@ export default {
             if (item.isDoingStep) {
               this.activeStep = step;
             }
-            if (item.isDoingStep && userItem.isCurrentUserStep) {
+            if (
+              item.isDoingStep &&
+              userItem.isCurrentUserStep &&
+              userItem.isDoingStep
+            ) {
               let cnt = [];
               if (userItem.content) {
                 cnt = JSON.parse(userItem.content);
@@ -198,12 +227,19 @@ export default {
               stepData.content = cnt;
             }
           });
+        let flagShowStep =
+          item.processUserDetailList &&
+          item.processUserDetailList.some(userItem => {
+            return userItem.isCurrentUserStep && userItem.isDoingStep;
+          });
         stepData.userList = userList;
         stepData.stepName = item.stepName;
-        stepData.showEdit = item.isDoingStep;
-        this.$set(this.stepConfig, item.step - 1, stepData);
-        if (step < stepList.length - 1) {
-          this.createConfNext(stepList[step + 1].processUserDetailList, step);
+        stepData.showEdit = item.isDoingStep && flagShowStep;
+        if (!isStart) {
+          this.$set(this.stepConfig, item.step - 1, stepData);
+          if (step < stepList.length - 1) {
+            this.createConfNext(stepList[step + 1].processUserDetailList, step);
+          }
         }
       });
       this.loading = false;
@@ -248,6 +284,9 @@ export default {
       this.contentTop.forEach(item => {
         let value = "";
         let valOld = this.editData[item.code];
+        if (!valOld && item.type.indexOf("multi") > -1) {
+          valOld = [];
+        }
         if (valOld && typeof valOld == "object") {
           value = JSON.stringify(valOld);
         } else if (value != undefined) {
@@ -259,6 +298,7 @@ export default {
           code: item.code,
           value: value,
           type: item.type
+          // data: item.data
         };
         if (dataIndex != undefined) {
           valueContent[dataIndex] = resData;
@@ -308,6 +348,17 @@ export default {
       }
     },
     /** 点击按钮部分 */
+    clickRecall() {
+      processRecall({
+        processUserDetailId: this.$route.query.processUserDetailId
+      })
+        .then(e => {
+          this.routerBack();
+        })
+        .catch(({ message }) => {
+          this.$alert(message);
+        });
+    },
     clickFP() {},
     clickJS() {
       this.showJS = true;
@@ -317,14 +368,19 @@ export default {
     },
     clickTJ() {
       let valueContent = this.getValueContent();
-      createFlow({
+      let query = this.$route.query;
+      let data = {
         processOrganizationId: this.processOrganizationId,
         processDetailRequest: {
-          nextUserId: this.stepData.nextUserId,
+          nextUserId: this.stepData.nextUserId[0].userId,
           nextDeadTime: this.stepData.nextDeadTime,
           valueContent
         }
-      })
+      };
+      if (query.permitModelType == 101) {
+        data.fatherProcessUserWatchId = query.processUserWatcherId;
+      }
+      createFlow(data)
         .then(e => {
           this.$alert("提交成功", "提示");
           this.routerBack();
@@ -337,15 +393,29 @@ export default {
     clickAgree() {
       let valueContent = this.getValueContent();
       let data = {
+        nextDetailUserInfoList: this.stepData.nextUserId,
+        nextDeadTime: this.stepData.nextDeadTime,
         processUserDetailId: this.$route.query.processUserDetailId,
         valueContent
-        // nextDetailUserInfoList: [],
-        // nextDeadTime: "",
-        // excuteUserInfoList: []
       };
-      agree(data).then(e => {
-        console.log("agree success");
-      });
+      agree(data)
+        .then(e => {
+          this.routerBack();
+        })
+        .catch(({ message }) => {
+          this.$alert(message);
+        });
+    },
+    clickShowWen() {
+      showWen({
+        processUserWatcherId: this.$route.query.processUserWatcherId
+      })
+        .then(e => {
+          this.routerBack();
+        })
+        .catch(({ message }) => {
+          this.$alert(message);
+        });
     },
     clickDisagree() {
       let valueContent = this.getValueContent();

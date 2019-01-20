@@ -73,6 +73,15 @@ export const agree = data => {
     data
   });
 };
+
+export const processRecall = data => {
+  return Ajax.request({
+    url: "/oa/flow/processUserButton/recall",
+    method: "post",
+    data
+  });
+};
+
 export const disAgree = data => {
   return Ajax.request({
     url: "/oa/flow/processUserButton/unAgree",
@@ -215,17 +224,17 @@ export const scedualSearch = ({
   });
 };
 
-let testContent=[{
-  name:'关联公文',
-  code:'combine',
-  type:'combine'
+let testContent = [{
+  name: '关联公文',
+  code: 'combine',
+  type: 'combine'
 }]
-let testData={
-  processUserDetailResponseList:[{
-    processUser:{
-      content:JSON.stringify(testContent)
+let testData = {
+  processUserDetailResponseList: [{
+    processUser: {
+      content: JSON.stringify(testContent)
     },
-    processUserStepList:[]
+    processUserStepList: []
   }]
 }
 
@@ -248,16 +257,25 @@ export const getFormTemp = ({
   });
 };
 
-export const getProcessDetail = ({
-  processUserId = 0,
-  processUserDetailId = ""
-}) => {
+export const getProcessDetail = (data) => {
   return Ajax.request({
     url: "/oa/flow/processUserDetail/list",
-    data: {
-      processUserId,
-      processUserDetailId
-    },
+    data,
+    method: "post"
+  });
+};
+export const showWen = (data) => {
+  return Ajax.request({
+    url: "/oa/flow/processUserButton/watchRead",
+    data,
+    method: "post"
+  });
+};
+
+export const getOrganizationTree = () => {
+  return Ajax.request({
+    url: "/oa/ums/organizationGroup/list",
+    data: {},
     method: "post"
   });
 };

@@ -4,26 +4,20 @@
       <list-search @search="onSearch"></list-search>
       <section class="mgTop24">
         <el-table v-loading="bLoading" :data="dataSource" style="min-height: 400px">
-          <el-table-column prop label="文号"></el-table-column>
-          <el-table-column prop="region" label="标题"></el-table-column>
-          <el-table-column prop="numid" label="紧急程度"></el-table-column>
+          <el-table-column prop="flowCode" label="文号"></el-table-column>
+          <el-table-column prop="flowTitle" label="标题"></el-table-column>
+          <el-table-column prop="numid" label="紧急程度">
+            <template slot-scope="scope">
+              {{getJJCD(scope.row)}}
+            </template>
+          </el-table-column>
           <el-table-column prop="recharge" label="状态"></el-table-column>
           <el-table-column prop="usercnt" label="发文单位"></el-table-column>
           <el-table-column prop="recharge" label="限办日期"></el-table-column>
           <el-table-column prop="recharge" label="类型"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <template v-if="scope.$index%3==0">
-                <el-button @click="$router.push('/document/assign/do')" type="text">分派</el-button>
-              </template>
-              <template v-else-if="scope.$index%3==1">
-                <el-button @click="showFormDetail(scope.row)" type="text">查看</el-button>
-              </template>
-              <template v-else-if="scope.$index%3==2">
-                <el-button @click="showFormDetail(scope.row)" type="text">查看</el-button>
-                <i class="grey">|</i>
-                <el-button @click="showReceiveDetail(scope.row)" type="text">接收情况</el-button>
-              </template>
+                <el-button @click="showFormDetail(scope.row)" type="text">{{scope.row.buttonContent}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -35,19 +29,23 @@
 <script>
 import listSearch from "./components/search";
 import modalDetail from "./components/modalDetail";
+import { getListAssign } from "api/document";
 export default {
   components: { listSearch, modalDetail },
   data() {
     return {
       showDetail: false,
       bLoading: false,
-      dataSource: [{}],
+      dataSource: [],
       listDone: [{}, {}, {}],
-      listNotDone: []
+      listNotDone: [],
+      searchParams: {
+        modelTypeList: [100,101]
+      },
+      
     };
   },
-  watch: {
-  },
+  watch: {},
   mounted() {
     this.$store.dispatch("updateBreadCurmbList", [
       {
@@ -59,9 +57,36 @@ export default {
         url: this.$route.path
       }
     ]);
+    this.onSearch();
   },
   methods: {
-    onSearch(params) {},
+    getJJCD(data) {
+      let valueContent = JSON.parse(data.valueContent);
+      let dataUrgency = valueContent.filter(item => {
+        return item.code == "urgency";
+      })[0];
+      if (dataUrgency.value.indexOf("{") == -1) {
+        return 0;
+      }
+      let valueConf = JSON.parse(dataUrgency.value);
+      let value = valueConf.name;
+      return value;
+    },
+    loadData() {
+      this.bLoading = true;
+      this.searchParams.dateFormat = "%Y-%m-%d";
+      getListAssign(this.searchParams)
+        .then(({ tableResponse }) => {
+          this.dataSource = tableResponse.list;
+        })
+        .finally(() => {
+          this.bLoading = false;
+        });
+    },
+    onSearch(params) {
+      Object.assign(this.searchParams, params, { pageNo: 1 });
+      this.loadData();
+    },
     showReceiveDetail(data) {
       this.showDetail = true;
     },
@@ -69,7 +94,8 @@ export default {
       this.$router.push({
         path: "/document/seeAssign/do",
         query: {
-          id: data.id
+          processUserId: data.processUserId,
+          processUserDetailId:data.detailId
         }
       });
     }

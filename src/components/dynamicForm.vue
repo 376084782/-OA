@@ -58,7 +58,16 @@
             :conf="conf"
             :disabled="disabled||conf.readOnly"
             v-model="editData[conf.code]"
+            :select="editData[conf.code]"
           ></dym-radio>
+        </template>
+        <template v-else-if="conf.type=='multi-document'">
+          <dym-combine
+            :conf="conf"
+            :disabled="disabled||conf.readOnly"
+            v-model="editData[conf.code]"
+            :select="editData[conf.code]"
+          ></dym-combine>
         </template>
         <template v-else-if="conf.type=='radio-next-user'">
           <dym-radio-next-user
@@ -111,6 +120,7 @@ import { funcMap } from "./dynamicFuncDefine";
 import { mapGetters } from "vuex";
 import dymSelect from "./dym-components/dym-select";
 import dymRadio from "./dym-components/dym-radio";
+import dymCombine from "./dym-components/dym-combine";
 import dymRadioNextUser from "./dym-components/dym-radio-next-user";
 import dymWorkPlanImport from "./dym-components/dym-work-plan-import";
 import dymWorkPlanCalender from "./dym-components/dym-work-plan-calender";
@@ -120,7 +130,8 @@ export default {
     dymRadio,
     dymRadioNextUser,
     dymWorkPlanImport,
-    dymWorkPlanCalender
+    dymWorkPlanCalender,
+    dymCombine
   },
   props: {
     rules: {
