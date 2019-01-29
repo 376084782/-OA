@@ -164,3 +164,50 @@ export function dateFormater(timeStamp, fmt) {
       fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
   return fmt;
 }
+export function formatValueContentToList(dataJson) {
+  let data = {};
+  if (typeof dataJson == 'string') {
+    data = JSON.parse(dataJson)
+  } else {
+    data = dataJson
+  }
+  let map = {};
+  data.forEach(item => {
+    let value = item.value;
+    if (value.indexOf('{') > -1 || value.indexOf('[') > -1) {
+      value = JSON.parse(value);
+      if (Array.isArray(value)) {
+        let list = value.concat();
+        value = ''
+        list.forEach(item => {
+          if (value) {
+            value += ','
+          }
+          value += item.name
+        })
+
+      } else {
+        value = value.name
+      }
+    }
+    map[item.code] = value;
+  })
+  return map;
+}
+export function formatValueContentToListObject(dataJson) {
+  let data = {};
+  if (typeof dataJson == 'string') {
+    data = JSON.parse(dataJson)
+  } else {
+    data = dataJson
+  }
+  let map = {};
+  data.forEach(item => {
+    let value = item.value;
+    if (value.indexOf('{') > -1 || value.indexOf('[') > -1) {
+      value = JSON.parse(value);
+    }
+    map[item.code] = value;
+  })
+  return map;
+}

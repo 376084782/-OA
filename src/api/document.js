@@ -3,6 +3,14 @@ import {
 } from "utils/axios";
 
 
+export const getListChild = data => {
+  return Ajax.request({
+    url: "oa/flow/processUser/list/chlidren",
+    method: "post",
+    data
+  });
+};
+
 export const getListAll = data => {
   return Ajax.request({
     url: "/oa/flow/processUser/page/all",

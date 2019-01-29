@@ -14,6 +14,8 @@ import $ from 'jquery';
 window.$ = $;
 filter(Vue);
 
+import _ from 'lodash';
+Vue.prototype._ = _;
 
 var vue = new Vue();
 Vue.use(Common)

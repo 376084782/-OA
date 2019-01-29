@@ -14,9 +14,27 @@
         <el-col>
           <el-row type="flex" class="detail">
             <el-col class="left">
-              <el-row class="user-list-wrap" v-for="(item,index) in conf.userList" :key="index" type="flex">
-                <span class="name">{{item.name}}</span>
-                <el-tag class="role">{{item.roleName}}</el-tag>
+              <el-row
+                class="user-list-wrap"
+                v-for="(item,index) in conf.userList"
+                :key="index"
+                type="flex"
+              >
+                <!-- {{item}} -->
+                <div class="left">
+                  <span class="name">{{item.name}}</span>
+                  <el-tag class="role" v-if="item.name">{{item.roleName}}</el-tag>
+                </div>
+                <div
+                  class="right"
+                  v-if="item.statusDictionary!='待处理'&&item.statusDictionary!='未开始'"
+                >
+                  <p>
+                    {{item.statusDictionary}}&nbsp;&nbsp;
+                    <span class="sub">{{item.finishTime}}</span>
+                  </p>
+                  <step-detail :content="item.content" :value="item.valueContent" :step="index+1"></step-detail>
+                </div>
               </el-row>
             </el-col>
             <el-col>
@@ -35,16 +53,6 @@
                     </div>
                   </div>
                 </div>
-                <div v-else-if="conf.action!=1">
-                  <div v-for="(detail,index) in conf.detailList" :key="index">
-                    <p class="tip-detail">
-                      <span class="action" :class="detail.className">{{detail.title1}}</span>
-                      <span class="detail-name">{{detail.title2}}</span>
-                      <span class="tip-date">&nbsp;&nbsp;{{detail.title3}}</span>
-                    </p>
-                    <p class="tip-detail">{{detail.remark}}</p>
-                  </div>
-                </div>
               </div>
             </el-col>
           </el-row>
@@ -55,7 +63,9 @@
 </template>
 <script>
 import "assets/css/step.scss";
+import stepDetail from './step-detail.vue'
 export default {
+  components:{stepDetail},
   props: {
     data: {
       type: Object,

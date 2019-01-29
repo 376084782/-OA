@@ -15,12 +15,16 @@
           <el-table-column prop="flowCode" label="文号"></el-table-column>
           <el-table-column prop="flowTitle" label="标题"></el-table-column>
           <el-table-column prop="numid" label="紧急程度">
-            <template slot-scope="scope">{{getJJCD(scope.row)}}</template>
+            <template slot-scope="scope">{{scope.row.valueContent['urgency']}}</template>
           </el-table-column>
           <el-table-column prop="finishStatusDictionary" label="状态"></el-table-column>
-          <el-table-column prop="organizationGroupName" label="来文单位"></el-table-column>
+          <el-table-column width="220px" prop="organizationGroupName" label="来文单位">
+            <template slot-scope="scope">{{scope.row.valueContent['mainGroupList']}}</template>
+          </el-table-column>
           <template v-if="activeName=='2'">
-            <el-table-column prop="detailFinishTime" label="限办日期"></el-table-column>
+            <el-table-column width="180px" prop="detailFinishTime" label="限办日期">
+              <template slot-scope="scope">{{scope.row.valueContent['documentSendDate']}}</template>
+            </el-table-column>
           </template>
           <el-table-column prop="finishStatusDictionary" label="类型"></el-table-column>
           <el-table-column label="操作" v-if="activeName=='1'">
@@ -51,6 +55,7 @@
 import listSearch from "./components/search";
 import modalDetail from "./components/modalDetail";
 import { getListSend, getListGet } from "api/document";
+import { formatValueContentToList } from "utils/assist";
 export default {
   components: { listSearch, modalDetail },
   data() {
@@ -60,7 +65,7 @@ export default {
       showDetail: false,
       bLoading: false,
       searchParams: {
-        modelTypeList: [100,101]
+        modelTypeList: [100, 101]
       },
       dataSource: [],
       oPagination: {
@@ -73,7 +78,7 @@ export default {
   watch: {
     activeName(val) {
       this.searchParams = {
-        modelTypeList: [100,101]
+        modelTypeList: [100, 101]
       };
       this.onSearch();
     }
@@ -108,7 +113,8 @@ export default {
       this.$router.push({
         path: "/document/sponse/do",
         query: {
-          modelType: 100
+          modelType: 100,
+          permitButton: 1
         }
       });
     },
@@ -123,19 +129,15 @@ export default {
         query: {
           processUserId: data.processUserId,
           processUserDetailId: data.detailId,
-          processUserWatcherId:data.processUserWatcherId
+          processUserWatcherId: data.processUserWatcherId,
+          permitButton: data.permitButton,
+          permitModelType: data.permitModelType
         }
       };
       this.$store.dispatch("addBreadCurmbList", routeData);
       this.$router.push({
-        path: "/document/seeSponse/do",
-        query: {
-          processUserId: data.processUserId,
-          processUserDetailId: data.detailId,
-          processUserWatcherId:data.processUserWatcherId,
-          permitButton:data.permitButton,
-          permitModelType:data.permitModelType
-        }
+        path: routeData.url,
+        query: routeData.query
       });
     },
     // 请求数据函数
@@ -146,6 +148,10 @@ export default {
       func(this.searchParams)
         .then(({ tableResponse }) => {
           this.dataSource = tableResponse.list;
+          this.dataSource.forEach(item => {
+            console.log(item, 222);
+            item.valueContent = formatValueContentToList(item.valueContent);
+          });
           this.oPagination.pageNo = tableResponse.pageNum;
           this.oPagination.total = tableResponse.count;
         })

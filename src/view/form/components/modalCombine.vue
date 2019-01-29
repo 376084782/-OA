@@ -1,16 +1,22 @@
 <template>
-  <el-dialog title="选择关联公文" :visible.sync="visible" width="1160px" :before-close="handleClose">
+  <el-dialog title="选择关联公文" :visible="visible" width="1160px" @update:visible="toggle">
     <modal-combine-search @search="onSearch"></modal-combine-search>
     <el-table :row-style="rowStyle" :data="dataSource">
       <el-table-column prop="flowCode" label="文号"></el-table-column>
       <el-table-column prop="flowTitle" label="标题"></el-table-column>
       <el-table-column label="紧急程度">
-        <template slot-scope="scope">{{getJJCD(scope.row)}}</template>
+        <template slot-scope="scope">{{scope.row.valueContent['urgency']}}</template>
       </el-table-column>
-      <el-table-column label="状态"></el-table-column>
-      <el-table-column label="来文单位"></el-table-column>
-      <el-table-column label="发文日期"></el-table-column>
-      <el-table-column label="类型"></el-table-column>
+      <el-table-column prop="modelTypeDictionary" label="状态"></el-table-column>
+      <el-table-column label="来文单位">
+        <template slot-scope="scope">{{scope.row.valueContent['mainGroupList']}}</template>
+      </el-table-column>
+      <el-table-column label="发文日期">
+        <template slot-scope="scope">{{scope.row.valueContent['sendGroupList']}}</template>
+      </el-table-column>
+      <el-table-column label="类型">
+        <template slot-scope="scope">{{scope.row.valueContent['type']}}</template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button v-if="isHave(scope.row)" type="text" @click="toggleSel(scope.row,false)">取消选择</el-button>
@@ -19,7 +25,7 @@
       </el-table-column>
     </el-table>
     <template slot="footer">
-      <el-button size="small" @click="$emit('visible',false)">取消</el-button>
+      <el-button size="small" @click="toggle(false)">取消</el-button>
       <el-button size="small" type="primary" @click="changeSel">确认</el-button>
     </template>
   </el-dialog>
@@ -27,31 +33,33 @@
 <script>
 import modalCombineSearch from "./modalCombineSearch";
 import { getListAll } from "api/document";
+
+import { formatValueContentToList } from "utils/assist";
+import { defaultCoreCipherList } from "constants";
 export default {
   components: { modalCombineSearch },
-  props: ["visible"],
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    },
+    defaultList: {
+      type: Array,
+      default() {
+        return [];
+      }
+    }
+  },
   computed: {},
   methods: {
     changeSel() {
-      this.visible = false;
+      this.toggle(false);
       this.$emit("changeSel", this.selectedList);
     },
     isHave(data) {
       return this.selectedList.some(item => {
         return item.value == data.processUserId;
       });
-    },
-    getJJCD(data) {
-      let valueContent = JSON.parse(data.valueContent);
-      let dataUrgency = valueContent.filter(item => {
-        return item.code == "urgency";
-      })[0];
-      if (dataUrgency.value.indexOf("{") == -1) {
-        return 0;
-      }
-      let valueConf = JSON.parse(dataUrgency.value);
-      let value = valueConf.name;
-      return value;
     },
     loadData() {
       this.bLoading = true;
@@ -61,6 +69,9 @@ export default {
       getListAll(this.searchParams)
         .then(({ tableResponse }) => {
           this.dataSource = tableResponse.list;
+          this.dataSource.forEach(item => {
+            item.valueContent = formatValueContentToList(item.valueContent);
+          });
         })
         .finally(() => {
           this.bLoading = false;
@@ -102,19 +113,26 @@ export default {
       }
     },
     searchHandler() {},
-    handleClose() {
-      this.$emit("update:visible", false);
+    toggle(flag) {
+      this.$emit("update:visible", flag);
     }
   },
   mounted() {
     this.onSearch();
   },
+  watch: {
+    visible(flag) {
+      if (flag) {
+        this.selectedList = this.defaultList.concat();
+      }
+    }
+  },
   data() {
     return {
-      selectedList: [],
       list: [{ id: 1 }],
       searchParams: {},
-      dataSource: []
+      dataSource: [],
+      selectedList: []
     };
   }
 };

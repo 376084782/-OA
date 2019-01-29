@@ -52,6 +52,16 @@
             value-format="yyyy-MM-dd hh:mm:ss"
           ></el-date-picker>
         </template>
+        <template v-else-if="conf.type=='dateTime'">
+          <el-date-picker
+            :disabled="disabled||conf.readOnly"
+            :style="{width:inputWidth}"
+            v-model="editData[conf.code]"
+            type="datetime"
+            value-format="yyyy-MM-dd hh:mm:ss"
+          ></el-date-picker>
+        </template>
+
         <template v-else-if="conf.type=='radio'">
           <dym-radio
             :auto-select="true"
@@ -78,11 +88,7 @@
           ></dym-radio-next-user>
         </template>
         <template v-else-if="conf.type=='multi-file'">
-          <el-upload :disabled="disabled||conf.readOnly" action="22">
-            <el-button size="small">
-              <i class="anticon icon-upload"></i> 上传文件
-            </el-button>
-          </el-upload>
+          <dym-upload-file :disabled="disabled||conf.readOnly" v-model="editData[conf.code]"></dym-upload-file>
         </template>
         <template v-else-if="conf.type=='upload'">
           <template v-if="conf.meta.type=='image'">
@@ -107,7 +113,7 @@
           <dym-work-plan-calender v-model="editData[conf.code]"></dym-work-plan-calender>
         </template>
         <template v-else-if="conf.type=='combine'">
-          <el-button @click="showCombine">关联公文</el-button>
+          <el-button :disabled="disabled||conf.readOnly" @click="showCombine">关联公文</el-button>
         </template>
       </el-form-item>
     </template>
@@ -124,6 +130,7 @@ import dymCombine from "./dym-components/dym-combine";
 import dymRadioNextUser from "./dym-components/dym-radio-next-user";
 import dymWorkPlanImport from "./dym-components/dym-work-plan-import";
 import dymWorkPlanCalender from "./dym-components/dym-work-plan-calender";
+import dymUploadFile from "./dym-components/dym-upload-file.vue";
 export default {
   components: {
     dymSelect,
@@ -131,7 +138,8 @@ export default {
     dymRadioNextUser,
     dymWorkPlanImport,
     dymWorkPlanCalender,
-    dymCombine
+    dymCombine,
+    dymUploadFile
   },
   props: {
     rules: {

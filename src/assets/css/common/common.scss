@@ -55,15 +55,15 @@
     background-color: rgba(245, 34, 45, 1);
   }
 
-  &.danger:after {
+  &.danger::before {
     background-color: rgba(245, 34, 45, 1);
   }
 
-  &.warn:after {
+  &.warn::before {
     background-color: rgba(250, 173, 20, 1);
   }
 
-  &.primary:after {
+  &.primary::before {
     background-color: rgba(77, 160, 253, 1);
   }
 }

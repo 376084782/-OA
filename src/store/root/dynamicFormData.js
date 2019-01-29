@@ -1,14 +1,25 @@
 import Vue from 'vue'
 import store from 'store'
 import {
-  getOrganizationTree
+  getOrganizationTree,
 } from 'api/index'
+import {
+  getPeopleList
+} from 'api/permission'
 const state = {
   data: {},
   currentUserInfo: {},
   currentOrgInfo: {}
 };
 const actions = {
+  setData({
+    state
+  }, {
+    code,
+    data
+  }) {
+    Vue.set(state.data, code, data);
+  },
   getCurrentUserInfo({
     state
   }) {
@@ -55,6 +66,26 @@ const actions = {
         })
       })
       Vue.set(state.data, 'getCurrentUserGroupInfo', list);
+    })
+  },
+  getUserList({
+    state
+  }) {
+    getPeopleList({
+      pageNo: 1,
+      pageSize: 9999,
+
+    }).then(({
+      tableResponse
+    }) => {
+      let list = []
+      tableResponse.list.forEach(item => {
+        list.push({
+          name: item.name,
+          value: item.userId + ''
+        })
+      })
+      Vue.set(state.data, 'getUserList', list);
     })
   },
   getGroupList({

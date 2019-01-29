@@ -3,8 +3,24 @@ import {
   Ajax
 } from "utils/axios";
 
+export const finishTask = (data) => {
+  return Ajax.request({
+    url: "oa/flow/processUserLog/create",
+    method: "post",
+    data
+  });
+};
+export const getFlowNum = (modelType) => {
+  return Ajax.request({
+    url: "/oa/flow/processUser/modelType/number",
+    method: "post",
+    data: {
+      modelType
+    }
+  });
+};
 export const getListProcess = ({
-  modelType = 100,
+  modelTypeList = [100],
   keyWord = '',
   startTime = '',
   deadTime = '',
@@ -18,7 +34,7 @@ export const getListProcess = ({
     url: "/oa/flow/processUser/page/receive",
     method: "post",
     data: {
-      modelType,
+      modelTypeList,
       keyWord,
       startTime,
       deadTime,
@@ -32,7 +48,7 @@ export const getListProcess = ({
 };
 
 export const getListMySendProcess = ({
-  modelType = 100,
+  modelTypeList = [100],
   keyWord = '',
   startTime = '',
   deadTime = '',
@@ -46,7 +62,7 @@ export const getListMySendProcess = ({
     url: "/oa/flow/processUser/page/send",
     method: "post",
     data: {
-      modelType,
+      modelTypeList,
       keyWord,
       startTime,
       deadTime,

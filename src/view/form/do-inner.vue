@@ -38,8 +38,6 @@
     <modal-zb :visible.sync="showZB"></modal-zb>
     <modal-change-name :visible.sync="showChangeName"></modal-change-name>
     <modal-combine :visible.sync="visibleModalCombine"></modal-combine>
-    <modal-add @success="successAddSubTask" :id="query.processUserDetailId" :show.sync="showAdd"></modal-add>
-    <modal-percent :percent="finishPercent" @finish="finishHandler" :show.sync="visibleModalPercent"></modal-percent>
   </section>
 </template>
 <script>
@@ -53,7 +51,6 @@ import {
   disAgree,
   processRecall,
   showWen,
-  finishTask,
   getFlowNum
 } from "api/index";
 import taskTree from "./components/taskTree.vue";
@@ -64,12 +61,8 @@ import modalChangeName from "./components/modalChangeName";
 import modalCombine from "./components/modalCombine";
 import { setTimeout } from "timers";
 import { formatValueContentToList } from "utils/assist";
-import ModalAdd from "view/task/center/components/modalAdd.vue";
-import ModalPercent from "./components/modalPercent.vue";
 export default {
   components: {
-    ModalAdd,
-    ModalPercent,
     ModalJs,
     ModalZb,
     FormBtn,
@@ -98,8 +91,6 @@ export default {
   },
   data() {
     return {
-      finishPercent: 0,
-      visibleModalPercent: false,
       showAdd: false,
       visibleModalCombine: false,
       showChangeName: false,
@@ -125,15 +116,6 @@ export default {
     this.initData();
   },
   methods: {
-    finishHandler(data) {
-      finishTask({
-        processUserDetailId: this.query.processUserDetailId,
-        detailPercent: data.percent,
-        detailContent: data.content
-      }).then(e => {
-        this.visibleModalPercent = false;
-      });
-    },
     initData() {
       this.query = this.fromModal ? this.queryData : this.$route.query;
       let query = this.query;
@@ -165,12 +147,8 @@ export default {
     },
     clickEvents(data) {
       // 不需要验证的，提前return
-      console.log("clickevent", data);
       if (data.code == "permitCreateSubProcess") {
         this.showAdd = true;
-        return;
-      } else if (data.code == "permitAddLog") {
-        this.visibleModalPercent = true;
         return;
       }
       let flagValiRequired = this.$refs.editTop.$refs.form.validate(vali => {
@@ -233,8 +211,6 @@ export default {
       } else {
         config = e;
       }
-      this.finishPercent = config.processUser.finishPercent;
-      console.log(config,'cccccong',this.finishPercent)
       let confContent = JSON.parse(config.processUser.content);
       this.processOrganizationId = config.processUser.processOrganizationId;
       if (!isStart) {

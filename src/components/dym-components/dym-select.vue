@@ -37,6 +37,15 @@ export default {
       } else if (this.conf.dataType == 3) {
         list = this.getDataByFuncName(this.conf);
       }
+      if (
+        this.value &&
+        !list.some(item => {
+          return item.value == this.value.value;
+        })
+      ) {
+        list.push(this.value);
+      }
+
       if (this.autoSelect && list.length > 0) {
         this.val = list[0];
       }

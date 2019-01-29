@@ -45,23 +45,24 @@ export default {
   mounted() {
     this.radioDataList = [];
     let userList = this.conf.data.list;
-    let organizationRoleIdList = [];
-    let organizationGroupIdList = [];
     userList.forEach((item, index) => {
       this.$set(this.radioDataList, index, []);
       if (item.persionType == 3) {
-        getPeopleListByRole({ organizationRoleIdList }).then(({ userList }) => {
+        getPeopleListByRole({ organizationRoleIdList:[item.businessId] }).then(({ userList }) => {
           this.radioDataList[index] = this.formatUserList(userList);
+          this.$set(this.valList, index, this.radioDataList[index][0].value);
         });
       } else if (item.persionType == 2) {
-        getPeopleListByOrg({ organizationRoleIdList }).then(({ userList }) => {
+        getPeopleListByOrg({ organizationGroupIdList:[item.businessId] }).then(({ userList }) => {
           this.radioDataList[index] = this.formatUserList(userList);
+          this.$set(this.valList, index, this.radioDataList[index][0].value);
         });
       } else {
         this.radioDataList[index].push({
           value: item.businessId,
           name: item.businessName
         });
+        this.$set(this.valList, index, this.radioDataList[index][0].value);
       }
     });
   },

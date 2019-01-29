@@ -104,15 +104,35 @@
   .detail {
     margin-top: 8px;
     padding-bottom: 60px;
-    .left{
+
+    .left {
       flex-shrink: 0;
       width: auto;
       flex-grow: 0;
     }
+
     .user-list-wrap {
       padding-right: 20px;
       display: flex;
-      flex-direction: column !important;
+      &:not(:first-child){
+        margin-top: 10px;
+      }
+      // flex-direction: column !important;
+      .left {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .right {
+        margin-left: 20px;
+      }
+    }
+
+    .sub {
+      font-size: 12px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: rgba(0, 0, 0, .65);
     }
   }
 

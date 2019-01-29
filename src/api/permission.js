@@ -1,6 +1,15 @@
 import md5 from "js-md5";
 import {Ajax} from "utils/axios";
 
+
+
+export const getPeopleList = (data) => {
+  return Ajax.request({
+    url: "/oa/ums/user/systemOrganization/page",
+    method: "post",
+    data
+  });
+};
 /* 获取部门树 */
 export const getOrganizationTree = ({
   organizationGroupId

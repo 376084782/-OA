@@ -35,7 +35,8 @@
 </template>
 <script>
 import listSearch from "./components/search";
-import { getListMySendProcess, getListProcess } from "api/index";
+import { getListMySendProcess } from "api/index";
+import { getListAssign } from "api/document";
 import { dateFormater } from "utils/assist.js";
 export default {
   components: { listSearch },
@@ -49,17 +50,17 @@ export default {
         2: [{}, {}, {}]
       },
       searchParams: {
-        modelType: 400
+        modelTypeList: [400]
       },
       bLoading: false
     };
   },
   watch: {
     activeName(val) {
-      let modelType = this.searchParams.modelType;
+      let modelTypeList = this.searchParams.modelTypeList;
       this.searchParams = {
         pageSearchStatus: this.activeName,
-        modelType
+        modelTypeList
       };
       this.loadData();
     }
@@ -107,17 +108,15 @@ export default {
     updateList() {
       let status = this.activeName;
       this.searchParams.pageSearchStatus = status;
-      return getListProcess(this.searchParams)
+      return getListAssign(this.searchParams)
         .then(({ tableResponse }) => {
           this.dataMap[status] = tableResponse.list;
-          console.log(this.dataMap);
         })
         .finally(() => {
           this.bLoading = false;
         });
     },
     showFormDetail(data) {
-      console.log("dddd", data);
       this.$router.push({
         path: "/document/seeSchedualApply/do",
         query: {
@@ -130,13 +129,15 @@ export default {
       this.$router.push({
         path: "/document/schedualApply/do",
         query: {
-          modelType: 400
+          modelType: 400,
+          permitButton: 1
         }
       });
     },
     // 搜索
     onSearch(params) {
       Object.assign(this.searchParams, params);
+      console.log(this.searchParams)
       this.loadData();
     }
   },

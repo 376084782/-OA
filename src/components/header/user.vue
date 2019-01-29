@@ -24,7 +24,7 @@ export default {
   name: "turUser",
   data() {
     return {
-      name: "用户名",
+      name: this.$store.getters.name,
       avatar:
         "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1114585158,1026985006&fm=27&gp=0.jpg"
     };

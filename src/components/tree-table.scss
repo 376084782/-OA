@@ -1,0 +1,75 @@
+.tree-wrap {
+  width: 1100px;
+  color: rgba(0, 0, 0, .65);
+
+  i.grey {
+    color: #d9d9d9;
+    font-style: normal;
+  }
+
+  .center {
+    display: flex;
+    justify-content: center;
+  }
+
+  .title-wrap {
+    width: 1100px;
+    height: 54px;
+    line-height: 54px;
+    background-color: #FAFAFA;
+    font-size: 14px;
+    font-family: PingFangSC-Medium;
+    font-weight: 500;
+    color: rgba(0, 0, 0, .85);
+    border-top: 1px solid #E8E8E8;
+    border-bottom: 1px solid #E8E8E8;
+    &>*:first-child {
+      margin-left: 40px;
+    }
+
+    .right {
+      width: 800px;
+      display: flex;
+      float: right;
+      justify-content: space-between;
+
+      &>* {
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+
+  .el-tree {
+    width: 100;
+
+    .el-button {
+      padding: 0;
+    }
+
+    .el-tree-node__content {
+      height: 50px;
+      border-bottom: 1px solid #E8E8E8;
+      &>*:first-child {
+
+        margin-left: 20px;
+      }
+    }
+
+    .custom-tree-node {
+      width: 100%;
+
+      .right {
+        width: 800px;
+        display: flex;
+        float: right;
+        justify-content: space-between;
+
+        &>* {
+          display: flex;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
