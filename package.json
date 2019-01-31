@@ -4,7 +4,7 @@
   "description": "重庆OA",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.dev.js",
+    "serve": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.dev.js",
     "build": "cross-env NODE_ENV=production node build/webpack.config.build.js"
   },
   "author": "",

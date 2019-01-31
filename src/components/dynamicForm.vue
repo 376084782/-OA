@@ -30,11 +30,16 @@
           ></dym-select>
         </template>
         <template v-else-if="conf.type=='input'">
-          <el-input
-            :disabled="disabled||conf.readOnly"
-            :style="{width:inputWidth}"
-            v-model="editData[conf.code]"
-          ></el-input>
+          <template v-if="conf.data&&conf.data.function=='calculateHour'">
+            <dym-cal-hour :style="{width:inputWidth}" :form="editData" :start-key="conf.data.params[0]" :end-key="conf.data.params[1]"></dym-cal-hour>
+          </template>
+          <template v-else>
+            <el-input
+              :disabled="disabled||conf.readOnly"
+              :style="{width:inputWidth}"
+              v-model="editData[conf.code]"
+            ></el-input>
+          </template>
         </template>
         <template v-else-if="conf.type=='textarea'">
           <el-input
@@ -131,9 +136,11 @@ import dymRadioNextUser from "./dym-components/dym-radio-next-user";
 import dymWorkPlanImport from "./dym-components/dym-work-plan-import";
 import dymWorkPlanCalender from "./dym-components/dym-work-plan-calender";
 import dymUploadFile from "./dym-components/dym-upload-file.vue";
+import dymCalHour from "./dym-components/dym-cal-hour.vue";
 export default {
   components: {
     dymSelect,
+    dymCalHour,
     dymRadio,
     dymRadioNextUser,
     dymWorkPlanImport,

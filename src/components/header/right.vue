@@ -13,7 +13,7 @@
       </el-badge>
     </span>
     <!-- codepen -->
-    <span class="menu-item">
+    <span class="menu-item" @click="toggleModalSys">
       <el-badge is-dot :value="news">
         <i class="anticon icon-codepen"></i>
       </el-badge>
@@ -38,7 +38,11 @@ export default {
     turUser,
     turUserNews
   },
-  methods: {},
+  methods: {
+    toggleModalSys() {
+      this.$store.dispatch("toggleChangeSys", true);
+    }
+  },
   data() {
     return {
       news: 0

@@ -26,9 +26,9 @@ import fullcalendar from "components/fullcalendar2.vue";
     data() {
       return {
         list: [
-          {content: '王海峰的请假审批', date:'2018-12-12'},
-          {content: '王海峰的请假审批', date:'2018-12-12'},
-          {content: '王海峰的请假审批', date:'2018-12-12'},
+          // {content: '王海峰的请假审批', date:'2018-12-12'},
+          // {content: '王海峰的请假审批', date:'2018-12-12'},
+          // {content: '王海峰的请假审批', date:'2018-12-12'},
         ]
       };
     },

@@ -3,11 +3,12 @@
     <el-tabs class="top-sec-tab" v-model="activeName">
       <el-tab-pane label="待办任务" name="-1"></el-tab-pane>
       <el-tab-pane label="已办任务" name="1"></el-tab-pane>
+      <el-tab-pane label="我发起的" name="2"></el-tab-pane>
     </el-tabs>
     <el-card class="mgTop24">
       <list-search @search="onSearch"></list-search>
       <el-button @click="createTask" class="mgTop10" type="primary" size="small">发起任务</el-button>
-      <section class="mgTop24">
+      <section class="mgTop24" style="overflow:scroll;">
         <tree-table ref="tree" :active-name="activeName" @addSubTask="addSubTask"></tree-table>
       </section>
     </el-card>
@@ -55,7 +56,6 @@ export default {
   },
   methods: {
     addSubTask(data) {
-      console.log('pro',data)
       this.selectedProcessUserDetailId = data.detailId;
       this.showAdd = true;
     },
@@ -76,23 +76,10 @@ export default {
         }
       });
     },
-    // 请求数据函数
-    loadData() {
-      this.bLoading = true;
-      console.log("in");
-      getClubList({})
-        .then(data => {
-          // this.dataSource = data.list;
-          // this.oPagination = data.page;
-        })
-        .finally(() => {
-          this.bLoading = false;
-        });
-    },
     // 搜索
     onSearch(params) {
       Object.assign(this.searchParams, params, { page: 1 });
-      this.loadData();
+      this.$refs.tree.update(this.searchParams);
     }
   },
   created() {

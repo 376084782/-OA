@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="切换系统" :visible.sync="visible" width="736px" :before-close="handleClose">
+  <el-dialog title="其他应用" :visible.sync="visible" width="736px" :before-close="handleClose">
     <el-collapse v-model="activeNames">
       <el-collapse-item :title='item.title' class="item-system" v-for="(item, index) in system" :name='index' :key="index">
         <!-- <p class="title">
@@ -34,78 +34,28 @@
             num: 10,
             list: [{
                 icon: "icon-piechart",
-                name: "数字办公"
+                name: "数字办公",
+                url:'http://47.110.51.157:7300/index.html#/login'
               },
               {
                 icon: "icon-piechart",
-                name: "招商管理"
+                name: "中介管理",
+                url:'http://47.99.43.217:7310/vue-admin/#/login'
               },
               {
                 name: "重点项目",
-                icon: "icon-piechart"
+                icon: "icon-piechart",
+                url:'http://47.110.51.157:8098/'
               },
               {
                 icon: "icon-piechart",
-                name: "一窗受理"
+                name: "招商管理"
+              },{
+                icon:'icon-piechart',
+                name:'固投管理',
               }
             ]
           },
-          {
-            title: "社会信用",
-            num: 10,
-            list: [{
-                icon: "",
-                icon: "icon-piechart",
-                name: "数字办公"
-              },
-              {
-                icon: "icon-piechart",
-                name: "招商管理"
-              }
-            ]
-          },
-          {
-            title: "数据中心",
-            num: 10,
-            list: [{
-                icon: "icon-piechart",
-                name: "数字办公"
-              },
-              {
-                icon: "icon-piechart",
-                name: "招商管理"
-              },
-              {
-                icon: "icon-piechart",
-                name: "重点项目"
-              },
-              {
-                icon: "icon-piechart",
-                name: "一窗受理"
-              },
-              {
-                icon: "icon-piechart",
-                name: "数字办公"
-              },
-              {
-                icon: "icon-piechart",
-                name: "招商管理"
-              }
-            ]
-          },
-          {
-            title: "常用工具",
-            num: 10,
-            list: [{
-                icon: "icon-piechart",
-                name: "数字办公"
-              },
-              {
-                icon: "icon-piechart",
-                name: "招商管理"
-              }
-            ]
-          }
         ]
       };
     },

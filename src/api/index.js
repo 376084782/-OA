@@ -3,6 +3,14 @@ import {
   Ajax
 } from "utils/axios";
 
+export const getIndexPageData = (data) => {
+  return Ajax.request({
+    url: "/oa/flow/index/detail",
+    method: "post",
+    data
+  });
+};
+
 export const finishTask = (data) => {
   return Ajax.request({
     url: "oa/flow/processUserLog/create",

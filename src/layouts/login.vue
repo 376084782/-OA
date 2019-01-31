@@ -14,7 +14,7 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="loginData.password" placeholder="密码">
+          <el-input type="password" v-model="loginData.password" placeholder="密码">
             <i slot="prefix" class="anticon icon-key"></i>
           </el-input>
         </el-form-item>

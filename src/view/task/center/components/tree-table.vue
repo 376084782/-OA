@@ -27,6 +27,7 @@
 <script>
 import "components/tree-table.scss";
 import { getListAssign, getListChild } from "api/document";
+import { getListMySendProcess } from "api";
 import {
   formatValueContentToList,
   formatValueContentToListObject
@@ -36,11 +37,13 @@ export default {
   data() {
     return {
       dataSource: [],
-      showTree: false
+      showTree: true,
+      searchData: {}
     };
   },
   methods: {
-    update() {
+    update(data = {}) {
+      this.searchData = data;
       this.showTree = false;
       this.$nextTick(() => {
         this.showTree = true;
@@ -124,7 +127,8 @@ export default {
     },
     loadNode1(node, resolve) {
       if (node.level === 0) {
-        getListAssign({
+        let func = this.activeName == 2 ? getListMySendProcess : getListAssign;
+        func({
           modelTypeList: [201],
           pageSearchStatus: this.activeName == -1 ? "1" : "2"
         }).then(({ tableResponse }) => {
