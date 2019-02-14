@@ -47,6 +47,7 @@ export default {
   },
   methods: {
     login() {
+      let loading = this.$loading();
       this.$refs.form.validate(flag => {
         if (flag) {
           this.$store
@@ -56,6 +57,9 @@ export default {
             })
             .catch(({ message }) => {
               this.$alert(message, "错误");
+            })
+            .finally(e => {
+              loading.close();
             });
         }
       });

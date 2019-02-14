@@ -32,8 +32,33 @@ export default {
   data() {
     return {
       name: this.$store.getters.name,
-      topData: [],
-      listMsg:[]
+      topData: [
+        {
+          icon: "anticon icon-user",
+          title: "待办理",
+          num: 0,
+          color: "#7F66ED"
+        },
+        {
+          icon: "anticon icon-check-square",
+          title: "我审批的",
+          num: 0,
+          color: "#5C88F6"
+        },
+        {
+          icon: "anticon icon-pushpin",
+          title: "我发起的",
+          num: 0,
+          color: "#77CEA8"
+        },
+        {
+          icon: "anticon icon-heart",
+          title: "我关注的",
+          num: 0,
+          color: "#EBCF51"
+        }
+      ],
+      listMsg: []
     };
   },
   mounted() {
@@ -72,7 +97,7 @@ export default {
             color: "#EBCF51"
           }
         ];
-        this.listMsg=e.userMessageList
+        this.listMsg = e.userMessageList;
       });
     }
   },

@@ -45,10 +45,11 @@ config.beforeEach((to, from, next) => {
       path: PATH_LOGIN // 跳转到登录页
     })
   } else if (!flagGetInfo) {
+    let loading = Vue.prototype.$loading()
     store.dispatch("userGetInfo").then(e => {
-      console.log(store.state.login.userInfo)
       funcJump()
-    }).catch(e => {
+    }).finally(e => {
+      loading.close()
     })
   } else {
     funcJump()

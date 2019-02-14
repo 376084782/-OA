@@ -62,11 +62,13 @@ const actions = {
       login(data).then(e => {
         state.userInfo = e.user;
         state.groupList = e.organizationGroupList;
-        state.flagGetInfo = true;
+        // state.flagGetInfo = true;
         setTokenPlatform(e.platformToken)
         setTokenSystem(e.systemToken);
         loginLP().then(() => {
-          resolve(e);
+          store.dispatch('updateMenuList').then(e => {
+            resolve();
+          })
         }).catch(e => {
           reject(e);
         })
