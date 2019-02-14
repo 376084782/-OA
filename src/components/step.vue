@@ -4,7 +4,7 @@
       <slot></slot>
       <el-row type="flex" v-for="(conf,index) in config" :key="index" class="area">
         <el-col style="width:50px;margin-right:20px;" class="line-wrap">
-          <div class="circle" :class="circleClass(index)">{{conf.stepName}}</div>
+          <div class="circle" :class="circleClass(index)"><span>{{conf.stepName}}</span></div>
           <div
             v-if="index<config.length-1"
             class="line-dash"
@@ -23,7 +23,7 @@
                 <!-- {{item}} -->
                 <div class="left">
                   <span class="name">{{item.name}}</span>
-                  <el-tag class="role" v-if="item.name">{{item.roleName}}</el-tag>
+                  <!-- <el-tag class="role" v-if="item.name">{{item.roleName}}</el-tag> -->
                 </div>
                 <div
                   class="right"

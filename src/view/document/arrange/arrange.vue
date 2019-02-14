@@ -17,6 +17,12 @@
             </template>
           </el-table-column>
         </el-table>
+        <pagination
+          :total="oPagination.total"
+          :currentPage="oPagination.pageNo"
+          :size="oPagination.pageSize"
+          @onPageChange="onPageChange"
+        ></pagination>
       </section>
     </el-card>
     <modal-detail :visible.sync="showDetail"></modal-detail>
@@ -51,6 +57,9 @@ export default {
     ]);
   },
   methods: {
+    onPageChange(){
+
+    },
     showReceiveDetail(data) {
       this.showDetail = true;
     },

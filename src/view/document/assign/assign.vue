@@ -9,9 +9,9 @@
           <el-table-column prop="numid" label="紧急程度">
             <template slot-scope="scope">{{scope.row.valueContent['urgency']}}</template>
           </el-table-column>
-          <el-table-column prop="modelTypeDictionary" label="状态"></el-table-column>
+          <el-table-column prop="finishStatusDictionary" label="状态"></el-table-column>
           <el-table-column prop="usercnt" label="发文单位" width="230px">
-            <template slot-scope="scope">{{scope.row.valueContent['sendGroupList']}}</template>
+            <template slot-scope="scope">{{scope.row.valueContent['sendGroup']}}</template>
           </el-table-column>
           <el-table-column prop="recharge" label="限办日期" width="180px">
             <template slot-scope="scope">{{scope.row.valueContent['documentSendDate']}}</template>
@@ -25,6 +25,13 @@
             </template>
           </el-table-column>
         </el-table>
+
+        <pagination
+          :total="oPagination.total"
+          :currentPage="oPagination.pageNo"
+          :size="oPagination.pageSize"
+          @onPageChange="onPageChange"
+        ></pagination>
       </section>
     </el-card>
     <modal-detail :visible.sync="showDetail"></modal-detail>
@@ -44,6 +51,10 @@ export default {
       dataSource: [],
       listDone: [{}, {}, {}],
       listNotDone: [],
+      oPagination: {
+        pageNo: 1,
+        pageSize: 20
+      },
       searchParams: {
         modelTypeList: [100, 101]
       }
@@ -64,6 +75,7 @@ export default {
     this.onSearch();
   },
   methods: {
+    onPageChange(page) {},
     getJJCD(data) {
       // let valueContent = JSON.parse(data.valueContent);
       // let dataUrgency = valueContent.filter(item => {
@@ -85,6 +97,7 @@ export default {
             item.valueContent = formatValueContentToList(item.valueContent);
           });
           this.dataSource = tableResponse.list;
+          this.oPagination.total = tableResponse.count;
         })
         .finally(() => {
           this.bLoading = false;

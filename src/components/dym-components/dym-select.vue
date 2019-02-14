@@ -5,6 +5,7 @@
     :style="{width:inputWidth}"
     :multiple="multiple"
     filterable
+    @change="changeHandler"
   >
     <el-option v-for="item in selectDataList" :key="item.value" :label="item.name" :value="item"></el-option>
   </el-select>
@@ -23,10 +24,21 @@ export default {
       this.$emit("input", val);
     }
   },
-  mounted() {
-    if (this.conf.data && this.conf.data.function) {
-      this.$store.dispatch(this.conf.data.function);
+  methods: {
+    changeHandler(value) {
+      this.$bus.$emit("changeSel", {
+        conf: this.conf,
+        value
+      });
+    },
+    getInitData() {
+      if (this.conf.data && this.conf.data.function) {
+        this.$store.dispatch(this.conf.data.function);
+      }
     }
+  },
+  mounted() {
+    this.getInitData();
   },
   computed: {
     ...mapGetters(["getDataByFuncName"]),

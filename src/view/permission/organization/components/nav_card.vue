@@ -1,8 +1,5 @@
 <template>
   <el-card class="nav-card">
-    <el-input placeholder="请输入内容" v-model="searchValue">
-      <i class="anticon icon-search"></i>
-    </el-input>
     <el-button-group class="permission-btn-group">
       <router-link :to="{path: '/permission/organization'}">
         <el-button type="primary">组织架构</el-button>

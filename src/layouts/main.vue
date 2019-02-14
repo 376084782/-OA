@@ -1,5 +1,5 @@
 <template>
-  <div class="main">{{$store.getters.showChangeSys}}
+  <div class="main">
     <router-view></router-view>
     <modal-system :visible="$store.getters.showChangeSys" @update:visible="toggle"></modal-system>
   </div>

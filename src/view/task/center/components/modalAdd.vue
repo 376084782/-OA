@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible="show" @update:visible="toggle" width="1020px" title="添加子任务">
-    <common-form @success="successHandler" :from-modal="true" :query-data="queryData"></common-form>
+    <common-form @success="successHandler" :from-modal="true" :query-data="queryData" v-if="show"></common-form>
   </el-dialog>
 </template>
 <script>
@@ -19,6 +19,7 @@ export default {
   watch: {
     show(flag) {
       if (flag) {
+        console.log(this.id,'2222id')
         this.queryData.fatherProcessUserDetailId = this.id;
       }
     }

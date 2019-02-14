@@ -2,7 +2,8 @@ import {
   login,
   logout,
   loginLP,
-  getInfo
+  getInfo,
+
 } from 'api/index';
 import {
   setTokenSystem,
@@ -12,9 +13,9 @@ const state = {
   // 用户登录信息
   userInfo: {},
   flagGetInfo: false,
-  groupList: []
+  groupList: [],
 };
-
+import store from 'store'
 const getters = {
   // 角色
   name: state => {
@@ -29,7 +30,7 @@ const getters = {
   },
   currentUserInfo: state => {
     return {
-      name: state.userInfo.userName,
+      name: state.userInfo.name,
       value: state.userInfo.userId + ''
     }
   }
@@ -46,7 +47,9 @@ const actions = {
         state.userInfo = e.user;
         state.groupList = e.organizationGroupList;
         state.flagGetInfo = true;
-        resolve();
+        store.dispatch('updateMenuList').then(e => {
+          resolve();
+        })
       }).catch(e => {
         reject(e);
       });
@@ -86,7 +89,7 @@ const actions = {
         reject(e);
       });
     });
-  }
+  },
 };
 
 export default {

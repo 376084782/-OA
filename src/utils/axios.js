@@ -6,6 +6,7 @@ import {
   getToken
 } from "utils/assist";
 // import { Spin } from 'iview'
+import vue from 'vue'
 
 let deviceCode = 1121212;
 const addErrorLog = errorInfo => {
@@ -133,7 +134,8 @@ class HttpRequest {
               code: code,
               message: decodeURIComponent(msg)
             };
-            console.warn(errData,'请求返回异常')
+            vue.prototype.$alert(errData.message)
+            console.warn(errData, '请求返回异常')
             rej(errData);
           }
         })
@@ -148,6 +150,8 @@ class HttpRequest {
               code: code,
               message: decodeURIComponent(msg)
             };
+            vue.prototype.$alert(errData.message);
+            
             rej(errData);
           } else {
             rej();

@@ -9,7 +9,7 @@ export function getCurrentUserInfo() {
     } = store.state.login;
     rsv([{
       value: userInfo.userId,
-      name: userInfo.userName
+      name: userInfo.name
     }])
   })
 }
@@ -21,7 +21,7 @@ export function getCurrentUserGroupList() {
   return new Promise(rsv => {
 
     let list = [];
-    groupList.forEach(item => {
+    groupList && groupList.forEach(item => {
       list.push({
         value: item.organizationGroupId,
         name: item.name
@@ -45,7 +45,7 @@ export function getGroupList() {
           value: item.organizationCode
         })
       })
-      console.log(list,'list')
+      console.log(list, 'list')
       rsv(list);
     })
   })
@@ -58,7 +58,7 @@ export function getProcessUserList(modalType) {
   return new Promise(rsv => {
 
     let list = [];
-    groupList.forEach(item => {
+    groupList && groupList.forEach(item => {
       list.push({
         key: item.organizationGroupId,
         value: item.name

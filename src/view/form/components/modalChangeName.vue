@@ -6,7 +6,7 @@
       </el-form-item>
     </el-form>
     <template slot="footer">
-      <el-button size="small">取消</el-button>
+      <el-button size="small" @click="toggle(false)">取消</el-button>
       <el-button size="small" type="primary" @click="change">确认</el-button>
     </template>
   </el-dialog>

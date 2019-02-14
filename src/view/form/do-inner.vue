@@ -117,6 +117,7 @@ export default {
   },
   methods: {
     initData() {
+      this.editData = {};
       this.query = this.fromModal ? this.queryData : this.$route.query;
       let query = this.query;
       let flagStart =

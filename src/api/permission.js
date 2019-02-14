@@ -1,5 +1,7 @@
 import md5 from "js-md5";
-import {Ajax} from "utils/axios";
+import {
+  Ajax
+} from "utils/axios";
 
 
 
@@ -81,6 +83,16 @@ export const getMemberInfo = (params) => {
   });
 };
 
+// 获取角色下拉列表
+export const getRoleList = (params = {}) => {
+  return Ajax.request({
+    url: "/oa/ums/organizationRole/organization/List",
+    data: params,
+    method: "post"
+  });
+};
+
+
 /* 部门成员新增编辑删除 */
 export const membersOperate = (params, type) => {
   const data = params;
@@ -137,6 +149,11 @@ export const roleGroupOperate = (params, type) => {
 
 /* 获取已分组角色信息 */
 export const getOrganizationRoleSubtree = (params) => {
+  if(!params.organizationRoleGroupId){
+    return new Promise((rsv,rej)=>{
+      rej()
+    });
+  }
   return Ajax.request({
     url: "/oa/ums/organizationRole/list",
     data: params,

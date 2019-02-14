@@ -31,7 +31,12 @@
         </template>
         <template v-else-if="conf.type=='input'">
           <template v-if="conf.data&&conf.data.function=='calculateHour'">
-            <dym-cal-hour :style="{width:inputWidth}" :form="editData" :start-key="conf.data.params[0]" :end-key="conf.data.params[1]"></dym-cal-hour>
+            <dym-cal-hour
+              :style="{width:inputWidth}"
+              :form="editData"
+              :start-key="conf.data.params[0]"
+              :end-key="conf.data.params[1]"
+            ></dym-cal-hour>
           </template>
           <template v-else>
             <el-input
@@ -149,6 +154,12 @@ export default {
     dymUploadFile
   },
   props: {
+    query: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
     rules: {
       type: Object,
       default() {
@@ -181,6 +192,42 @@ export default {
     editData(val) {
       // console.log(val);
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      let query = this.query;
+      let flagStart =
+        query.permitButton &&
+        (query.permitButton == 1 || query.permitButton == 2);
+      let { groupList, userInfo } = this.$store.state.login;
+      if (flagStart) {
+        groupList &&
+          groupList[0] &&
+          !this.editData["sendGroup"] &&
+          this.$set(this.editData, "sendGroup", {
+            name: groupList[0].name,
+            value: groupList[0].organizationGroupId + ""
+          });
+      }
+      this.$set(this.editData, "userMobile", userInfo.mobile);
+    });
+    this.$bus.$on("changeSel", data => {
+      if (data.conf.code == "type") {
+        let groupList = this.$store.state.login.groupList;
+        let value = data.value.value;
+        let codes = groupList[0].documentCode.split("-");
+        let fixed = groupList[0].documentCodeFixd;
+        let code = "";
+        if (value < 200) {
+          code = codes[0] + fixed;
+        } else if (value < 300) {
+          code = codes[1] + fixed;
+        } else {
+          code = codes[2] + fixed;
+        }
+        this.$set(this.editData, "flowCode", code);
+      }
+    });
   },
   methods: {
     workPlanImportHandler(list) {

@@ -1,6 +1,6 @@
-// import {
-//   updateMenu
-// } from '@/api/user'
+import {
+  getMenuList
+} from 'api/index'
 
 function formatData(data) {
   let res = [];
@@ -38,9 +38,9 @@ const menuList = {
       }, {
         title: '归档公文',
         path: '/document/arrange'
-      },{
-        title:'文号管理',
-        path:'/document/whgl'
+      }, {
+        title: '文号管理',
+        path: '/document/whgl'
       }]
     }, {
       title: '任务管理',
@@ -80,19 +80,15 @@ const menuList = {
     },
   },
   actions: {
-    // updateMenuList({
-    //   state,
-    //   commit,
-    //   rootGetters
-    // }) {
-    //   updateMenu(rootGetters.roleId).then(({
-    //     functionList,
-    //     quickFunctionList
-    //   }) => {
-    //     return;
-    //     commit('setMenu', formatData(functionList));
-    //   })
-    // }
+    updateMenuList({
+      state,
+    }) {
+      return getMenuList().then(({
+        children
+      }) => {
+        state.list = children;
+      })
+    }
   },
   getters: {
     menuList: state => state.list

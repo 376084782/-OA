@@ -4,7 +4,7 @@
     <div slot="header" class="clearfix">
       <span>临超/已超时件</span>
     </div>
-    <div>
+    <div style="min-height:170px;">
       <el-row>
         <el-col :span="20">
           <div class="gray title pull-left">催办单位</div>
@@ -32,28 +32,7 @@
 export default {
   data() {
     return {
-      mail: [
-        {
-          content: "主任会议议题催缴",
-          day: -5
-        },
-        {
-          content: "请假审批（王存）",
-          day: -3
-        },
-        {
-          content: "园区物业费，水电费，活动经费等支付",
-          day: 0
-        },
-        {
-          content: "员工体检经费",
-          day: 3
-        },
-        {
-          content: "员工生日经费包括蛋糕吃饭等经费报销",
-          day: 5
-        }
-      ]
+      mail:[]
     };
   },
   methods: {

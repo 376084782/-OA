@@ -10,6 +10,10 @@ import store from 'store';
 import Main from 'layouts/main';
 import filter from 'plugins/filter';
 
+const Bus = new Vue()
+
+Vue.prototype.$bus = Bus;
+
 import $ from 'jquery';
 window.$ = $;
 filter(Vue);

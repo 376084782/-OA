@@ -5,6 +5,7 @@
 
       <!-- <h3>发文拟稿</h3> -->
       <dynamic-form
+        :query="query"
         ref="editTop"
         :edit-data="editData"
         class="mgTop24"
@@ -39,7 +40,11 @@
     <modal-change-name :visible.sync="showChangeName"></modal-change-name>
     <modal-combine :visible.sync="visibleModalCombine"></modal-combine>
     <modal-add @success="successAddSubTask" :id="query.processUserDetailId" :show.sync="showAdd"></modal-add>
-    <modal-percent :percent="finishPercent" @finish="finishHandler" :show.sync="visibleModalPercent"></modal-percent>
+    <modal-percent
+      :percent="finishPercent"
+      @finish="finishHandler"
+      :show.sync="visibleModalPercent"
+    ></modal-percent>
   </section>
 </template>
 <script>
@@ -234,7 +239,6 @@ export default {
         config = e;
       }
       this.finishPercent = config.processUser.finishPercent;
-      console.log(config,'cccccong',this.finishPercent)
       let confContent = JSON.parse(config.processUser.content);
       this.processOrganizationId = config.processUser.processOrganizationId;
       if (!isStart) {
@@ -270,6 +274,7 @@ export default {
           ) {
             value = JSON.parse(value);
           }
+          console.log(value,item.code)
           this.$set(this.editData, item.code, value);
         });
       }
@@ -322,12 +327,14 @@ export default {
         if (stepData.showEdit && stepData.content) {
           stepData.content.forEach(item => {
             if (item.link) {
-              console.log(this.editData, item);
               this.$set(this.stepData, item.code, this.editData[item.code]);
             }
           });
         }
       });
+      if (config.processUser.finishStatus == 3) {
+        this.activeStep = stepList.length;
+      }
       this.loading = false;
     },
     createConfNext(listPeople, step) {

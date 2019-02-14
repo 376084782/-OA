@@ -30,8 +30,13 @@
       height: 50px;
       border: 1px solid #4b9ffd;
       border-radius: 1000px;
-      line-height: 50px;
       text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &>span{
+        margin: 6px;
+      }
 
       &.active {
         background-color: #f2faff;

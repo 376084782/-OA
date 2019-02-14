@@ -4,10 +4,10 @@
       <el-button type="primary" @click="addHandler" size="small">新增文号</el-button>
       <section class="mgTop24">
         <el-table v-loading="bLoading" :data="dataSource" style="min-height: 400px">
-          <el-table-column prop label="序号"></el-table-column>
-          <el-table-column prop="region" label="收发类型"></el-table-column>
-          <el-table-column prop="numid" label="公文类型"></el-table-column>
-          <el-table-column prop="recharge" label="编号定义"></el-table-column>
+          <el-table-column type="index" label="序号"></el-table-column>
+          <el-table-column prop="groupName" label="收发类型"></el-table-column>
+          <el-table-column prop="code" label="公文类型"></el-table-column>
+          <el-table-column prop="codeValue" label="编号定义"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click="showModalEdit(scope.row)" type="text">编辑</el-button>
@@ -16,26 +16,41 @@
             </template>
           </el-table-column>
         </el-table>
+        <!-- <pagination
+          :total="oPagination.total"
+          :currentPage="oPagination.pageNo"
+          :size="oPagination.pageSize"
+          @onPageChange="onPageChange"
+        ></pagination> -->
       </section>
     </el-card>
-    <modal-detail :visible.sync="showDetail"></modal-detail>
+    <modal-detail @success="loadData" :id="selId" :visible.sync="showDetail"></modal-detail>
   </div>
 </template>
 <script>
 import modalDetail from "./components/modalDetail";
+import { getProcessCodeList,delProcessCode } from "api/document";
 export default {
   components: { modalDetail },
   data() {
     return {
+      selId: undefined,
+      oPagination: {
+        pageNo: 1,
+        pageSize: 10,
+        total: 0
+      },
       showDetail: false,
       bLoading: false,
       dataSource: [{}],
       listDone: [{}, {}, {}],
-      listNotDone: []
+      listNotDone: [],
+      searchParams: {}
     };
   },
   watch: {},
   mounted() {
+    this.onSearch();
     this.$store.dispatch("updateBreadCurmbList", [
       {
         name: "公文管理",
@@ -48,14 +63,43 @@ export default {
     ]);
   },
   methods: {
-    onSearch(params) {},
+    // 翻页
+    onPageChange(page) {
+      Object.assign(this.searchParams, { pageNo: page });
+      this.loadData();
+    },
+    loadData() {
+      this.bLoading = true;
+      Object.assign(this.searchParams, {
+        processGroupCodeList: ["document-send-code", "ducument-receive-code"]
+      });
+      getProcessCodeList(this.searchParams)
+        .then(({ processCodeList }) => {
+          this.dataSource = processCodeList;
+        })
+        .finally(() => {
+          this.bLoading = false;
+        });
+    },
+    onSearch(params) {
+      Object.assign(this.searchParams, params, { pageNo: 1 });
+      this.loadData();
+    },
     delHanler(data) {
-      this.showDetail = true;
+      delProcessCode({
+        processCodeId: data.processCodeId
+
+      }).then(e=>{
+        this.$alert('删除成功');
+        this.loadData()
+      })
     },
     showModalEdit(data) {
+      this.selId = data.processCodeId;
       this.showDetail = true;
     },
     addHandler() {
+      this.selId = undefined;
       this.showDetail = true;
     }
   }

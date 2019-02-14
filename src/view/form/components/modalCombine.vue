@@ -12,7 +12,7 @@
         <template slot-scope="scope">{{scope.row.valueContent['mainGroupList']}}</template>
       </el-table-column>
       <el-table-column label="发文日期">
-        <template slot-scope="scope">{{scope.row.valueContent['sendGroupList']}}</template>
+        <template slot-scope="scope">{{scope.row.valueContent['sendGroup']}}</template>
       </el-table-column>
       <el-table-column label="类型">
         <template slot-scope="scope">{{scope.row.valueContent['type']}}</template>

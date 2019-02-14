@@ -3,7 +3,7 @@
     placement="bottom-end"
     width="336"
     trigger="click">
-    <el-tabs v-model="activeName" @tab-click="handleClick" v-loading="loading">
+    <!-- <el-tabs v-model="activeName" @tab-click="handleClick" v-loading="loading">
       <el-tab-pane label="通知" name="inform">
         <lists-mobile :datas="informDatas"></lists-mobile>
       </el-tab-pane>
@@ -13,14 +13,14 @@
       <el-tab-pane label="待办" name="todos">
         <lists-mobile :datas="informDatas"></lists-mobile>
       </el-tab-pane>
-    </el-tabs>
-    <span class="menu-item" slot="reference">
+    </el-tabs> -->
+    <!-- <span class="menu-item" slot="reference">
       <span>
         <el-badge :value="news">
           <i class="anticon icon-bell" ></i>
         </el-badge>
       </span>
-    </span>
+    </span> -->
   </el-popover>
 </template>
 <script>

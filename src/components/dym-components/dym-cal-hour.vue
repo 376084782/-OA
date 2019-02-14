@@ -11,11 +11,14 @@ export default {
   },
   computed: {
     hour() {
+      if(!this.form.detailStartTime||!this.form.detailDeadTime){
+        return ''
+      }
       let start = new Date(this.form.detailStartTime);
       let end = new Date(this.form.detailDeadTime);
       return timeFormater(
         (end.getTime() - start.getTime()) / 1000,
-        "d天 hh:mm:ss"
+        "d天"
       );
     }
   },

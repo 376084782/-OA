@@ -4,7 +4,7 @@
     <div slot="header" class="clearfix">
       <span>通知公告</span>
     </div>
-    <div>
+    <div style="min-height:100px;">
       <el-row v-for="(item, index) in list" :key="index">
         <el-col :span="20">
           <p>{{item.title}}</p>

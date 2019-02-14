@@ -6,6 +6,9 @@ import {
 import {
   getPeopleList
 } from 'api/permission'
+import {
+  getProcessCodeList
+} from 'api/document'
 const state = {
   data: {},
   currentUserInfo: {},
@@ -28,11 +31,11 @@ const actions = {
     } = store.state.login;
     Vue.set(state.data, 'getCurrentUserInfo', [{
       value: userInfo.userId + '',
-      name: userInfo.userName
+      name: userInfo.name
     }])
     state.currentUserInfo = {
       value: userInfo.userId + '',
-      name: userInfo.userName
+      name: userInfo.name
     }
   },
   getCurrentUserGroupList({
@@ -42,7 +45,7 @@ const actions = {
       groupList
     } = store.state.login;
     let list = [];
-    groupList.forEach(item => {
+    groupList && groupList.forEach(item => {
       list.push({
         value: item.organizationGroupId + '',
         name: item.name
@@ -86,6 +89,25 @@ const actions = {
         })
       })
       Vue.set(state.data, 'getUserList', list);
+    })
+  },
+  getGroupDocumentCode({
+    state
+  }) {
+    getProcessCodeList({
+      processGroupCodeList: ["document-send-code", "ducument-receive-code"]
+
+    }).then(({
+      processCodeList
+    }) => {
+      let list = []
+      processCodeList.forEach(item => {
+        list.push({
+          name: item.code,
+          value: item.processCodeGroupId + ''
+        })
+      })
+      Vue.set(state.data, 'getGroupDocumentCode', list);
     })
   },
   getGroupList({

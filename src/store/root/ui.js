@@ -1,5 +1,5 @@
 const state = {
-  showChangeSys: true
+  showChangeSys: false
 };
 
 const getters = {

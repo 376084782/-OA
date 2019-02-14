@@ -8,7 +8,7 @@
       <list-search @search="onSearch" :search-form="searchParams"></list-search>
       <el-row class="bottom-row mgTop24">
         <el-button v-if="activeName=='1'" type="primary" size="small" @click="createSponse">发起公文</el-button>
-        <el-button v-else type="primary" size="small" @click="doShowWen">收文登记</el-button>
+        <el-button v-else type="primary" size="small" @click="createSponse">收文登记</el-button>
       </el-row>
       <section class="mgTop24">
         <el-table v-loading="bLoading" :data="dataSource" style="min-height: 400px">
@@ -26,7 +26,9 @@
               <template slot-scope="scope">{{scope.row.valueContent['documentSendDate']}}</template>
             </el-table-column>
           </template>
-          <el-table-column prop="finishStatusDictionary" label="类型"></el-table-column>
+          <el-table-column prop="finishStatusDictionary" label="类型">
+            <template slot-scope="scope">{{scope.row.valueContent['type']}}</template>
+          </el-table-column>
           <el-table-column label="操作" v-if="activeName=='1'">
             <template slot-scope="scope">
               <el-button @click="showFormDetail(scope.row)" type="text">详情</el-button>

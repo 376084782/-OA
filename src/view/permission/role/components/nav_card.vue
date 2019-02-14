@@ -1,8 +1,5 @@
 <template>
   <el-card class="nav-card">
-    <el-input placeholder="请输入内容" v-model="searchValue">
-      <i class="anticon icon-search"></i>
-    </el-input>
     <el-button-group class="permission-btn-group">
       <router-link :to="{path: '/permission/organization'}">
         <el-button>组织架构</el-button>
@@ -17,46 +14,42 @@
     </el-button-group>
     <el-tree
       :data="treeData"
-      :load="loadNode" v-loading="bLoading"
-      lazy :props="defaultProps"
+      :load="loadNode"
+      v-loading="bLoading"
+      lazy
+      :props="defaultProps"
       node-key="organizationRoleGroupId"
       @current-change="handleNodeClick"
-      :expand-on-click-node="false">
+      :expand-on-click-node="false"
+    >
       <div class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
         <span v-if="!node.data.leaf">
-          <el-button
-            size="mini"
-            @click="onEdit(node, data)">
-            编辑
-          </el-button>
+          <el-button size="mini" @click="onEdit(node, data)">编辑</el-button>
         </span>
       </div>
     </el-tree>
-    <modal-group v-model="showGroup" :info.sync="currentGroup"
-      @edit="$emit('load')"></modal-group>
-    <modal-role v-model="showRole" info=""
-      :data="treeData"
-      @edit="$emit('load')"></modal-role>
+    <modal-group v-model="showGroup" :info.sync="currentGroup" @edit="$emit('load')"></modal-group>
+    <modal-role v-model="showRole" info :data="treeData" @edit="$emit('load')"></modal-role>
   </el-card>
 </template>
 <script>
-import { getOrganizationRoleSubtree } from 'api/permission';
-import modalGroup from '../modals/group.vue';
-import modalRole from '../modals/role.vue';
+import { getOrganizationRoleSubtree } from "api/permission";
+import modalGroup from "../modals/group.vue";
+import modalRole from "../modals/role.vue";
 export default {
   components: { modalGroup, modalRole },
-  props: ['info', 'data'],
-  data () {
+  props: ["info", "data"],
+  data() {
     return {
-      searchValue: '',
+      searchValue: "",
       showGroup: false,
       showRole: false,
-      currentGroup: '',
+      currentGroup: "",
       defaultProps: {
-        children: 'organizationRoleGroupList',
-        label: 'name',
-        isLeaf: 'leaf'
+        children: "organizationRoleGroupList",
+        label: "name",
+        isLeaf: "leaf"
       },
       defaultExpand: [],
       bLoading: false,
@@ -64,29 +57,33 @@ export default {
     };
   },
   watch: {
-    'data': {
+    data: {
       // immediate: true,
-      handler (val) {
+      handler(val) {
         this.treeData = val;
       }
     }
   },
   methods: {
-    loadNode (node, resolve) {
-      getOrganizationRoleSubtree({organizationRoleGroupId: node.data.organizationRoleGroupId}).then(data => {
-        resolve(data.organizationRoleList.map(role => {
-          role.leaf = true;
-          return role;
-        }));
+    loadNode(node, resolve) {
+      getOrganizationRoleSubtree({
+        organizationRoleGroupId: node.data.organizationRoleGroupId
+      }).then(data => {
+        resolve(
+          data.organizationRoleList.map(role => {
+            role.leaf = true;
+            return role;
+          })
+        );
       });
     },
-    onEdit (node, data) {
+    onEdit(node, data) {
       this.currentGroup = JSON.stringify(data);
       this.showGroup = true;
     },
-    handleNodeClick (data) {
+    handleNodeClick(data) {
       if (data.leaf) {
-        this.$emit('update:info', JSON.stringify(data));
+        this.$emit("update:info", JSON.stringify(data));
       }
     }
   }

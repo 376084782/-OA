@@ -5,9 +5,9 @@
     <el-row>
       <el-col :span="16">
         <!-- 分配任务完成情况 -->
-        <!-- <task-dispatch></task-dispatch> -->
+        <task-dispatch></task-dispatch>
         <!-- 时件 -->
-        <!-- <task-mail></task-mail> -->
+        <task-mail></task-mail>
         <!-- 通知广告 -->
         <task-notice :list="listMsg"></task-notice>
       </el-col>
@@ -15,7 +15,7 @@
         <!-- 工作公告 -->
         <task-schedule></task-schedule>
         <!-- 当月任务完成情况 -->
-        <!-- <task-current></task-current> -->
+        <task-current></task-current>
       </el-col>
     </el-row>
   </section>
@@ -65,12 +65,12 @@ export default {
             num: e.sendCount,
             color: "#77CEA8"
           },
-          // {
-          //   icon: "anticon icon-heart",
-          //   title: "我关注的",
-          //   num: 32,
-          //   color: "#EBCF51"
-          // }
+          {
+            icon: "anticon icon-heart",
+            title: "我关注的",
+            num: 0,
+            color: "#EBCF51"
+          }
         ];
         this.listMsg=e.userMessageList
       });

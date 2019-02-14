@@ -17,16 +17,16 @@
       background-color="#020C16"
       active-text-color="#fff"
     >
-      <el-submenu v-for="(item ,key) in menuList" :key="key" :index="item.path||''+key">
+      <el-submenu v-for="(item ,key) in menuList" :key="key" :index="item.uri||''+key">
         <template slot="title">
           <i :class="`anticon icon-${item.icon}`"></i>
-          <span>{{item.title}}</span>
+          <span>{{item.name}}</span>
         </template>
         <el-menu-item
-          v-for="(item ,index) in item.subMenu||[]"
+          v-for="(item ,index) in item.children||[]"
           :key="index"
-          :index="item.path||''"
-        >{{item.title}}</el-menu-item>
+          :index="item.uri||''"
+        >{{item.name}}</el-menu-item>
       </el-submenu>
     </el-menu>
   </div>

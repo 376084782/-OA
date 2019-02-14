@@ -72,7 +72,7 @@ export default {
       list.forEach(item => {
         res.push({
           value: item.userId,
-          name: item.userName
+          name: item.name
         });
       });
       return res;

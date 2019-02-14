@@ -51,3 +51,47 @@ export const getDetailListReceive = data => {
   });
 };
 
+
+export const getProcessCodeList = data => {
+  return Ajax.request({
+    url: "/oa/flow/processCode/list",
+    method: "post",
+    data
+  });
+};
+export const createProcessCode = data => {
+  return Ajax.request({
+    url: "/oa/flow/processCode/create",
+    method: "post",
+    data
+  });
+};
+export const delProcessCode = data => {
+  return Ajax.request({
+    url: "/oa/flow/processCode/delete",
+    method: "post",
+    data
+  });
+};
+export const updateProcessCode = data => {
+  return Ajax.request({
+    url: "/oa/flow/processCode/update",
+    method: "post",
+    data
+  });
+};
+export const detailProcessCode = data => {
+  return Ajax.request({
+    url: "oa/flow/processCode/detail",
+    method: "post",
+    data
+  });
+};
+
+export const getSFType = data => {
+  return Ajax.request({
+    url: "/oa/flow/processCodeGroup/list",
+    method: "post",
+    data
+  });
+};

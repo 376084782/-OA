@@ -303,3 +303,11 @@ export const getOrganizationTree = () => {
     method: "post"
   });
 };
+
+export const getMenuList = () => {
+  return Ajax.request({
+    url: "/oa/ums/resource/menuTree",
+    data: {},
+    method: "post"
+  });
+};

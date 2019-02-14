@@ -12,7 +12,7 @@
         <tree-table ref="tree" :active-name="activeName" @addSubTask="addSubTask"></tree-table>
       </section>
     </el-card>
-    <modal-add :id="selectedProcessUserDetailId" :show.sync="showAdd"></modal-add>
+    <modal-add @success="onSearch" :id="selectedProcessUserDetailId" :show.sync="showAdd"></modal-add>
   </section>
 </template>
 <script>
@@ -38,7 +38,7 @@ export default {
   },
   watch: {
     activeName(val) {
-      this.$refs.tree.update();
+      this.$refs.tree && this.$refs.tree.update();
     }
   },
   mounted() {
@@ -78,8 +78,8 @@ export default {
     },
     // 搜索
     onSearch(params) {
-      Object.assign(this.searchParams, params, { page: 1 });
-      this.$refs.tree.update(this.searchParams);
+      Object.assign(this.searchParams, params, { pageIndex: 1 });
+      this.$refs.tree && this.$refs.tree.update(this.searchParams);
     }
   },
   created() {
