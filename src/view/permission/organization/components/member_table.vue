@@ -1,11 +1,11 @@
 <template>
   <section>
-    <el-table :data="dataSource" style="min-height: 400px">
+    <el-table class="mgTop24" :data="dataSource" style="min-height: 400px">
       <el-table-column prop="name" label="姓名"></el-table-column>
       <el-table-column prop="position" label="职务">
         <template slot-scope="scope">{{scope.row.position | noData}}</template>
       </el-table-column>
-      <el-table-column prop="mobile" label="手机号">
+      <el-table-column width="120px" prop="mobile" label="手机号">
         <template slot-scope="scope">{{scope.row.mobile | noData}}</template>
       </el-table-column>
       <el-table-column prop="telphone" label="座机">

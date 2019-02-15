@@ -160,6 +160,14 @@ export const getOrganizationRoleSubtree = (params) => {
     method: "post"
   });
 };
+/* 获取分管领导列表 */
+export const getManageList = (params) => {
+  return Ajax.request({
+    url: "oa/ums/organizationGroupMember/fatherLeaderList",
+    data: params,
+    method: "post"
+  });
+};
 
 /* 操作角色 */
 export const roleOperate = (params, type) => {

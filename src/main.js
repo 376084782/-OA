@@ -14,6 +14,10 @@ const Bus = new Vue()
 
 Vue.prototype.$bus = Bus;
 
+import reg from 'utils/reg'
+
+Vue.prototype.reg=reg;
+
 import $ from 'jquery';
 window.$ = $;
 filter(Vue);

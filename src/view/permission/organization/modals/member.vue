@@ -51,7 +51,7 @@
                 v-model="form.birthday"
                 type="date"
                 format="yyyy-MM-dd"
-                value-format="yyyy-MM-dd"
+                value-format="yyyy-MM-dd hh:mm:ss"
                 placeholder="选择日期"
               ></el-date-picker>
             </el-form-item>
@@ -65,11 +65,18 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="分管领导" prop="manageName">
-              <el-input v-model="form.manageName" placeholder="请输入分管领导"></el-input>
+            <el-form-item label="分管领导" prop="manageUserId">
+              <el-select v-model="form.manageUserId" placeholder="请选择领导">
+                <el-option
+                  v-for="manageUser in manageUserList"
+                  :key="manageUser.value"
+                  :label="manageUser.key"
+                  :value="manageUser.value"
+                ></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="工龄" prop="workAge">
-              <el-input v-model="form.workAge" placeholder="请输入工龄"></el-input>
+              <el-input type="tel" v-model="form.workAge" placeholder="请输入工龄"></el-input>
             </el-form-item>
             <el-form-item label="座机" prop="telphone">
               <el-input v-model="form.telphone" placeholder="请输入座机"></el-input>
@@ -116,7 +123,12 @@
   </el-dialog>
 </template>
 <script>
-import { membersOperate, getMemberInfo, getRoleList } from "api/permission";
+import {
+  membersOperate,
+  getMemberInfo,
+  getRoleList,
+  getManageList
+} from "api/permission";
 export default {
   data() {
     return {
@@ -133,11 +145,12 @@ export default {
         { value: 3, name: "书记" },
         { value: 4, name: "其他" }
       ],
+      manageUserList: [],
       form: {
         organizationRoleId: "",
         sexDictionary: "男",
         position: "",
-        manageName: "",
+        manageUserId: "",
         userName: "",
         name: "",
         birthday: "",
@@ -155,14 +168,20 @@ export default {
         description: ""
       },
       rules: {
+        email: [{ pattern: this.reg.email }],
+        workAge: [{ pattern: this.reg.number }],
+        telphone: [{ pattern: this.reg.number }],
         name: [{ required: true, message: "请输入" }],
         idCard: [
           { required: true, message: "请输入" },
           {
-            pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/
+            pattern: this.reg.idcard
           }
         ],
-        mobile: [{ required: true, message: "请输入" }]
+        mobile: [
+          { required: true, message: "请输入" },
+          { pattern: this.reg.mobile }
+        ]
         // organizationRoleId: [
         //   { required: true, message: '请选择' }
         // ]
@@ -177,6 +196,9 @@ export default {
   },
   watch: {
     value(val) {
+      if (val) {
+        this.getManageList();
+      }
       this.bShow = val;
     },
     bShow(val) {
@@ -190,6 +212,8 @@ export default {
           getMemberInfo({ organizationGroupId: this.id, userId: val }).then(
             data => {
               Object.assign(this.form, data.user);
+              this.form.organizationRoleIdList =
+                this.form.organizationRoleIdList || [];
               this.form.organizationRoleId =
                 data.organizationRoleList[0] &&
                 data.organizationRoleList[0].organizationRoleId;
@@ -208,12 +232,25 @@ export default {
         this.organizationRoleList = e.organizationRoleList;
       });
     },
+    getManageList() {
+      getManageList({
+        organizationGroupId: this.id
+      }).then(({ userList }) => {
+        this.manageUserList=[];
+        userList.forEach(item => {
+          this.manageUserList.push({
+            key: item.name,
+            value: item.userId
+          });
+        });
+      });
+    },
     onClose() {
       this.form = {
         organizationRoleId: "",
         sexDictionary: "男",
         position: "",
-        manageName: "",
+        manageUserId: "",
         userName: "",
         name: "",
         birthday: "",
@@ -242,10 +279,11 @@ export default {
           this.confirmLoading = true;
           let { ...params } = this.form;
           let finalParams = {
-            organizationRoleIdList: [],
+            organizationRoleIdList: params.organizationRoleIdList,
             organizationGroupId: this.id,
             organizationGroupMemberList: [
               {
+                manageUserId: params.manageUserId,
                 organizationGroupId: this.id,
                 position: params.position
               }
@@ -261,6 +299,8 @@ export default {
             .finally(() => {
               this.confirmLoading = false;
             });
+        } else {
+          this.$alert("验证失败！请检查您的输入信息！");
         }
       });
     }

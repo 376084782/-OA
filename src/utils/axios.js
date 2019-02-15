@@ -134,8 +134,12 @@ class HttpRequest {
               code: code,
               message: decodeURIComponent(msg)
             };
-            vue.prototype.$alert(errData.message)
             console.warn(errData, '请求返回异常')
+            if (options.url == '/oa/ums/user/info') {
+              store.dispatch('loginErr')
+            } else {
+              vue.prototype.$alert(errData.message)
+            }
             rej(errData);
           }
         })
@@ -151,7 +155,6 @@ class HttpRequest {
               message: decodeURIComponent(msg)
             };
             vue.prototype.$alert(errData.message);
-            
             rej(errData);
           } else {
             rej();

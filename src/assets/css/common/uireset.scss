@@ -129,7 +129,9 @@
 }
 
 .cell{
-  overflow: visible!important;
+  white-space: nowrap!important;
+  overflow: hidden!important;
+  text-overflow: ellipsis;
 }
 .table-task{
   td:not(:nth-child(3)){

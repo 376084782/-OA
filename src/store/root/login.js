@@ -9,6 +9,7 @@ import {
   setTokenSystem,
   setTokenPlatform
 } from 'utils/assist.js'
+import router from 'router'
 const state = {
   // 用户登录信息
   userInfo: {},
@@ -39,6 +40,13 @@ const getters = {
 const mutations = {};
 
 const actions = {
+  loginErr({state}){
+    state.flagGetInfo = false;
+    state.userInfo = {};
+    setTokenPlatform('')
+    setTokenSystem('');
+    router.push('/login')
+  },
   userGetInfo({
     state
   }) {
