@@ -4,7 +4,9 @@ import {
   getOrganizationTree,
 } from 'api/index'
 import {
-  getPeopleList
+  getPeopleList,
+  getDanWeiList,
+  getOrganizationMembers
 } from 'api/permission'
 import {
   getProcessCodeList
@@ -22,6 +24,30 @@ const actions = {
     data
   }) {
     Vue.set(state.data, code, data);
+  },
+  getDanWeiList({
+    state
+  }) {
+    getDanWeiList().then(e => {
+
+    })
+  },
+  getCurrentGroupUserList({
+    state
+  }) {
+    getOrganizationMembers({
+      organizationGroupIdList: [store.state.login.groupList[0].organizationGroupId]
+    }).then(({userList}) => {
+      let list=[];
+      userList.forEach(item=>{
+        list.push({
+          value: item.userId + '',
+          name: item.name
+        })
+      })
+      Vue.set(state.data, 'getCurrentGroupUserList', list);
+      console.log(e,'2222224444444------')
+    })
   },
   getCurrentUserInfo({
     state
@@ -77,7 +103,6 @@ const actions = {
     getPeopleList({
       pageNo: 1,
       pageSize: 9999,
-
     }).then(({
       tableResponse
     }) => {
@@ -112,9 +137,10 @@ const actions = {
   },
   getGroupList({
     state
-  }) {
-    getOrganizationTree({
-      organizationGroupId: -1
+  }, level = 2) {
+    getDanWeiList({
+      level,
+      organizationGroupId: store.state.login.groupList[0].organizationGroupId
     }).then(({
       organizationGroupList
     }) => {

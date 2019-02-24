@@ -28,11 +28,9 @@ export default {
   watch: {
     visible(flag) {
       if (flag) {
-        console.log("idddd", this.id);
         getDetailListReceive({
           processUserId: this.id
         }).then(e => {
-          console.log(2321331, e);
         });
       }
     }

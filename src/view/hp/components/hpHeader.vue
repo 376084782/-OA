@@ -1,9 +1,9 @@
 <template>
-  <section class="wrap-header">
-    <div class="card" v-for="(item, index) in data" :key="index">
+  <section class="wrap-header" style="margin-left:0;margin-right:0;">
+    <div class="card" style="flex-grow:1;" v-for="(item, index) in data" :key="index">
       <div class="pull-left">
         <h5>{{item.title}}</h5>
-        <h2>{{item.num}}</h2>
+        <h2 style="margin-top:-8px;">{{item.num}}</h2>
       </div>
       <div class="pull-right">
         <div class="icon" :style="{'background-color': item.color}">

@@ -3,6 +3,15 @@ import {
   Ajax
 } from "utils/axios";
 
+
+export const getCode = (data) => {
+  return Ajax.request({
+    url: "/oa/ums/userVerificationCode/picture/generate",
+    method: "post",
+    data
+  });
+};
+
 export const getIndexPageData = (data) => {
   return Ajax.request({
     url: "/oa/flow/index/detail",
@@ -308,6 +317,15 @@ export const getMenuList = () => {
   return Ajax.request({
     url: "/oa/ums/resource/menuTree",
     data: {},
+    method: "post"
+  });
+};
+
+
+export const zhuanban = (data) => {
+  return Ajax.request({
+    url: "/oa/flow/processUserButton/transfer",
+    data,
     method: "post"
   });
 };

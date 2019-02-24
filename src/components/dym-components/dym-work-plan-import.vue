@@ -78,8 +78,20 @@ export default {
         }
       })
         .then(({ workPlanDateList }) => {
-          this.list = this.list.concat(workPlanDateList);
-          this.$emit('import',this.list);
+          // 做个去重
+          workPlanDateList.forEach(item => {
+            let flagHas = this.list.some(iitem => {
+              return (
+                iitem.date == item.date &&
+                iitem.userId == item.userId &&
+                iitem.type == item.type
+              );
+            });
+            if (!flagHas) {
+              this.list.push(item);
+            }
+          });
+          this.$emit("import", this.list);
         })
         .catch(({ message }) => {
           this.$alert(message, "错误");

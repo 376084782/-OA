@@ -1,7 +1,7 @@
 <template>
   <el-dialog title="选择关联公文" :visible="visible" width="1160px" @update:visible="toggle">
     <modal-combine-search @search="onSearch"></modal-combine-search>
-    <el-table :row-style="rowStyle" :data="dataSource">
+    <el-table class="mgTop24" :row-style="rowStyle" :data="dataSource">
       <el-table-column prop="flowCode" label="文号"></el-table-column>
       <el-table-column prop="flowTitle" label="标题"></el-table-column>
       <el-table-column label="紧急程度">

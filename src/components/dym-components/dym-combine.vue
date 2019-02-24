@@ -5,7 +5,7 @@
       <span>{{item.name}}</span>
       <el-button type="text" @click="del(item)" v-if="!disabled">删除</el-button>
     </p>
-    <el-button @click="showModal=true" :disabled="disabled">关联公文</el-button>
+    <el-button size="small" @click="showModal=true" :disabled="disabled">关联公文</el-button>
     <modal-combine
       :default-list="list"
       :visible.sync="showModal"

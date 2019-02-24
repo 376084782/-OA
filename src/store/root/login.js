@@ -3,7 +3,7 @@ import {
   logout,
   loginLP,
   getInfo,
-
+  getCode
 } from 'api/index';
 import {
   setTokenSystem,
@@ -15,6 +15,7 @@ const state = {
   userInfo: {},
   flagGetInfo: false,
   groupList: [],
+  deviceCode:''
 };
 import store from 'store'
 const getters = {
@@ -40,6 +41,12 @@ const getters = {
 const mutations = {};
 
 const actions = {
+  updateCode({state}){
+    getCode().then(e => {
+      // console.log(e)
+    });
+    // deviceCode
+  },
   loginErr({state}){
     state.flagGetInfo = false;
     state.userInfo = {};

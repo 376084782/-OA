@@ -200,3 +200,12 @@ export const editPermission = (params) => {
     method: "post"
   });
 };
+
+/** 获取上级本级下级单位列表 */
+export const getDanWeiList = (params) => {
+  return Ajax.request({
+    url: '/oa/ums/organizationGroup/level/list',
+    data: params,
+    method: "post"
+  });
+};

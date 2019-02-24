@@ -3,7 +3,7 @@
     <el-card class="mgTop24">
       <list-search @search="onSearch"></list-search>
       <section class="mgTop24">
-        <el-table v-loading="bLoading" :data="dataSource" style="min-height: 400px">
+        <el-table v-loading="bLoading" :data="dataSource" >
           <el-table-column prop label="文号"></el-table-column>
           <el-table-column prop="region" label="标题"></el-table-column>
           <el-table-column prop="numid" label="紧急程度"></el-table-column>

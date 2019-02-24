@@ -1,6 +1,8 @@
 <template>
   <section v-loading="loading">
     <el-card class="mgTop24">
+      <h3 style="margin:0 24px 16px;">{{$route.query.title}}</h3>
+      <p class="line" style="margin-left:-24px;width:120%;"></p>
       <task-tree v-if="!fromModal&&query.modelType==201" :par-id="query.processUserId"></task-tree>
 
       <!-- <h3>发文拟稿</h3> -->
@@ -12,11 +14,12 @@
         :config="contentTop"
         :rules="rulesTop"
         :disabled="!canEditTop"
+        :document-code-fixd="documentCodeFixd"
         @showModalCombine="showModalCombine"
       ></dynamic-form>
       <template v-if="stepConfig.length>0">
         <div class="line mgTop40"></div>
-        <h4 class="mgTop40 mgLeft75">公文处理流程图：</h4>
+        <h4 class="mgTop40 mgLeft75">流程图：</h4>
         <step
           ref="step"
           :style="{height:activeStep==3?'650px':'auto'}"
@@ -26,9 +29,13 @@
           class="mgTop24 mgLeft185"
         ></step>
       </template>
-      <el-row class="mgLeft185">
+      <el-row style="margin-left:172px;">
         <template v-for="(conf,index) in buttonConfig">
-          <el-button type="primary" :key="index" @click="clickEvents(conf)">{{conf.showValue}}</el-button>
+          <el-button
+            :type="index==0?'primary':''"
+            :key="index"
+            @click="clickEvents(conf)"
+          >{{conf.showValue}}</el-button>
         </template>
         <!-- <el-button type="primary" @click="clickFP">分派</el-button>
           <el-button @click="clickJS">拒收</el-button>
@@ -45,6 +52,7 @@
       @finish="finishHandler"
       :show.sync="visibleModalPercent"
     ></modal-percent>
+    <modal-zb @success="initData" :id="query.processUserDetailId" :visible.sync="showModalZB"></modal-zb>
   </section>
 </template>
 <script>
@@ -103,6 +111,8 @@ export default {
   },
   data() {
     return {
+      showModalZB: false,
+      documentCodeFixd: "",
       finishPercent: 0,
       visibleModalPercent: false,
       showAdd: false,
@@ -211,6 +221,10 @@ export default {
               this.clickShowWen();
               return;
             }
+            case "permitTransfer": {
+              this.showModalZB = true;
+              break;
+            }
           }
         }
       });
@@ -237,6 +251,9 @@ export default {
         config = processUserDetailResponseList[0] || {};
       } else {
         config = e;
+      }
+      if (e.documentCodeFixd) {
+        this.documentCodeFixd = e.documentCodeFixd;
       }
       this.finishPercent = config.processUser.finishPercent;
       let confContent = JSON.parse(config.processUser.content);
@@ -274,7 +291,7 @@ export default {
           ) {
             value = JSON.parse(value);
           }
-          console.log(value,item.code)
+          console.log(value, item.code);
           this.$set(this.editData, item.code, value);
         });
       }
@@ -294,7 +311,7 @@ export default {
               let valueCnt = formatValueContentToList(userItem.valueContent);
               confUser["remark"] = valueCnt.message;
             }
-            userList.push(Object.assign(confUser, userItem));
+            userList.push(Object.assign(userItem, confUser));
             if (item.isDoingStep) {
               this.activeStep = step;
             }
@@ -303,6 +320,7 @@ export default {
               userItem.isCurrentUserStep &&
               userItem.isDoingStep
             ) {
+              this.canEditTop = userItem.allowUpdate > 0;
               let cnt = [];
               if (userItem.content) {
                 cnt = JSON.parse(userItem.content);
@@ -316,6 +334,7 @@ export default {
             return userItem.isCurrentUserStep && userItem.isDoingStep;
           });
         stepData.userList = userList;
+
         stepData.stepName = item.stepName;
         stepData.showEdit = item.isDoingStep && flagShowStep;
         if (!isStart) {
@@ -452,13 +471,9 @@ export default {
     clickRecall() {
       processRecall({
         processUserDetailId: this.query.processUserDetailId
-      })
-        .then(e => {
-          this.routerBack();
-        })
-        .catch(({ message }) => {
-          this.$alert(message);
-        });
+      }).then(e => {
+        this.routerBack();
+      });
     },
     clickFP() {},
     clickJS() {

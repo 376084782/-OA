@@ -107,7 +107,7 @@
   }
 
   .detail {
-    margin-top: 8px;
+    margin-top: 16px;
     padding-bottom: 60px;
 
     .left {
@@ -164,6 +164,7 @@
     margin-top: -30px;
     padding: 24px 0;
     position: relative;
+    margin-left: 10px;
 
     .el-form-item {
       margin: 8px;
@@ -173,7 +174,7 @@
       content: "";
       position: absolute;
       left: -22px;
-      top: 52px;
+      top: 30px;
       border: 11px solid white;
       border-right: 13px solid rgba(244, 249, 252, 1);
     }

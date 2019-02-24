@@ -70,15 +70,10 @@ export default {
             </span>
             <span
               style="width:100px;"
-              class={
-                "font-" + data.finishStatusDictionary == "未接收"
-                  ? "font-warning"
-                  : "font-blue"
-              }
             >
               {data.finishStatusDictionary}
             </span>
-            <span style="width:100px;">{data.detailStatusDictionary}</span>
+            <span style="width:100px;">{data.finishPercent}%</span>
             <span style="width:200px">
               <el-button
                 v-if={data.finishStatus == 2}
@@ -113,7 +108,8 @@ export default {
           processUserDetailId: data.detailId,
           processUserWatcherId: data.processUserWatcherId,
           permitButton: data.permitButton,
-          permitModelType: data.permitModelType
+          permitModelType: data.permitModelType,
+          title:'查看任务'
         }
       };
       this.$store.dispatch("addBreadCurmbList", routeData);

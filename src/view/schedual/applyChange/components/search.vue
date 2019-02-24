@@ -1,6 +1,6 @@
 <template>
   <div class="search-area">
-    <el-form label-width="80px">
+    <el-form label-width="80px" size="small">
       <el-row class="row" :gutter="20">
         <el-col :span="8">
           <el-form-item label="标题:">
@@ -21,12 +21,14 @@
             ></el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="7" :offset="1">
+        <el-col :span="7" :offset="1" style="
+    padding-right: 10px;
+    margin-left: 42px;">
           <el-button type="primary" size="small" @click="onSearch">查询</el-button>
           <el-button size="small" @click="onReset()">重置</el-button>
         </el-col>
       </el-row>
-      <el-row :gutter="20" v-if="status=='10'">
+      <el-row :gutter="20" v-if="status=='10'" style="margin-top:10px;">
         <el-col :span="8">
           <el-form-item label="状态:">
             <el-select style="width:100%;" v-model="searchForm.pageSearchStatus" placeholder="请选择">

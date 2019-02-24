@@ -8,7 +8,7 @@ import {
 // import { Spin } from 'iview'
 import vue from 'vue'
 
-let deviceCode = 1121212;
+let deviceCode = localStorage.getItem('deviceCode') || '1121212';
 const addErrorLog = errorInfo => {
   const {
     statusText,
@@ -124,6 +124,10 @@ class HttpRequest {
           data,
           headers
         }) => {
+          if (headers['picturetoken']) {
+            deviceCode = headers['picturetoken']
+            localStorage.setItem('deviceCode', deviceCode);
+          }
           let code = +headers["businessstatus"] || 200;
           let msg = headers["message"];
           headers = Object.assign(headers, options.headers);

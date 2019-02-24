@@ -15,7 +15,7 @@
         <!-- 工作公告 -->
         <task-schedule></task-schedule>
         <!-- 当月任务完成情况 -->
-        <task-current></task-current>
+        <task-current style="min-height:496px;"></task-current>
       </el-col>
     </el-row>
   </section>

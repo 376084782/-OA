@@ -3,7 +3,7 @@
     <div class="logo">
       <span class="menu-item">
         <div>
-          <i class="anticon icon-dropbox"></i>
+          <i class="logo-icon"></i>
           <span>智信经开</span>
         </div>
       </span>

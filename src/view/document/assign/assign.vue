@@ -3,17 +3,17 @@
     <el-card class="mgTop24">
       <list-search @search="onSearch"></list-search>
       <section class="mgTop24">
-        <el-table v-loading="bLoading" :data="dataSource" style="min-height: 400px">
-          <el-table-column prop="flowCode" label="文号"></el-table-column>
-          <el-table-column prop="flowTitle" label="标题"></el-table-column>
+        <el-table v-loading="bLoading" :data="dataSource">
+          <el-table-column prop="flowCode" label="文号" width="200px"></el-table-column>
+          <el-table-column prop="flowTitle" label="标题" width="200px"></el-table-column>
           <el-table-column prop="numid" label="紧急程度">
             <template slot-scope="scope">{{scope.row.valueContent['urgency']}}</template>
           </el-table-column>
           <el-table-column prop="finishStatusDictionary" label="状态"></el-table-column>
-          <el-table-column prop="usercnt" label="发文单位" width="230px">
+          <el-table-column prop="usercnt" label="发文单位" min-width="200px">
             <template slot-scope="scope">{{scope.row.valueContent['sendGroup']}}</template>
           </el-table-column>
-          <el-table-column prop="recharge" label="限办日期" width="180px">
+          <el-table-column prop="recharge" label="限办日期" min-width="180px">
             <template slot-scope="scope">{{scope.row.valueContent['documentSendDate']}}</template>
           </el-table-column>
           <el-table-column prop="recharge" label="类型">
@@ -111,12 +111,19 @@ export default {
       this.showDetail = true;
     },
     showFormDetail(data) {
-      this.$router.push({
-        path: "/document/seeAssign/do",
+      let routeData = {
+        name: "查看",
+        url: "/document/seeAssign/do",
         query: {
           processUserId: data.processUserId,
-          processUserDetailId: data.detailId
+          processUserDetailId: data.detailId,
+          title: "查看公文"
         }
+      };
+      this.$store.dispatch("addBreadCurmbList", routeData);
+      this.$router.push({
+        path: routeData.url,
+        query: routeData.query
       });
     }
   }

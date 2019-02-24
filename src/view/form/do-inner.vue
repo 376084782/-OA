@@ -1,6 +1,6 @@
 <template>
   <section v-loading="loading">
-    <el-card class="mgTop24">
+    <div style="margin-top:-20px">
       <task-tree v-if="!fromModal&&query.modelType==201" :par-id="query.processUserId"></task-tree>
 
       <!-- <h3>发文拟稿</h3> -->
@@ -15,7 +15,7 @@
       ></dynamic-form>
       <template v-if="stepConfig.length>0">
         <div class="line mgTop40"></div>
-        <h4 class="mgTop40 mgLeft75">公文处理流程图：</h4>
+        <h4 class="mgTop40 mgLeft75">流程图：</h4>
         <step
           ref="step"
           :style="{height:activeStep==3?'650px':'auto'}"
@@ -25,7 +25,7 @@
           class="mgTop24 mgLeft185"
         ></step>
       </template>
-      <el-row class="mgLeft185">
+      <el-row style="margin-left:172px;">
         <template v-for="(conf,index) in buttonConfig">
           <el-button type="primary" :key="index" @click="clickEvents(conf)">{{conf.showValue}}</el-button>
         </template>
@@ -33,7 +33,7 @@
           <el-button @click="clickJS">拒收</el-button>
         <el-button @click="clickZB">转办</el-button>-->
       </el-row>
-    </el-card>
+    </div>
     <modal-js :visible.sync="showJS"></modal-js>
     <modal-zb :visible.sync="showZB"></modal-zb>
     <modal-change-name :visible.sync="showChangeName"></modal-change-name>

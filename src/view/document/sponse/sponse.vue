@@ -1,28 +1,33 @@
 <template>
   <section>
-    <el-tabs class="top-sec-tab" v-model="activeName">
+    <el-tabs style="margin-top: -16px;" class="top-sec-tab" v-model="activeName">
       <el-tab-pane label="发文" name="1"></el-tab-pane>
       <el-tab-pane label="收文" name="2"></el-tab-pane>
     </el-tabs>
     <el-card class="mgTop24">
       <list-search @search="onSearch" :search-form="searchParams"></list-search>
-      <el-row class="bottom-row mgTop24">
+      <el-row class="bottom-row mgTop20">
         <el-button v-if="activeName=='1'" type="primary" size="small" @click="createSponse">发起公文</el-button>
         <el-button v-else type="primary" size="small" @click="createSponse">收文登记</el-button>
       </el-row>
       <section class="mgTop24">
-        <el-table v-loading="bLoading" :data="dataSource" style="min-height: 400px">
-          <el-table-column prop="flowCode" label="文号"></el-table-column>
-          <el-table-column prop="flowTitle" label="标题"></el-table-column>
+        <el-table v-loading="bLoading" :data="dataSource">
+          <el-table-column prop="flowCode" label="文号" min-width="200px"></el-table-column>
+          <el-table-column prop="flowTitle" label="标题" min-width="200px"></el-table-column>
           <el-table-column prop="numid" label="紧急程度">
             <template slot-scope="scope">{{scope.row.valueContent['urgency']}}</template>
           </el-table-column>
           <el-table-column prop="finishStatusDictionary" label="状态"></el-table-column>
-          <el-table-column width="220px" prop="organizationGroupName" label="来文单位">
+          <el-table-column
+            v-if="activeName!='1'"
+            min-width="220px"
+            prop="organizationGroupName"
+            label="来文单位"
+          >
             <template slot-scope="scope">{{scope.row.valueContent['mainGroupList']}}</template>
           </el-table-column>
           <template v-if="activeName=='2'">
-            <el-table-column width="180px" prop="detailFinishTime" label="限办日期">
+            <el-table-column min-width="180px" prop="detailFinishTime" label="限办日期">
               <template slot-scope="scope">{{scope.row.valueContent['documentSendDate']}}</template>
             </el-table-column>
           </template>
@@ -112,12 +117,19 @@ export default {
     },
     doShowWen() {},
     createSponse() {
-      this.$router.push({
-        path: "/document/sponse/do",
+      let routeData = {
+        name: "发起",
+        url: "/document/sponse/do",
         query: {
           modelType: 100,
-          permitButton: 1
+          permitButton: 1,
+          title: "发起公文"
         }
+      };
+      this.$store.dispatch("addBreadCurmbList", routeData);
+      this.$router.push({
+        path: routeData.url,
+        query: routeData.query
       });
     },
     showReceiveDetail(data) {
@@ -133,7 +145,8 @@ export default {
           processUserDetailId: data.detailId,
           processUserWatcherId: data.processUserWatcherId,
           permitButton: data.permitButton,
-          permitModelType: data.permitModelType
+          permitModelType: data.permitModelType,
+          title: "公文详情"
         }
       };
       this.$store.dispatch("addBreadCurmbList", routeData);
@@ -151,7 +164,6 @@ export default {
         .then(({ tableResponse }) => {
           this.dataSource = tableResponse.list;
           this.dataSource.forEach(item => {
-            console.log(item, 222);
             item.valueContent = formatValueContentToList(item.valueContent);
           });
           this.oPagination.pageNo = tableResponse.pageNum;

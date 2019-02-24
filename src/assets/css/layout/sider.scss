@@ -84,11 +84,19 @@ $var-color-log: #fff;
     line-height: 64px;
     padding-left: 20px;
     cursor: pointer;
-    .menu-item>div{
+    .logo-icon{
+      background: url(../../images/icon_logo.png) no-repeat;
+      width: 30px;
+      height: 38px;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .menu-item>div {
       display: flex;
       align-items: center;
       justify-content: start;
     }
+
     .anticon {
       font-size: 22px;
       margin-right: 12px;

@@ -1,13 +1,13 @@
 <template>
   <section>
-    <el-tabs class="top-sec-tab" v-model="activeName">
+    <el-tabs style="margin-top: -16px;" class="top-sec-tab" v-model="activeName">
       <el-tab-pane label="待办任务" name="-1"></el-tab-pane>
       <el-tab-pane label="已办任务" name="1"></el-tab-pane>
       <el-tab-pane label="我发起的" name="2"></el-tab-pane>
     </el-tabs>
     <el-card class="mgTop24">
       <list-search @search="onSearch"></list-search>
-      <el-button @click="createTask" class="mgTop10" type="primary" size="small">发起任务</el-button>
+      <el-button v-if="activeName=='2'" @click="createTask" class="mgTop20" type="primary" size="small">发起任务</el-button>
       <section class="mgTop24" style="overflow:scroll;">
         <tree-table ref="tree" :active-name="activeName" @addSubTask="addSubTask"></tree-table>
       </section>
@@ -60,21 +60,37 @@ export default {
       this.showAdd = true;
     },
     createTask() {
-      this.$router.push({
-        path: "/document/sponse/do",
+      let routeData = {
+        name: "发起",
+        url: "/document/sponse/do",
         query: {
           modelType: 201,
-          permitButton: 1
+          permitButton: 1,
+          title: "发起任务"
         }
+      };
+      this.$store.dispatch("addBreadCurmbList", routeData);
+      this.$router.push({
+        path: routeData.url,
+        query: routeData.query
       });
     },
     showFormDetail(data) {
-      this.$router.push({
-        path: `/document/seeTaskDone${this.activeName == "1" ? "1" : ""}/do`,
+      let routeData = {
+        name: "发起公文",
+        url: `/document/seeTaskDone${this.activeName == "1" ? "1" : ""}/do`,
         query: {
-          data
+          data,
+          title: "查看任务"
         }
+      };
+      this.$store.dispatch("addBreadCurmbList", routeData);
+      this.$router.push({
+        path: routeData.url,
+        query: routeData.query
       });
+
+      this.$router.push({});
     },
     // 搜索
     onSearch(params) {

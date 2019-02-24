@@ -26,6 +26,19 @@ export default {
   },
   methods: {
     changeHandler(value) {
+      if (this.conf.code == "type") {
+        let level = 2;
+        let val=value.value
+        if (val < 200) {
+          level = 1;
+        } else if (val < 300) {
+          level = 2;
+        } else {
+          level = 3;
+        }
+        console.log(val,level,'llllevl')
+        this.$store.dispatch("getGroupList", level);
+      }
       this.$bus.$emit("changeSel", {
         conf: this.conf,
         value
@@ -49,14 +62,14 @@ export default {
       } else if (this.conf.dataType == 3) {
         list = this.getDataByFuncName(this.conf);
       }
-      if (
-        this.value &&
-        !list.some(item => {
-          return item.value == this.value.value;
-        })
-      ) {
-        list.push(this.value);
-      }
+      // if (
+      //   this.value &&
+      //   !list.some(item => {
+      //     return item.value == this.value.value;
+      //   })
+      // ) {
+      //   list.push(this.value);
+      // }
 
       if (this.autoSelect && list.length > 0) {
         this.val = list[0];

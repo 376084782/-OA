@@ -30,8 +30,9 @@ export default {
 .breadcrumb {
   margin: -24px -24px 0px;
   .el-breadcrumb {
-    padding: 16px 24px;
+    padding: 20px 24px;
     background: #fff;
+    padding-bottom: 24px;
   }
   a {
     color: rgba(0, 0, 0, 0.45);

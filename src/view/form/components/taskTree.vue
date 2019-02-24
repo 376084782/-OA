@@ -1,7 +1,5 @@
 <template>
   <div style="margin:0 -24px">
-    <h3 style="margin:0 24px 16px;">任务详情</h3>
-    <p class="line"></p>
     <el-tree
       class="inner-form-tree"
       :render-content="renderContent"
@@ -75,6 +73,9 @@ export default {
       );
     },
     loadNode1(node, resolve) {
+      if (!this.parId) {
+        return;
+      }
       if (node.level === 0) {
         getListChild({
           fatherProcessUserId: this.parId

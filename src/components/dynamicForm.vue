@@ -132,7 +132,7 @@
 
 <script>
 import { getToken, dateFormater } from "utils/assist";
-import { funcMap } from "./dynamicFuncDefine";
+// import { funcMap } from "./dynamicFuncDefine";
 import { mapGetters } from "vuex";
 import dymSelect from "./dym-components/dym-select";
 import dymRadio from "./dym-components/dym-radio";
@@ -154,6 +154,7 @@ export default {
     dymUploadFile
   },
   props: {
+    documentCodeFixd:String,
     query: {
       type: Object,
       default() {
@@ -216,7 +217,7 @@ export default {
         let groupList = this.$store.state.login.groupList;
         let value = data.value.value;
         let codes = groupList[0].documentCode.split("-");
-        let fixed = groupList[0].documentCodeFixd;
+        let fixed = this.documentCodeFixd;
         let code = "";
         if (value < 200) {
           code = codes[0] + fixed;

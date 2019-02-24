@@ -19,7 +19,6 @@ export default {
   watch: {
     show(flag) {
       if (flag) {
-        console.log(this.id,'2222id')
         this.queryData.fatherProcessUserDetailId = this.id;
       }
     }

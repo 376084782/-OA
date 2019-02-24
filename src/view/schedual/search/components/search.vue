@@ -12,12 +12,14 @@
             <el-input v-model="searchForm.groupName" placeholder="请输入" size="small"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="7" :offset="1">
+        <el-col :span="7" :offset="1" style="
+    padding-right: 10px;
+    margin-left: 42px;">
           <el-button type="primary" size="small" @click="onSearch">查询</el-button>
           <el-button size="small" @click="onReset()">重置</el-button>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
+      <el-row :gutter="20" style="margin-top:10px;">
         <el-col :span="8">
           <el-form-item label="排班时间:">
             <el-date-picker

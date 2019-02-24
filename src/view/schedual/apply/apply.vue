@@ -7,14 +7,14 @@
     </el-tabs>
     <el-card class="mgTop24">
       <list-search @search="onSearch" :status="activeName"></list-search>
-      <el-row class="bottom-row mgTop24">
+      <el-row v-if="activeName=='10'" class="bottom-row mgTop24">
         <el-button type="primary" size="small" @click="showFormDo()">申请排班</el-button>
       </el-row>
       <section class="mgTop24">
-        <el-table v-loading="bLoading" :data="dataSource" style="min-height: 400px">
+        <el-table v-loading="bLoading" :data="dataSource">
           <el-table-column prop="processUserId" label="序号"></el-table-column>
           <el-table-column prop="title" label="标题"></el-table-column>
-          <el-table-column prop="createTime" label="排班时间"></el-table-column>
+          <el-table-column min-width="180px" prop="createTime" label="排班时间"></el-table-column>
           <el-table-column prop="name" label="发起申请人"></el-table-column>
           <el-table-column prop="organizationGroupName" label="发起部门"></el-table-column>
           <el-table-column prop="modelTypeDictionary" label="排班当前状态"></el-table-column>
@@ -117,27 +117,41 @@ export default {
         });
     },
     showFormDetail(data) {
-      this.$router.push({
-        path: "/document/seeSchedualApply/do",
+      let routeData = {
+        name: "查看",
+        url: "/document/seeSchedualApply/do",
         query: {
           processUserId: data.processUserId,
-          processUserDetailId: data.detailId
+          processUserDetailId: data.detailId,
+          title: "查看"
         }
+      };
+      this.$store.dispatch("addBreadCurmbList", routeData);
+      this.$router.push({
+        path: routeData.url,
+        query: routeData.query
       });
     },
     showFormDo() {
-      this.$router.push({
-        path: "/document/schedualApply/do",
+      let routeData = {
+        name: "申请排班",
+        url: "/document/schedualApply/do",
         query: {
           modelType: 400,
-          permitButton: 1
+          permitButton: 1,
+          title: "申请排班"
         }
+      };
+      this.$store.dispatch("addBreadCurmbList", routeData);
+      this.$router.push({
+        path: routeData.url,
+        query: routeData.query
       });
     },
     // 搜索
     onSearch(params) {
       Object.assign(this.searchParams, params);
-      console.log(this.searchParams)
+      console.log(this.searchParams);
       this.loadData();
     }
   },

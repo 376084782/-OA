@@ -1,12 +1,12 @@
 <template>
   <el-row>
     <p v-for="(item,index) in fileList" :key="index">
-      <span>{{item.name}}</span>
+      <span>{{item.name}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
       <a download :href="item.value" target="_blank" class="el-button el-button--text">下载</a>
-      <el-button type="text" @click="rename(item)" v-if="!disabled">改名</el-button>
-      <el-button type="text" @click="del(item)" v-if="!disabled">删除</el-button>
+      <el-button style="margin-left:6px;" type="text" @click="rename(item)" v-if="!disabled">改名</el-button>
+      <el-button style="margin-left:6px;" type="text" @click="del(item)" v-if="!disabled">删除</el-button>
     </p>
-    <el-button v-if="!disabled" size="small" @click="uploadHandler">
+    <el-button :disabled="disabled" size="small" @click="uploadHandler">
       <i class="anticon icon-upload"></i> 上传文件
     </el-button>
     <modal-change-name :visible.sync="showChangeName" @change="changeHandler" :value="changingName"></modal-change-name>

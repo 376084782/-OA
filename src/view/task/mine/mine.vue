@@ -2,11 +2,11 @@
   <section>
     <el-card class="mgTop24">
       <list-search @search="onSearch"></list-search>
-      <el-row class="mgTop24">
+      <el-row class="mgTop20">
         <el-button type="primary" size="small" @click="createTask">发起任务</el-button>
       </el-row>
       <section class="mgTop24">
-        <el-table v-loading="bLoading" :data="dataSource" style="min-height: 400px">
+        <el-table v-loading="bLoading" :data="dataSource">
           <el-table-column prop label="任务名称"></el-table-column>
           <el-table-column prop="region" label="发起人"></el-table-column>
           <el-table-column prop="numid" label="自己工时/总工时" min-width="90px"></el-table-column>

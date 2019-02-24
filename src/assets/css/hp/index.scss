@@ -1,19 +1,23 @@
 .hp-container {
   width: 100%;
+
   .el-picker-panel {
     border: none !important;
     display: block !important;
   }
+
   .el-picker-panel,
   .el-table-filter {
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
   }
+
   .text-welcome {
     margin: -24px -24px 0px;
     padding: 16px 24px;
     background-color: #fff;
   }
+
   .wrap-header {
     margin-top: 24px;
     height: 90px;
@@ -21,11 +25,17 @@
     display: flex;
     justify-content: flex-start;
     margin-left: -20px;
+
+    .card:not(:first-child) {
+      margin-left: 20px;
+
+    }
+
     .card {
       width: 272px;
       height: 90px;
-      margin-left: 20px;
       background-color: #fff;
+
       h5 {
         font-size: 14px;
         line-height: 14px;
@@ -34,12 +44,14 @@
         color: gray;
         font-weight: normal;
       }
+
       h2 {
         font-size: 32px;
         line-height: 32px;
         margin-left: 31px;
         font-weight: 400;
       }
+
       .icon {
         width: 42px;
         height: 42px;
@@ -49,16 +61,21 @@
         line-height: 42px;
         text-align: center;
         color: #fff;
+
         .anticon {
           font-size: 20px;
         }
       }
     }
   }
+
   .panel-content {
     margin-top: 25px;
     font-size: 14px;
     position: relative;
+    .el-card__header{
+      font-weight: 500;
+    }
     .text-name {
       position: absolute;
       width: 100px;
@@ -67,23 +84,29 @@
       text-align: right;
       padding-right: 20px;
     }
+
     .text-li {
       color: #facc14;
+
       span {
         color: #000000;
       }
     }
+
     .card-content {
       height: 400px;
     }
+
     .picker {
       position: absolute;
       top: 40px;
       opacity: 0;
     }
+
     .title {
       line-height: 32px;
     }
+
     .gray {
       font-size: 14px;
       font-family: PingFangSC-Regular;
@@ -91,24 +114,30 @@
       color: rgba(0, 0, 0, 1);
       opacity: 0.45;
     }
+
     .el-card__header {
       font-size: 16px;
     }
+
     .el-col {
       height: 30px;
     }
+
     .text {
       width: 72px;
       height: 6px;
       border-radius: 3px;
     }
+
     .text-red {
       background-color: rgba(246, 92, 125, 1);
     }
+
     .text-green {
       background: rgba(119, 206, 168, 1);
     }
   }
+
   .text-yellow {
     background: rgba(235, 207, 81, 1);
   }

@@ -5,6 +5,7 @@
   box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
   overflow: hidden;
   z-index: 999;
+  line-height: 64px;
 
   .title {
     font-size: 18px;
@@ -46,7 +47,9 @@
 
   .header-menu {
     line-height: 64px;
-
+    .title{
+      line-height: 64px;
+    }
     .menu-item {
       display: inline-block;
       vertical-align: top;

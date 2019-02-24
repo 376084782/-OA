@@ -5,7 +5,7 @@
         <el-button type="primary" size="small" @click="createTask">+子任务</el-button>
       </el-row>
       <section class="mgTop24">
-        <el-table v-loading="bLoading" :data="dataSource" style="min-height: 400px">
+        <el-table v-loading="bLoading" :data="dataSource">
           <el-table-column prop label="执行人"></el-table-column>
           <el-table-column prop="region" label="自己已完成工时"></el-table-column>
           <el-table-column prop="usercnt" label="开始时间"></el-table-column>

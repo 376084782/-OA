@@ -4,8 +4,8 @@
     <div slot="header" class="clearfix">
       <span>当月任务完成情况</span>
     </div>
-    <p class="gray text-name">name</p>
-    <div id="chart-current"></div>
+    <!-- <p class="gray text-name">name</p> -->
+    <!-- <div id="chart-current"></div> -->
   </el-card>
   <!-- <section >
                   <div id='chart-dispatch'></div>
@@ -72,7 +72,7 @@
       }
     },
     mounted() {
-      this.drawConsumeChart();
+      // this.drawConsumeChart();
     }
   };
 </script>

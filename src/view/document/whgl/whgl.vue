@@ -3,7 +3,7 @@
     <el-card class="mgTop24">
       <el-button type="primary" @click="addHandler" size="small">新增文号</el-button>
       <section class="mgTop24">
-        <el-table v-loading="bLoading" :data="dataSource" style="min-height: 400px">
+        <el-table v-loading="bLoading" :data="dataSource" >
           <el-table-column type="index" label="序号"></el-table-column>
           <el-table-column prop="groupName" label="收发类型"></el-table-column>
           <el-table-column prop="code" label="公文类型"></el-table-column>
