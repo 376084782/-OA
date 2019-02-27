@@ -93,9 +93,6 @@ export default {
           });
           this.$emit("import", this.list);
         })
-        .catch(({ message }) => {
-          this.$alert(message, "错误");
-        });
     },
     getAnalyseName(type) {
       let map = {

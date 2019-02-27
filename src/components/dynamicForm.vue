@@ -68,7 +68,7 @@
             :style="{width:inputWidth}"
             v-model="editData[conf.code]"
             type="datetime"
-            value-format="yyyy-MM-dd hh:mm:ss"
+            value-format="yyyy-MM-dd HH:mm:ss"
           ></el-date-picker>
         </template>
 
@@ -142,6 +142,7 @@ import dymWorkPlanImport from "./dym-components/dym-work-plan-import";
 import dymWorkPlanCalender from "./dym-components/dym-work-plan-calender";
 import dymUploadFile from "./dym-components/dym-upload-file.vue";
 import dymCalHour from "./dym-components/dym-cal-hour.vue";
+import moment from "moment";
 export default {
   components: {
     dymSelect,
@@ -154,7 +155,7 @@ export default {
     dymUploadFile
   },
   props: {
-    documentCodeFixd:String,
+    documentCodeFixd: String,
     query: {
       type: Object,
       default() {
@@ -191,7 +192,6 @@ export default {
   },
   watch: {
     editData(val) {
-      // console.log(val);
     }
   },
   mounted() {
@@ -210,6 +210,11 @@ export default {
             value: groupList[0].organizationGroupId + ""
           });
       }
+      this.$set(
+        this.editData,
+        "flowStartTime",
+        moment().format("YYYY-MM-DD hh:mm:ss")
+      );
       this.$set(this.editData, "userMobile", userInfo.mobile);
     });
     this.$bus.$on("changeSel", data => {

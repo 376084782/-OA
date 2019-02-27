@@ -74,7 +74,6 @@ export default {
     // 请求数据函数
     loadData() {
       this.bLoading = true;
-      console.log("in");
       getClubList({})
         .then(data => {
           // this.dataSource = data.list;

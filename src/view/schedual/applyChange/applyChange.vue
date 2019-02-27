@@ -12,7 +12,7 @@
       </el-row>
       <section class="mgTop24">
         <el-table v-loading="bLoading" :data="dataSource">
-          <el-table-column prop="processUserId" label="序号"></el-table-column>
+          <el-table-column width="100px" type="index" label="序号"></el-table-column>
           <el-table-column prop="title" label="标题" min-width="200px"></el-table-column>
           <el-table-column min-width="180px" prop="createTime" label="排班时间"></el-table-column>
           <el-table-column prop="name" label="发起申请人"></el-table-column>
@@ -20,12 +20,7 @@
           <el-table-column prop="modelTypeDictionary" label="排班当前状态"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <template v-if="scope.row.modelTypeDictionary==1">
-                <el-button @click="showFormDetail(scope.row)" type="text">办理</el-button>
-              </template>
-              <template v-else>
-                <el-button @click="showFormDetail(scope.row)" type="text">查看</el-button>
-              </template>
+              <el-button @click="showFormDetail(scope.row)" type="text">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -123,7 +118,7 @@ export default {
         query: {
           processUserId: data.processUserId,
           processUserDetailId: data.detailId,
-          title:'查看调班'
+          title: "查看调班"
         }
       };
       this.$store.dispatch("addBreadCurmbList", routeData);
@@ -150,6 +145,9 @@ export default {
     },
     // 搜索
     onSearch(params) {
+      this.searchParams = {
+        modelTypeList: [410]
+      };
       Object.assign(this.searchParams, params);
       this.loadData();
     }

@@ -16,7 +16,7 @@ import "./taskTree.scss";
 import { getListAssign, getListChild } from "api/document";
 import { formatValueContentToList } from "utils/assist";
 export default {
-  props: ["parId"],
+  props: ["parId", "processUser"],
   data() {
     return {
       dataSource: []
@@ -78,14 +78,16 @@ export default {
       }
       if (node.level === 0) {
         getListChild({
-          fatherProcessUserId: this.parId
-        }).then(({ processUserList }) => {
-          resolve(processUserList);
+          fatherProcessUserId: this.parId,
+          processUser: this.processUser
+        }).then(({ processUserList, processUser }) => {
+          resolve([processUser]);
         });
         return;
       }
       getListChild({
-        fatherProcessUserId: node.data.processUserId
+        fatherProcessUserId: node.data.processUserId,
+        processUser: this.processUser
       }).then(({ processUserList }) => {
         resolve(processUserList);
       });

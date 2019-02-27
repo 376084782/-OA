@@ -30,7 +30,7 @@
       </div>
     </el-tree>
     <modal-group v-model="showGroup" :info.sync="currentGroup" @edit="$emit('load')"></modal-group>
-    <modal-role v-model="showRole" info :data="treeData" @edit="$emit('load')"></modal-role>
+    <modal-role @add="$emit('load')" v-model="showRole" info :data="treeData" @edit="$emit('load')"></modal-role>
   </el-card>
 </template>
 <script>

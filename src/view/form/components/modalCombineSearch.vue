@@ -48,8 +48,7 @@ export default {
   data() {
     return {
       expand: false,
-      searchForm: {
-      },
+      searchForm: {},
       dateRange: []
     };
   },
@@ -62,6 +61,8 @@ export default {
   methods: {
     onSearch(flag = 0) {
       if (flag === 1) {
+        this.searchForm = {};
+        this.$emit("search", this.searchForm);
       } else {
         this.$emit("search", this.searchForm);
       }

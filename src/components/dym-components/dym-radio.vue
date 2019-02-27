@@ -19,7 +19,6 @@ export default {
   },
   watch: {
     val(val) {
-      console.log(val, "val");
       let conf = this.radioDataList.filter(item => {
         return item.value == val;
       });

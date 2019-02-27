@@ -69,9 +69,6 @@ export default {
             .then(e => {
               this.$router.push("/");
             })
-            .catch(({ message }) => {
-              this.$alert(message, "错误");
-            })
             .finally(e => {
               loading.close();
             });

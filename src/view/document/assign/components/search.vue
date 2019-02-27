@@ -75,9 +75,10 @@ export default {
   methods: {
     onSearch(flag = 0) {
       if (flag === 1) {
+        this.searchForm = {};
       } else {
-        this.$emit("search", this.searchForm);
       }
+      this.$emit("search", this.searchForm);
     }
   }
 };

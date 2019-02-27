@@ -46,7 +46,6 @@ export function serialize(obj) {
     return;
   }
   var url = '?';
-  console.log('serialize', obj);
   for (let key in obj) {
     var value = obj[key];
     if (Array.isArray(value)) {
@@ -98,7 +97,6 @@ export function numToStr(num) {
 const TOKEN_KEY = 'TOKEN_KEY'
 export const setTokenSystem = (token) => {
   let config = getToken();
-  console.log(config)
   config.tokenSystem = token;
   localStorage.setItem(TOKEN_KEY, JSON.stringify(config));
 }

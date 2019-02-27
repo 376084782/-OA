@@ -69,8 +69,8 @@ export default {
     loadPermission () {
       this.bloading = true;
       getPermissionInfo({roleId: this.currentInfo.organizationRoleId}).then(data => {
-        let filter_data = data.chlidren.map(tag => {
-          tag.children = tag.chlidren.filter(cate => cate.hasPermission);
+        let filter_data = data.children.map(tag => {
+          tag.children = tag.children.filter(cate => cate.hasPermission);
           return tag;
         });
         this.treeData = filter_data.filter(role => role.hasPermission || role.children.length != 0);

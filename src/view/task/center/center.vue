@@ -7,23 +7,40 @@
     </el-tabs>
     <el-card class="mgTop24">
       <list-search @search="onSearch"></list-search>
-      <el-button v-if="activeName=='2'" @click="createTask" class="mgTop20" type="primary" size="small">发起任务</el-button>
+      <el-button @click="createTask" class="mgTop20" type="primary" size="small">发起任务</el-button>
       <section class="mgTop24" style="overflow:scroll;">
-        <tree-table ref="tree" :active-name="activeName" @addSubTask="addSubTask"></tree-table>
+        <tree-table
+          @doTask="doTask"
+          ref="tree"
+          :active-name="activeName"
+          @addSubTask="addSubTask"
+          v-if="showTree"
+        ></tree-table>
       </section>
     </el-card>
-    <modal-add @success="onSearch" :id="selectedProcessUserDetailId" :show.sync="showAdd"></modal-add>
+    <modal-add
+      @success="onSearch"
+      :father-process-user-id="selectFatherProcessUserId"
+      :id="selectedProcessUserDetailId"
+      :show.sync="showAdd"
+    ></modal-add>
+    <modal-percent @finish="finishHandler" :show.sync="visibleModalPercent"></modal-percent>
   </section>
 </template>
 <script>
+import modalPercent from "../../form/components/modalPercent.vue";
 import modalAdd from "./components/modalAdd.vue";
 import listSearch from "./components/search";
 import { getClubList } from "api/index";
 import treeTable from "./components/tree-table.vue";
+import { finishTask, agree } from "api/index";
 export default {
-  components: { listSearch, treeTable, modalAdd },
+  components: { listSearch, treeTable, modalAdd, modalPercent },
   data() {
     return {
+      showTree: true,
+      visibleModalPercent: false,
+      selectFatherProcessUserId: 0,
       selectedProcessUserDetailId: 0,
       showAdd: false,
       expandList: [],
@@ -33,7 +50,8 @@ export default {
       dataSource: [],
       listDone: [{}, {}, {}],
       listNotDone: [{}],
-      oPagination: {}
+      oPagination: {},
+      lastSel: {}
     };
   },
   watch: {
@@ -55,8 +73,40 @@ export default {
     ]);
   },
   methods: {
+    finishHandler(data) {
+      if (data.percent >= 100) {
+        // 调用完成
+        agree({
+          processUserDetailId: this.lastSel.detailId,
+          valueContent: []
+        }).then(e => {
+          this.visibleModalPercent = false;
+          this.showTree = false;
+          this.$nextTick(() => {
+            this.showTree = true;
+          });
+        });
+      } else {
+        finishTask({
+          processUserDetailId: this.lastSel.detailId,
+          detailPercent: data.percent,
+          detailContent: data.content
+        }).then(e => {
+          this.visibleModalPercent = false;
+          this.showTree = false;
+          this.$nextTick(() => {
+            this.showTree = true;
+          });
+        });
+      }
+    },
+    doTask(data) {
+      this.lastSel = data;
+      this.visibleModalPercent = true;
+    },
     addSubTask(data) {
       this.selectedProcessUserDetailId = data.detailId;
+      this.selectFatherProcessUserId = data.processUserId;
       this.showAdd = true;
     },
     createTask() {
@@ -94,6 +144,7 @@ export default {
     },
     // 搜索
     onSearch(params) {
+      this.searchParams = {};
       Object.assign(this.searchParams, params, { pageIndex: 1 });
       this.$refs.tree && this.$refs.tree.update(this.searchParams);
     }

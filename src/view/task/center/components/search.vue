@@ -4,7 +4,7 @@
       <el-row class="row" :gutter="20">
         <el-col :span="8">
           <el-form-item label="任务名称">
-            <el-input v-model="searchForm.keyWord" placeholder="请输入" size="small"></el-input>
+            <el-input v-model="searchForm.flowTitle" placeholder="请输入" size="small"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -29,7 +29,11 @@
       <el-row :gutter="20" style="margin-top:10px;">
         <el-col :span="8">
           <el-form-item label="级别">
-            <el-input placeholder="请输入" size="small"></el-input>
+            <el-select style="width:290px" v-model="searchForm.keyWord">
+              <el-option value="平级"></el-option>
+              <el-option value="紧急"></el-option>
+              <el-option value="特急"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -60,9 +64,9 @@ export default {
   methods: {
     onSearch(flag = 0) {
       if (flag === 1) {
-      } else {
-        this.$emit("search", this.searchForm);
+        this.searchForm = {};
       }
+      this.$emit("search", this.searchForm);
     }
   }
 };

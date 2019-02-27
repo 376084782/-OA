@@ -113,7 +113,9 @@ export default {
     };
   },
   mounted() {
-    this.initData();
+    this.$nextTick(() => {
+      this.initData();
+    });
   },
   methods: {
     initData() {
@@ -134,10 +136,13 @@ export default {
         this.getFormDetail(data, flagStart);
       }
       if (flagStart) {
-        this.createForm({
+        let data={
           modelType: query.modelType || query.permitModelType,
-          fatherProcessUserWatchId: this.query.fatherProcessUserWatchId
-        });
+          fatherProcessUserWatchId: query.fatherProcessUserWatchId,
+          fatherProcessUserId: query.fatherProcessUserId
+        }
+        console.log('daaaa',JSON.stringify(data))
+        this.createForm(data);
       }
     },
     successAddSubTask() {
@@ -299,7 +304,6 @@ export default {
         if (stepData.showEdit && stepData.content) {
           stepData.content.forEach(item => {
             if (item.link) {
-              console.log(this.editData, item);
               this.$set(this.stepData, item.code, this.editData[item.code]);
             }
           });
@@ -422,13 +426,9 @@ export default {
     clickRecall() {
       processRecall({
         processUserDetailId: this.query.processUserDetailId
-      })
-        .then(e => {
-          this.routerBack();
-        })
-        .catch(({ message }) => {
-          this.$alert(message);
-        });
+      }).then(e => {
+        this.routerBack();
+      });
     },
     clickFP() {},
     clickJS() {
@@ -454,14 +454,10 @@ export default {
       if (query.permitModelType == 101) {
         data.fatherProcessUserWatchId = query.processUserWatcherId;
       }
-      createFlow(data)
-        .then(e => {
-          this.$alert("提交成功", "提示");
-          this.routerBack();
-        })
-        .catch(({ message }) => {
-          this.$alert(message, "错误");
-        });
+      createFlow(data).then(e => {
+        this.$alert("提交成功", "提示");
+        this.routerBack();
+      });
     },
     /** 对应处理数据方法 */
     clickAgree() {
@@ -472,24 +468,16 @@ export default {
         processUserDetailId: this.query.processUserDetailId,
         valueContent
       };
-      agree(data)
-        .then(e => {
-          this.routerBack();
-        })
-        .catch(({ message }) => {
-          this.$alert(message);
-        });
+      agree(data).then(e => {
+        this.routerBack();
+      });
     },
     clickShowWen() {
       showWen({
         processUserWatcherId: this.query.processUserWatcherId
-      })
-        .then(e => {
-          this.routerBack();
-        })
-        .catch(({ message }) => {
-          this.$alert(message);
-        });
+      }).then(e => {
+        this.routerBack();
+      });
     },
     clickDisagree() {
       let valueContent = this.getValueContent();
@@ -497,9 +485,7 @@ export default {
         processUserDetailId: this.query.processUserDetailId,
         valueContent
       };
-      disAgree(data).then(e => {
-        console.log("disAgree success");
-      });
+      disAgree(data).then(e => {});
     }
   }
 };

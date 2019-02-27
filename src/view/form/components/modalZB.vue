@@ -8,7 +8,7 @@
   >
     <el-form style="margin:0 80px;" label-width="90px">
       <el-form-item label="转办人：">
-        <el-select value-key="userId" v-model="user" style="width:390px;" placeholder="请选择">
+        <el-select value-key="userId" v-model="user" style="width:390px;" placeholder="请选择" filterable>
           <el-option v-for="(item,index) in list" :key="index" :label="item.name" :value="item"></el-option>
         </el-select>
       </el-form-item>
@@ -63,7 +63,6 @@ export default {
         pageSize: 10000
       }).then(({ tableResponse }) => {
         this.list = tableResponse.list;
-        console.log(this.list);
       });
     },
     handleClose() {

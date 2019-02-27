@@ -11,21 +11,16 @@ export default {
   },
   computed: {
     hour() {
-      if(!this.form.detailStartTime||!this.form.detailDeadTime){
-        return ''
+      if (!this.form.detailStartTime || !this.form.detailDeadTime) {
+        return "";
       }
       let start = new Date(this.form.detailStartTime);
       let end = new Date(this.form.detailDeadTime);
-      return timeFormater(
-        (end.getTime() - start.getTime()) / 1000,
-        "d天"
-      );
+      return timeFormater((end.getTime() - start.getTime()) / 1000, "d天") + 1;
     }
   },
   watch: {
-    form(val) {
-      console.log(222, val);
-    }
+    form(val) {}
   },
   data() {
     return {};

@@ -28,7 +28,7 @@
       </el-row>
       <el-row :gutter="20" style="margin-top:10px;">
         <el-col :span="8">
-          <el-form-item label="收发日期">
+          <el-form-item :label="type=='1'?'发文日期':'收文日期'">
             <el-date-picker
               v-model="dateRange"
               type="daterange"
@@ -40,7 +40,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="编号">
+          <el-form-item label="文号">
             <el-input v-model="searchForm.flowCode" placeholder="请输入" size="small"></el-input>
           </el-form-item>
         </el-col>
@@ -56,6 +56,10 @@ import { mapGetters } from "vuex";
 
 export default {
   props: {
+    type: {
+      type: String,
+      default: "1"
+    },
     searchForm: {
       type: Object,
       default() {
@@ -82,6 +86,7 @@ export default {
   methods: {
     onSearch(flag = 0) {
       if (flag === 1) {
+        this.$emit("reset");
       } else {
         this.$emit("search", this.searchForm);
       }

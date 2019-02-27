@@ -25,7 +25,6 @@ export default {
     // 请求数据函数
     loadData() {
       this.bLoading = true;
-      console.log("in");
       scedualSearch(this.searchParams)
         .then(({ workPlanDateInfoList }) => {
           let list = [];
@@ -53,6 +52,7 @@ export default {
     },
     // 搜索
     onSearch(params) {
+      this.searchParams={}
       Object.assign(this.searchParams, params);
       this.loadData();
     }

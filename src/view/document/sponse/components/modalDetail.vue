@@ -31,6 +31,7 @@ export default {
         getDetailListReceive({
           processUserId: this.id
         }).then(e => {
+          this.data = e.processUserWatcherList;
         });
       }
     }

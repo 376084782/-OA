@@ -3,7 +3,11 @@
     <el-card class="mgTop24">
       <h3 style="margin:0 24px 16px;">{{$route.query.title}}</h3>
       <p class="line" style="margin-left:-24px;width:120%;"></p>
-      <task-tree v-if="!fromModal&&query.modelType==201" :par-id="query.processUserId"></task-tree>
+      <task-tree
+        :process-user="query.processUserDetailId"
+        v-if="!fromModal&&query.modelType==201"
+        :par-id="query.firstFatherProcessUserId"
+      ></task-tree>
 
       <!-- <h3>发文拟稿</h3> -->
       <dynamic-form
@@ -53,6 +57,7 @@
       :show.sync="visibleModalPercent"
     ></modal-percent>
     <modal-zb @success="initData" :id="query.processUserDetailId" :visible.sync="showModalZB"></modal-zb>
+    <modal-refuse @sure="clickRefuse" :show.sync="showModalRefuse"></modal-refuse>
   </section>
 </template>
 <script>
@@ -67,12 +72,14 @@ import {
   processRecall,
   showWen,
   finishTask,
-  getFlowNum
+  getFlowNum,
+  refuse
 } from "api/index";
 import taskTree from "./components/taskTree.vue";
 import FormBtn from "./components/FormBtn";
 import ModalJs from "./components/modalJS";
 import ModalZb from "./components/modalZB";
+import modalRefuse from "./components/modalRefuse";
 import modalChangeName from "./components/modalChangeName";
 import modalCombine from "./components/modalCombine";
 import { setTimeout } from "timers";
@@ -88,7 +95,8 @@ export default {
     FormBtn,
     modalChangeName,
     modalCombine,
-    taskTree
+    taskTree,
+    modalRefuse
   },
   props: {
     fromModal: {
@@ -111,6 +119,7 @@ export default {
   },
   data() {
     return {
+      showModalRefuse: false,
       showModalZB: false,
       documentCodeFixd: "",
       finishPercent: 0,
@@ -141,13 +150,23 @@ export default {
   },
   methods: {
     finishHandler(data) {
-      finishTask({
-        processUserDetailId: this.query.processUserDetailId,
-        detailPercent: data.percent,
-        detailContent: data.content
-      }).then(e => {
-        this.visibleModalPercent = false;
-      });
+      if (data.percent >= 100) {
+        // 调用完成
+        agree({
+          processUserDetailId: this.query.processUserDetailId,
+          valueContent: []
+        }).then(e => {
+          this.routerBack();
+        });
+      } else {
+        finishTask({
+          processUserDetailId: this.query.processUserDetailId,
+          detailPercent: data.percent,
+          detailContent: data.content
+        }).then(e => {
+          this.visibleModalPercent = false;
+        });
+      }
     },
     initData() {
       this.query = this.fromModal ? this.queryData : this.$route.query;
@@ -180,7 +199,6 @@ export default {
     },
     clickEvents(data) {
       // 不需要验证的，提前return
-      console.log("clickevent", data);
       if (data.code == "permitCreateSubProcess") {
         this.showAdd = true;
         return;
@@ -225,6 +243,10 @@ export default {
               this.showModalZB = true;
               break;
             }
+            case "permitRefuse": {
+              this.showModalRefuse = true;
+              break;
+            }
           }
         }
       });
@@ -256,11 +278,14 @@ export default {
         this.documentCodeFixd = e.documentCodeFixd;
       }
       this.finishPercent = config.processUser.finishPercent;
+      if (config.processUser.firstFatherProcessUserId) {
+        this.query.firstFatherProcessUserId =
+          config.processUser.firstFatherProcessUserId;
+      }
       let confContent = JSON.parse(config.processUser.content);
       this.processOrganizationId = config.processUser.processOrganizationId;
       if (!isStart) {
         this.contentTop = confContent;
-        console.log(this.contentTop);
       }
       confContent.forEach(item => {
         if (item.required) {
@@ -291,7 +316,6 @@ export default {
           ) {
             value = JSON.parse(value);
           }
-          console.log(value, item.code);
           this.$set(this.editData, item.code, value);
         });
       }
@@ -499,14 +523,10 @@ export default {
       if (query.permitModelType == 101) {
         data.fatherProcessUserWatchId = query.processUserWatcherId;
       }
-      createFlow(data)
-        .then(e => {
-          this.$alert("提交成功", "提示");
-          this.routerBack();
-        })
-        .catch(({ message }) => {
-          this.$alert(message, "错误");
-        });
+      createFlow(data).then(e => {
+        this.$alert("提交成功", "提示");
+        this.routerBack();
+      });
     },
     /** 对应处理数据方法 */
     clickAgree() {
@@ -517,24 +537,16 @@ export default {
         processUserDetailId: this.query.processUserDetailId,
         valueContent
       };
-      agree(data)
-        .then(e => {
-          this.routerBack();
-        })
-        .catch(({ message }) => {
-          this.$alert(message);
-        });
+      agree(data).then(e => {
+        this.routerBack();
+      });
     },
     clickShowWen() {
       showWen({
         processUserWatcherId: this.query.processUserWatcherId
-      })
-        .then(e => {
-          this.routerBack();
-        })
-        .catch(({ message }) => {
-          this.$alert(message);
-        });
+      }).then(e => {
+        this.routerBack();
+      });
     },
     clickDisagree() {
       let valueContent = this.getValueContent();
@@ -543,7 +555,16 @@ export default {
         valueContent
       };
       disAgree(data).then(e => {
-        console.log("disAgree success");
+        this.routerBack();
+      });
+    },
+    clickRefuse(valueContent) {
+      let data = {
+        processUserDetailId: this.query.processUserDetailId,
+        valueContent
+      };
+      refuse(data).then(e => {
+        this.routerBack();
       });
     }
   }

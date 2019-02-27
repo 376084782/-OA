@@ -5,7 +5,12 @@
       <el-tab-pane label="收文" name="2"></el-tab-pane>
     </el-tabs>
     <el-card class="mgTop24">
-      <list-search @search="onSearch" :search-form="searchParams"></list-search>
+      <list-search
+        :type="activeName"
+        @search="onSearch"
+        @reset="resetSearch"
+        :search-form="searchParams"
+      ></list-search>
       <el-row class="bottom-row mgTop20">
         <el-button v-if="activeName=='1'" type="primary" size="small" @click="createSponse">发起公文</el-button>
         <el-button v-else type="primary" size="small" @click="createSponse">收文登记</el-button>
@@ -27,23 +32,21 @@
             <template slot-scope="scope">{{scope.row.valueContent['mainGroupList']}}</template>
           </el-table-column>
           <template v-if="activeName=='2'">
-            <el-table-column min-width="180px" prop="detailFinishTime" label="限办日期">
-              <template slot-scope="scope">{{scope.row.valueContent['documentSendDate']}}</template>
-            </el-table-column>
+            <el-table-column min-width="180px" prop="finishTime" label="限办日期"></el-table-column>
           </template>
           <el-table-column prop="finishStatusDictionary" label="类型">
             <template slot-scope="scope">{{scope.row.valueContent['type']}}</template>
           </el-table-column>
           <el-table-column label="操作" v-if="activeName=='1'">
             <template slot-scope="scope">
-              <el-button @click="showFormDetail(scope.row)" type="text">详情</el-button>
+              <el-button @click="showFormDetail(scope.row)" type="text">查看</el-button>
               <i class="grey">|</i>
               <el-button @click="showReceiveDetail(scope.row)" type="text">接收情况</el-button>
             </template>
           </el-table-column>
           <el-table-column v-else label="操作">
             <template slot-scope="scope">
-              <el-button @click="showFormDetail(scope.row)" type="text">{{scope.row.buttonContent}}</el-button>
+              <el-button @click="showFormDetail(scope.row)" type="text">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -176,6 +179,20 @@ export default {
     // 搜索
     onSearch(params) {
       Object.assign(this.searchParams, params, { pageNo: 1 });
+      this.loadData();
+    },
+    resetSearch(params) {
+      Object.assign(
+        this.searchParams,
+        {
+          flowTitle: "",
+          pageSearchStatus: "",
+          flowCode: "",
+          startTime: "",
+          deadTime: ""
+        },
+        { pageNo: 1 }
+      );
       this.loadData();
     },
     // 翻页

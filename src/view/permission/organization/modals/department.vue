@@ -198,9 +198,6 @@ export default {
               this.$emit("success");
               this.onClose();
             })
-            .catch(error => {
-              this.$message.error(error.message);
-            })
             .finally(() => {
               this.confirmLoading = false;
             });

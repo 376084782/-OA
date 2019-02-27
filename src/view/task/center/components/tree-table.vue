@@ -53,52 +53,92 @@ export default {
       let valueContent = formatValueContentToList(data.valueContent);
       let valueObj = formatValueContentToListObject(data.valueContent);
       let urgencyMap = ["", "primary", "warn", "danger"];
-      return (
-        <span class="custom-tree-node">
-          <span class="left">{data.flowTitle}</span>
-          <span class="right">
-            <span style="width:100px;">
-              <span
-                class={urgencyMap[valueObj.urgency.value] + " circle-before "}
-              >
-                {valueContent.urgency}
+      if (data.permitButton == 5) {
+        return (
+          <span class="custom-tree-node">
+            <span class="left">{data.flowTitle}</span>
+            <span class="right">
+              <span style="width:100px;">
+                <span
+                  class={urgencyMap[valueObj.urgency.value] + " circle-before "}
+                >
+                  {valueContent.urgency}
+                </span>
+              </span>
+              <span style="width:100px;">{data.detailName}</span>
+              <span style="width:100px;" class="table-cell-grey1">
+                {data.name}
+              </span>
+              <span style="width:100px;">{data.finishStatusDictionary}</span>
+              <span style="width:100px;">{data.finishPercent}%</span>
+              <span style="width:200px">
+                <el-button
+                  type="text"
+                  on-click={() => {
+                    this.addSubTask(data);
+                  }}
+                >
+                  添加子任务
+                </el-button>
+                <i class="grey">|</i>
+                <el-button
+                  type="text"
+                  on-click={() => {
+                    this.seeDetail(data);
+                  }}
+                >
+                  查看
+                </el-button>
+                <i class="grey">|</i>
+                {data.permitButton == 5}
+                <el-button
+                  type="text"
+                  on-click={() => {
+                    this.doTask(data);
+                  }}
+                >
+                  执行
+                </el-button>
               </span>
             </span>
-            <span style="width:100px;">{valueContent.excuteUserList}</span>
-            <span style="width:100px;" class="table-cell-grey1">
-              {data.name}
-            </span>
-            <span
-              style="width:100px;"
-            >
-              {data.finishStatusDictionary}
-            </span>
-            <span style="width:100px;">{data.finishPercent}%</span>
-            <span style="width:200px">
-              <el-button
-                v-if={data.finishStatus == 2}
-                type="text"
-                on-click={() => {
-                  this.addSubTask(data);
-                }}
-              >
-                添加子任务
-              </el-button>
-              <i class="grey">|</i>
-              <el-button
-                type="text"
-                on-click={() => {
-                  this.seeDetail(data);
-                }}
-              >
-                查看
-              </el-button>
+          </span>
+        );
+      } else {
+        return (
+          <span class="custom-tree-node">
+            <span class="left">{data.flowTitle}</span>
+            <span class="right">
+              <span style="width:100px;">
+                <span
+                  class={urgencyMap[valueObj.urgency.value] + " circle-before "}
+                >
+                  {valueContent.urgency}
+                </span>
+              </span>
+              <span style="width:100px;">{data.detailName}</span>
+              <span style="width:100px;" class="table-cell-grey1">
+                {data.name}
+              </span>
+              <span style="width:100px;">{data.finishStatusDictionary}</span>
+              <span style="width:100px;">{data.finishPercent}%</span>
+              <span style="width:200px">
+                <el-button
+                  type="text"
+                  on-click={() => {
+                    this.seeDetail(data);
+                  }}
+                >
+                  查看
+                </el-button>
+              </span>
             </span>
           </span>
-        </span>
-      );
+        );
+      }
     },
-    doTask(data) {},
+    doTask(data) {
+      this.$emit("doTask", data);
+    },
     seeDetail(data) {
       let routeData = {
         name: "详情",
@@ -109,7 +149,7 @@ export default {
           processUserWatcherId: data.processUserWatcherId,
           permitButton: data.permitButton,
           permitModelType: data.permitModelType,
-          title:'查看任务'
+          title: "查看任务"
         }
       };
       this.$store.dispatch("addBreadCurmbList", routeData);

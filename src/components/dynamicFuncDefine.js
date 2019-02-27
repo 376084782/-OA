@@ -45,7 +45,6 @@ export function getGroupList() {
           value: item.organizationCode
         })
       })
-      console.log(list, 'list')
       rsv(list);
     })
   })

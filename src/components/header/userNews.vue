@@ -47,7 +47,6 @@
     },
     methods: {
       handleClick (el) {
-        console.log(el);
       }
     },
     mounted () {

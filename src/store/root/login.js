@@ -43,7 +43,6 @@ const mutations = {};
 const actions = {
   updateCode({state}){
     getCode().then(e => {
-      // console.log(e)
     });
     // deviceCode
   },

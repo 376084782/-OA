@@ -7,6 +7,7 @@ import {
 } from "utils/assist";
 // import { Spin } from 'iview'
 import vue from 'vue'
+import router from 'router'
 
 let deviceCode = localStorage.getItem('deviceCode') || '1121212';
 const addErrorLog = errorInfo => {
@@ -132,7 +133,14 @@ class HttpRequest {
           let msg = headers["message"];
           headers = Object.assign(headers, options.headers);
           if (code <= 299 && code >= 200) {
-            res(data);
+            if (code == 222) {
+              vue.prototype.$confirm(decodeURIComponent(msg)).finally(e => {
+                router.back()
+              })
+
+            } else {
+              res(data);
+            }
           } else {
             let errData = {
               code: code,
@@ -142,7 +150,7 @@ class HttpRequest {
             if (options.url == '/oa/ums/user/info') {
               store.dispatch('loginErr')
             } else {
-              vue.prototype.$alert(errData.message)
+              vue.prototype.$alert(errData.message);
             }
             rej(errData);
           }
@@ -158,7 +166,15 @@ class HttpRequest {
               code: code,
               message: decodeURIComponent(msg)
             };
-            vue.prototype.$alert(errData.message);
+            if (code == 222) {
+              vue.prototype.$confirm(errData.message).finally(e => {
+                router.back()
+              })
+
+            } else {
+              vue.prototype.$alert(errData.message);
+            }
+
             rej(errData);
           } else {
             rej();

@@ -34,12 +34,10 @@ import fullcalendar from "components/fullcalendar2.vue";
     },
     methods: {
       // handleBtnClick() {
-      //   console.log("click")
       //   document.getElementById("date").focus();
       // },
       // onChange(e){
       //   e.cancelBubble=true;
-      //   console.log('change')
       // }
     },
     mounted() {

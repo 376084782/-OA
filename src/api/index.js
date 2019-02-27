@@ -43,7 +43,7 @@ export const getListProcess = ({
   deadTime = '',
   pageNo = 1,
   pageSize = 20,
-  dateFormat = '%Y%m%d',
+  dateFormat = '%Y-%m-%d',
   organization = null,
   pageSearchStatus = null
 }) => {
@@ -71,7 +71,7 @@ export const getListMySendProcess = ({
   deadTime = '',
   pageNo = 1,
   pageSize = 20,
-  dateFormat = '%Y%m%d',
+  dateFormat = '%Y-%m-%d',
   organization = null,
   pageSearchStatus = null
 }) => {
@@ -123,6 +123,13 @@ export const disAgree = data => {
   });
 };
 
+export const refuse = data => {
+  return Ajax.request({
+    url: "/oa/flow/processUserButton/refuse",
+    method: "post",
+    data
+  });
+};
 
 export const getPeopleListByRole = ({
   organizationRoleIdList
@@ -159,7 +166,6 @@ export const uploadSchedualFile = ({
 };
 
 export const getInfo = () => {
-  console.log("login");
   return Ajax.request({
     url: "/oa/ums/user/info",
     method: "post"
@@ -273,7 +279,8 @@ let testData = {
 
 export const getFormTemp = ({
   modelType = 400,
-  fatherProcessUserWatchId = ""
+  fatherProcessUserWatchId = "",
+  fatherProcessUserId = ''
 }) => {
   // if(modelType!=400){
   //   return new Promise(rsv=>{
@@ -284,7 +291,8 @@ export const getFormTemp = ({
     url: "/oa/flow/processOrganization/list/model",
     data: {
       modelType,
-      fatherProcessUserWatchId
+      fatherProcessUserWatchId,
+      fatherProcessUserId
     },
     method: "post"
   });

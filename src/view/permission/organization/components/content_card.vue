@@ -24,7 +24,7 @@
         <div slot="header">
           <el-button-group>
             <el-button size="small" @click="showMember = true;">添加成员</el-button>
-            <el-button size="small">批量导入导出</el-button>
+            <!-- <el-button size="small">批量导入导出</el-button> -->
           </el-button-group>
         </div>
         <member-table :data="membersList"

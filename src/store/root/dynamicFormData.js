@@ -37,16 +37,17 @@ const actions = {
   }) {
     getOrganizationMembers({
       organizationGroupIdList: [store.state.login.groupList[0].organizationGroupId]
-    }).then(({userList}) => {
-      let list=[];
-      userList.forEach(item=>{
+    }).then(({
+      userList
+    }) => {
+      let list = [];
+      userList.forEach(item => {
         list.push({
           value: item.userId + '',
           name: item.name
         })
       })
       Vue.set(state.data, 'getCurrentGroupUserList', list);
-      console.log(e,'2222224444444------')
     })
   },
   getCurrentUserInfo({

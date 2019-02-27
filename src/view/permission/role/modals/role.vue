@@ -106,11 +106,11 @@ export default {
     loadPermission (params) {
       this.bLoading = true;
       getPermissionInfo(params).then(data => {
-        this.privilegeList = data.chlidren.map(tag => {
+        this.privilegeList = data.children.map(tag => {
           if (tag.hasPermission) {
             this.defaultChecked.push(tag.resourceId);
           }
-          tag.chlidren.forEach(cate => {
+          tag.children.forEach(cate => {
             if (cate.hasPermission) {
               this.defaultChecked.push(cate.resourceId);
             }
@@ -155,7 +155,6 @@ export default {
     },
   },
   created () {
-    console.log('in');
     this.loadPermission({});
   }
 };

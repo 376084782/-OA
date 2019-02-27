@@ -21,7 +21,7 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button @click="showFormDetail(scope.row)" type="text">{{scope.row.buttonContent}}</el-button>
+              <el-button @click="showFormDetail(scope.row)" type="text">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -104,6 +104,9 @@ export default {
         });
     },
     onSearch(params) {
+      this.searchParams = {
+        modelTypeList: [100, 101]
+      };
       Object.assign(this.searchParams, params, { pageNo: 1 });
       this.loadData();
     },

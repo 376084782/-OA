@@ -36,7 +36,6 @@ export default {
         } else {
           level = 3;
         }
-        console.log(val,level,'llllevl')
         this.$store.dispatch("getGroupList", level);
       }
       this.$bus.$emit("changeSel", {
