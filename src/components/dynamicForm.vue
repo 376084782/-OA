@@ -60,6 +60,7 @@
             :style="{width:inputWidth}"
             v-model="editData[conf.code]"
             value-format="yyyy-MM-dd hh:mm:ss"
+            @change="changeHandler(conf)"
           ></el-date-picker>
         </template>
         <template v-else-if="conf.type=='dateTime'">
@@ -143,6 +144,7 @@ import dymWorkPlanCalender from "./dym-components/dym-work-plan-calender";
 import dymUploadFile from "./dym-components/dym-upload-file.vue";
 import dymCalHour from "./dym-components/dym-cal-hour.vue";
 import moment from "moment";
+import { scedualSearch, userGroupList } from "api/index";
 export default {
   components: {
     dymSelect,
@@ -191,8 +193,7 @@ export default {
     }
   },
   watch: {
-    editData(val) {
-    }
+    editData(val) {}
   },
   mounted() {
     this.$nextTick(() => {
@@ -217,6 +218,40 @@ export default {
       );
       this.$set(this.editData, "userMobile", userInfo.mobile);
     });
+
+    let ffGetOppWorkPlan = () => {
+      let obj = this.editData["changeUser"];
+      if (
+        !obj ||
+        !obj.value ||
+        !this.editData["changeStartDate"] ||
+        !this.editData["changeEndDate"]
+      ) {
+        console.log(this.editData, 222);
+        return;
+      }
+      scedualSearch({
+        startDate: this.editData["changeStartDate"],
+        endDate: this.editData["changeEndDate"],
+        userId: obj.value
+      }).then(({ workPlanDateInfoList }) => {
+        let list = [];
+        workPlanDateInfoList.forEach(item => {
+          let date = item.date;
+          let subList = item.workPlanDateDetailInfoList;
+          if (subList) {
+            subList.forEach(item1 => {
+              list.push({
+                name: date + " " + item1.typeDictionary,
+                value: item1.workPlanId
+              });
+            });
+          }
+        });
+        this.$bus.$emit("changeOptions", list, "changeWorkPlan");
+        // this.$bus.$emit("changeOptions", workPlanDateInfoList, "applyWorkPlan");
+      });
+    };
     this.$bus.$on("changeSel", data => {
       if (data.conf.code == "type") {
         let groupList = this.$store.state.login.groupList;
@@ -232,10 +267,71 @@ export default {
           code = codes[2] + fixed;
         }
         this.$set(this.editData, "flowCode", code);
+      } else if (data.conf.code == "changeUser") {
+        this.$nextTick(() => {
+          if (this.editData["changeUser"]) {
+            this.$bus.$emit('updateRadioNext')
+            let userId = +this.editData["changeUser"].value;
+            userGroupList({
+              userId
+            }).then(({ organizationGroupList }) => {
+              let list = [];
+              organizationGroupList.forEach(item => {
+                list.push({
+                  name: item.name,
+                  value: item.organizationGroupId
+                });
+              });
+              this.$bus.$emit("changeOptions", list, "changeGroup");
+            });
+            ffGetOppWorkPlan();
+          }
+        });
+      }
+    });
+    this.$bus.$on("changeHandler", (conf, value) => {
+      if (conf.code == "applyStartDate" || conf.code == "applyEndDate") {
+        if (this.editData["applyStartDate"] && this.editData["applyEndDate"]) {
+          scedualSearch({
+            startDate: this.editData["applyStartDate"],
+            endDate: this.editData["applyEndDate"],
+            userId: this.$store.getters.userId
+          }).then(({ workPlanDateInfoList }) => {
+            let list = [];
+            workPlanDateInfoList.forEach(item => {
+              let date = item.date;
+              let subList = item.workPlanDateDetailInfoList;
+              if (subList) {
+                subList.forEach(item1 => {
+                  list.push({
+                    name: date + " " + item1.typeDictionary,
+                    value: item1.workPlanId
+                  });
+                });
+              }
+            });
+            this.$bus.$emit("changeOptions", list, "applyWorkPlan");
+          });
+        }
+      } else if (
+        conf.code == "changeStartDate" ||
+        conf.code == "changeEndDate"
+      ) {
+        ffGetOppWorkPlan();
       }
     });
   },
   methods: {
+    changeHandler(conf) {
+      if (
+        conf.code == "applyStartDate" ||
+        conf.code == "applyEndDate" ||
+        conf.code == "changeStartDate" ||
+        conf.code == "changeEndDate"
+      ) {
+        this.$bus.$emit("changeHandler", conf, this.editData[conf.code]);
+      }
+    },
     workPlanImportHandler(list) {
       this.$set(this.editData, "workPlanDateInfoList", list);
     },

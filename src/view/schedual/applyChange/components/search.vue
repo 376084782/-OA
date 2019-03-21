@@ -31,7 +31,7 @@
       <el-row :gutter="20" v-if="status=='10'" style="margin-top:10px;">
         <el-col :span="8">
           <el-form-item label="状态:">
-            <el-select style="width:100%;" v-model="searchForm.pageSearchStatus" placeholder="请选择">
+            <el-select style="width:100%;" v-model="searchForm.stepStatus" placeholder="请选择">
               <el-option
                 v-for="item in statusList"
                 :key="item.value"
@@ -51,16 +51,15 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+import { getStatusList } from "api";
 export default {
   props: ["status"],
-  computed: {
-    ...mapGetters(["statusList"])
-  },
   data() {
     return {
       dateRange: [],
       expand: false,
-      searchForm: {}
+      searchForm: {},
+      statusList:[],
     };
   },
   watch: {
@@ -69,7 +68,23 @@ export default {
       this.searchForm.deadTime = val[1];
     }
   },
+  mounted() {
+    this.getStatusList();
+  },
   methods: {
+    getStatusList() {
+      getStatusList({
+        modelTypeList: [410]
+      }).then(e => {
+        this.statusList = [];
+        e.stepStatusList.forEach(item => {
+          this.statusList.push({
+            value: item.name,
+            key: item.value
+          });
+        });
+      });
+    },
     onReset() {
       this.searchForm = {};
       this.dateRange = ["", ""];

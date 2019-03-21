@@ -86,6 +86,7 @@ import { setTimeout } from "timers";
 import { formatValueContentToList } from "utils/assist";
 import ModalAdd from "view/task/center/components/modalAdd.vue";
 import ModalPercent from "./components/modalPercent.vue";
+import storeForm from "./store";
 export default {
   components: {
     ModalAdd,
@@ -115,6 +116,11 @@ export default {
   computed: {
     isStep1() {
       return true;
+    }
+  },
+  watch: {
+    editData(val) {
+      storeForm.commit("updateData", val);
     }
   },
   data() {
@@ -304,6 +310,8 @@ export default {
           });
         }
       });
+
+      console.log(confContent, "confContent");
       if (config.processUser.valueContent) {
         let valueContent = JSON.parse(config.processUser.valueContent);
         valueContent.forEach(item => {
@@ -321,14 +329,14 @@ export default {
       }
       this.buttonConfig = config.processButtonInfoList;
       let stepList = config.processUserStepList || [];
+      let doinged = false;
       stepList.forEach((item, step) => {
-        let stepData = this.stepConfig[item.step - 1] || {};
-        this.$set(this.stepConfig, item.step - 1, stepData);
+        let stepData = this.stepConfig[step] || {};
         let userList = [];
         item.processUserDetailList &&
           item.processUserDetailList.forEach(userItem => {
             let confUser = {
-              name: userItem.businessName,
+              name: userItem.name,
               roleName: "测试角色"
             };
             if (userItem.valueContent) {
@@ -358,34 +366,52 @@ export default {
             return userItem.isCurrentUserStep && userItem.isDoingStep;
           });
         stepData.userList = userList;
-
-        stepData.stepName = item.stepName;
+        if (userList[0]) {
+          stepData.stepName = userList[0].name;
+        }
         stepData.showEdit = item.isDoingStep && flagShowStep;
         if (!isStart) {
-          this.$set(this.stepConfig, item.step - 1, stepData);
+          if (
+            userList[0] &&
+            !doinged &&
+            (step == 0 || this.stepConfig[step - 1])
+          ) {
+            this.$set(this.stepConfig, step, stepData);
+          }
           if (step < stepList.length - 1) {
-            this.createConfNext(stepList[step + 1].processUserDetailList, step);
+            this.createConfNext(
+              stepList[step + 1].processUserDetailList,
+              step,
+              stepList
+            );
           }
         }
         if (stepData.showEdit && stepData.content) {
           stepData.content.forEach(item => {
-            if (item.link) {
+            if (this.editData[item.code]) {
               this.$set(this.stepData, item.code, this.editData[item.code]);
             }
           });
         }
+        doinged = item.isDoingStep;
       });
       if (config.processUser.finishStatus == 3) {
         this.activeStep = stepList.length;
       }
       this.loading = false;
+      storeForm.commit("update", config);
+      storeForm.commit("updateData", this.editData);
     },
-    createConfNext(listPeople, step) {
+    createConfNext(listPeople, step, stepList) {
       if (step == this.stepConfig.length) {
         // 已经是最后一步时没有下一步执行人
         return;
       }
       let listNext = [];
+      console.log(step, this.stepConfig[step]);
+      if (!this.stepConfig[step]) {
+        this.stepConfig[step] = {};
+      }
       if (!this.stepConfig[step].content) {
         this.stepConfig[step].content = [];
       }
@@ -398,7 +424,8 @@ export default {
           fixed: false,
           autoSelect: true,
           data: {
-            list: listPeople
+            list: listPeople,
+            lastList: stepList[step].processUserDetailList
           }
         },
         {

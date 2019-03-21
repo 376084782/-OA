@@ -2,6 +2,7 @@ import Vue from 'vue'
 import store from 'store'
 import {
   getOrganizationTree,
+  scedualSearch
 } from 'api/index'
 import {
   getPeopleList,
@@ -98,6 +99,27 @@ const actions = {
       Vue.set(state.data, 'getCurrentUserGroupInfo', list);
     })
   },
+  getFixUserGroupList({
+
+  }){
+
+  },
+  getWorkPlanList({
+    state
+  }, data={}) {
+    // scedualSearch(data).then(({
+    //   tableResponse
+    // }) => {
+    //   let list = []
+    //   tableResponse.list.forEach(item => {
+    //     list.push({
+    //       name: item.name,
+    //       value: item.userId + ''
+    //     })
+    //   })
+    //   Vue.set(state.data, 'getUserList', list);
+    // })
+  },
   getUserList({
     state
   }) {
@@ -141,7 +163,7 @@ const actions = {
   }, level = 2) {
     getDanWeiList({
       level,
-      organizationGroupId: store.state.login.groupList[0].organizationGroupId
+      organizationGroupId: store.state.login.groupList[0] && store.state.login.groupList[0].organizationGroupId
     }).then(({
       organizationGroupList
     }) => {

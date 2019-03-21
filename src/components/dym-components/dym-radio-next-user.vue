@@ -15,6 +15,8 @@
 <script>
 import { mapGetters } from "vuex";
 import { getPeopleListByOrg, getPeopleListByRole } from "api/index";
+import { getManageList } from "api/permission";
+import storeForm from "view/form/store";
 export default {
   props: ["conf", "disabled", "value", "autoSelect"],
   data() {
@@ -43,30 +45,104 @@ export default {
     }
   },
   mounted() {
-    this.radioDataList = [];
-    let userList = this.conf.data.list;
-    userList.forEach((item, index) => {
-      this.$set(this.radioDataList, index, []);
-      if (item.persionType == 3) {
-        getPeopleListByRole({ organizationRoleIdList:[item.businessId] }).then(({ userList }) => {
-          this.radioDataList[index] = this.formatUserList(userList);
-          this.$set(this.valList, index, this.radioDataList[index][0].value);
-        });
-      } else if (item.persionType == 2) {
-        getPeopleListByOrg({ organizationGroupIdList:[item.businessId] }).then(({ userList }) => {
-          this.radioDataList[index] = this.formatUserList(userList);
-          this.$set(this.valList, index, this.radioDataList[index][0].value);
-        });
-      } else {
-        this.radioDataList[index].push({
-          value: item.businessId,
-          name: item.businessName
-        });
-        this.$set(this.valList, index, this.radioDataList[index][0].value);
-      }
+    this.$bus.$on("updateRadioNext", () => {
+      this.update();
     });
+    this.update();
   },
   methods: {
+    update() {
+      let config = storeForm.state.config;
+      let editData = storeForm.state.data;
+      this.radioDataList = [];
+      let userList = this.conf.data.list;
+      userList.forEach((item, index) => {
+        console.log(item, "ittttte");
+        this.$set(this.radioDataList, index, []);
+        if (item.persionType == 3) {
+          getPeopleListByRole({
+            organizationRoleIdList: [item.businessId]
+          }).then(({ userList }) => {
+            this.radioDataList[index] = this.formatUserList(userList);
+            this.$set(this.valList, index, this.radioDataList[index][0].value);
+          });
+        } else if (item.persionType == 2) {
+          getPeopleListByOrg({
+            organizationGroupIdList: [item.businessId]
+          }).then(({ userList }) => {
+            this.radioDataList[index] = this.formatUserList(userList);
+            this.$set(this.valList, index, this.radioDataList[index][0].value);
+          });
+        } else if (item.persionType == 1) {
+          if (item.businessId == 0) {
+            // 发起人
+            this.radioDataList[index].push({
+              value: this.$store.state.getters.currentUserInfo.value,
+              name: this.$store.state.getters.currentUserInfo.name
+            });
+          } else if (item.businessId == -1) {
+            // 执行人
+            if (editData.changeUser) {
+              this.radioDataList[index].push(editData.changeUser);
+            }
+          } else {
+            this.radioDataList[index].push({
+              value: item.businessId,
+              name: item.businessName
+            });
+          }
+          if (this.radioDataList[index][0]) {
+            this.$set(this.valList, index, this.radioDataList[index][0].value);
+          }
+        } else if (item.persionType == 5) {
+          let organizationGroupId = item.businessId;
+          if (item.businessId == -2) {
+            // 发起部门
+            organizationGroupId =
+              config.processUser.organizationGroupId ||
+              this.$store.getters.organizationGroupId;
+          } else if (item.businessId == -3) {
+            // 执行部门
+          }
+          getManageList({
+            organizationGroupId: organizationGroupId,
+            position: 1
+          }).then(({ userList }) => {
+            this.radioDataList[index] = this.formatUserList(userList);
+            this.$set(this.valList, index, this.radioDataList[index][0].value);
+          });
+        } else if (item.persionType == 7) {
+          let organizationGroupId = 1;
+          let lastConfig = this.conf.data.lastList[0];
+          let position = undefined;
+          if (lastConfig.position == 1) {
+            organizationGroupId = lastConfig.fatherOrganizationGroupId;
+          } else if (lastConfig.position == 2) {
+            organizationGroupId = lastConfig.organizationGroupId;
+            position = 1;
+          }
+          getManageList({
+            organizationGroupId: organizationGroupId,
+            position
+          }).then(({ userList }) => {
+            this.radioDataList[index] = this.formatUserList(userList);
+            this.$set(this.valList, index, this.radioDataList[index][0].value);
+          });
+        } else if (item.persionType == 8) {
+          let organizationGroupId = this.$store.getters.organizationGroupId;
+          getManageList({ organizationGroupId: organizationGroupId }).then(
+            ({ userList }) => {
+              this.radioDataList[index] = this.formatUserList(userList);
+              this.$set(
+                this.valList,
+                index,
+                this.radioDataList[index][0].value
+              );
+            }
+          );
+        }
+      });
+    },
     formatUserList(list) {
       let res = [];
       list.forEach(item => {

@@ -9,7 +9,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="状态:">
-            <el-select style="width:100%;" v-model="searchForm.pageSearchStatus" placeholder="请选择">
+            <el-select style="width:100%;" v-model="searchForm.stepStatus" placeholder="请选择">
               <el-option
                 v-for="item in statusList"
                 :key="item.value"
@@ -38,7 +38,22 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="发起人">
-            <el-input placeholder="请输入" size="small"></el-input>
+            <el-select
+              style="width:100%;"
+              v-model="searchForm.sendUserId"
+              placeholder="请选择"
+              filterable
+              :remote-method="remoteMethod"
+              remote
+              :loading="loading"
+            >
+              <el-option
+                v-for="item in peopleList"
+                :key="item.value"
+                :label="item.value"
+                :value="item.key"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="16">
@@ -50,18 +65,54 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+import { getStatusList } from "api";
+import { getPeopleList } from "api/permission";
 
 export default {
   data() {
     return {
-      searchForm: {}
+      searchForm: {},
+      statusList: [],
+      peopleList: [],
+      loading: false
     };
   },
 
-  computed: {
-    ...mapGetters(["statusList"])
+  computed: {},
+  mounted() {
+    this.getStatusList();
   },
   methods: {
+    remoteMethod(query) {
+      this.loading = true;
+      getPeopleList({
+        keyWord: query,
+        pageNo: 1,
+        pageSize: 20
+      })
+        .then(({ tableResponse }) => {
+          this.peopleList = [];
+          tableResponse.list.forEach(item => {
+            this.peopleList.push({ value: item.name, key: item.userId });
+          });
+        })
+        .finally(e => {
+          this.loading = false;
+        });
+    },
+    getStatusList() {
+      getStatusList({
+        modelTypeList: [201]
+      }).then(e => {
+        this.statusList = [];
+        e.stepStatusList.forEach(item => {
+          this.statusList.push({
+            value: item.name,
+            key: item.value
+          });
+        });
+      });
+    },
     onSearch(flag = 0) {
       if (flag === 1) {
         this.searchForm = {};

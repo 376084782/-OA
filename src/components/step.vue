@@ -24,7 +24,7 @@
               >
                 <!-- {{item}} -->
                 <div class="left">
-                  <span class="name">{{item.name}}</span>
+                  <!-- <span class="name">{{item.name}}</span> -->
                   <!-- <el-tag class="role" v-if="item.name">{{item.roleName}}</el-tag> -->
                 </div>
                 <div
@@ -107,6 +107,9 @@ export default {
       default: 2
     }
   },
+  mounted(){
+    console.log(this.config)
+  },  
   data() {
     return {
       minHeight: "auto"

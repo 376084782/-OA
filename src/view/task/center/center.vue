@@ -9,13 +9,30 @@
       <list-search @search="onSearch"></list-search>
       <el-button @click="createTask" class="mgTop20" type="primary" size="small">发起任务</el-button>
       <section class="mgTop24" style="overflow:scroll;">
-        <tree-table
-          @doTask="doTask"
-          ref="tree"
-          :active-name="activeName"
-          @addSubTask="addSubTask"
-          v-if="showTree"
-        ></tree-table>
+        <el-table v-loading="bLoading" :data="dataSource">
+          <el-table-column type="index" label="序号" width="100px"></el-table-column>
+          <el-table-column prop="flowCode" label="级别" min-width="100px">
+            <template slot-scope="scope">{{scope.row.valueContent['urgency']}}</template>
+          </el-table-column>
+          <el-table-column prop="name" label="发起人" min-width="200px"></el-table-column>
+          <el-table-column prop="finishStatusDictionary" label="状态" min-width="200px"></el-table-column>
+          <el-table-column prop="flowCode" label="进度" min-width="200px">
+            <template slot-scope="scope">{{scope.row.finishPercent}}%</template>
+          </el-table-column>
+          <el-table-column prop="flowCode" label="操作" min-width="200px">
+            <template slot-scope="scope">
+              <template v-if="scope.row.permitButton==5">
+                <el-button type="text" @click="addSubTask(scope.row)">添加子任务</el-button>
+                <i class="grey">|</i>
+              </template>
+              <el-button type="text" @click="seeDetail(scope.row)">查看</el-button>
+              <template v-if="scope.row.permitButton==5">
+                <i class="grey">|</i>
+                <el-button type="text" @click="doTask(scope.row)">执行</el-button>
+              </template>
+            </template>
+          </el-table-column>
+        </el-table>
       </section>
     </el-card>
     <modal-add
@@ -34,6 +51,9 @@ import listSearch from "./components/search";
 import { getClubList } from "api/index";
 import treeTable from "./components/tree-table.vue";
 import { finishTask, agree } from "api/index";
+import { getListAssign, getListChild } from "api/document";
+import { formatValueContentToList } from "utils/assist";
+import { getListMySendProcess } from "api";
 export default {
   components: { listSearch, treeTable, modalAdd, modalPercent },
   data() {
@@ -51,12 +71,12 @@ export default {
       listDone: [{}, {}, {}],
       listNotDone: [{}],
       oPagination: {},
-      lastSel: {}
+      lastSel: {},
     };
   },
   watch: {
     activeName(val) {
-      this.$refs.tree && this.$refs.tree.update();
+      this.getData();
     }
   },
   mounted() {
@@ -104,6 +124,25 @@ export default {
       this.lastSel = data;
       this.visibleModalPercent = true;
     },
+    seeDetail(data) {
+      let routeData = {
+        name: "详情",
+        url: "/document/seeSponse/do",
+        query: {
+          processUserId: data.processUserId,
+          processUserDetailId: data.detailId,
+          processUserWatcherId: data.processUserWatcherId,
+          permitButton: data.permitButton,
+          permitModelType: data.permitModelType,
+          title: "查看任务"
+        }
+      };
+      this.$store.dispatch("addBreadCurmbList", routeData);
+      this.$router.push({
+        path: routeData.url,
+        query: routeData.query
+      });
+    },
     addSubTask(data) {
       this.selectedProcessUserDetailId = data.detailId;
       this.selectFatherProcessUserId = data.processUserId;
@@ -146,7 +185,18 @@ export default {
     onSearch(params) {
       this.searchParams = {};
       Object.assign(this.searchParams, params, { pageIndex: 1 });
-      this.$refs.tree && this.$refs.tree.update(this.searchParams);
+      this.getData();
+    },
+    getData() {
+      let func = this.activeName == 2 ? getListMySendProcess : getListAssign;
+      this.searchParams.modelTypeList = [201];
+      this.searchParams.pageSearchStatus = this.activeName == -1 ? "1" : "2";
+      func(this.searchParams).then(({ tableResponse }) => {
+        this.dataSource = tableResponse.list;
+        this.dataSource.forEach(item => {
+          item.valueContent = formatValueContentToList(item.valueContent);
+        });
+      });
     }
   },
   created() {

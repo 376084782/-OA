@@ -61,6 +61,7 @@ export default {
       // immediate: true,
       handler(val) {
         this.treeData = val;
+        console.log('update',this.treeData)
       }
     }
   },

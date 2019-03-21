@@ -17,11 +17,11 @@
       <el-table-column label="操作" width="150px">
         <template slot-scope="scope">
           <el-button type="text" @click="onEdit(scope.row, 'watch')">查看</el-button>
-          <el-button type="text" @click="onEdit(scope.row, '')">编辑</el-button>
-          <el-button
+          <el-button v-if="hasAccess" type="text" @click="onEdit(scope.row, '')">编辑</el-button>
+          <el-button v-if="hasAccess"
             type="text"
             @click="onBan(scope.row)"
-          >{{scope.row.statusDictionary == '有效' ? '停用' : '启用'}}</el-button>
+          >{{scope.row.relationStatus == 1 ? '停用' : '启用'}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -31,6 +31,7 @@
 import { userOperate } from "api/permission";
 export default {
   props: {
+    hasAccess:Boolean,
     data: Array
   },
   data() {
@@ -48,14 +49,14 @@ export default {
       this.$emit("edit", item, type);
     },
     onBan(scope) {
-      let curType = scope.statusDictionary == "有效" ? "stop" : "start";
+      let curType = scope.relationStatus == 1 ? "stop" : "start";
       this.$confirm(
         `<div style="font-weight: 600;">确定要${
-          scope.statusDictionary == "有效" ? "停用" : "启用"
+          scope.relationStatus == 1 ? "停用" : "启用"
         }该账户吗?</div>
                       <div>
                        ${
-                         scope.statusDictionary == "有效"
+                         scope.relationStatus == 1
                            ? "确定停用该账户？停用后账户不可使用。"
                            : "启用该账户后可登录系统，确定启用该账户吗？"
                        }
@@ -67,7 +68,13 @@ export default {
           dangerouslyUseHTMLString: true
         }
       ).then(() => {
-        userOperate({ userId: scope.userId }, curType).then(data => {
+        userOperate(
+          {
+            userId: scope.userId,
+            organizationGroupId: scope.organizationGroupId
+          },
+          curType
+        ).then(data => {
           this.$emit("load");
         });
       });

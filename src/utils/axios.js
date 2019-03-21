@@ -45,9 +45,15 @@ class HttpRequest {
         "Content-Type": "application/json",
         "platform-token": tokenConfig.tokenPlatform || "",
         "system-token": tokenConfig.tokenSystem || "",
-        "organization": 10000000
       }
     };
+    let organization = 0;
+    if (store.getters.currentOrgInfo && store.getters.currentOrgInfo.value != undefined) {
+      organization = store.getters.currentOrgInfo.value
+    } else {
+      organization = localStorage.getItem('oa-organization')
+    }
+    config.headers.organization = organization;
     return config;
   }
   destroy(url) {

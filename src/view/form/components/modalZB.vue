@@ -28,7 +28,7 @@ export default {
       type: Boolean
     },
     id: {
-      type: Number
+      type: [Number,String]
     }
   },
   data() {

@@ -209,3 +209,11 @@ export const getDanWeiList = (params) => {
     method: "post"
   });
 };
+
+export const noManageUser = (data) => {
+  return Ajax.request({
+    url: "/oa/ums/organizationGroup/noManageUser/list",
+    data,
+    method: "post"
+  });
+};

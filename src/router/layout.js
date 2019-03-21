@@ -6,6 +6,8 @@ const documentAssign = () => import('view/document/assign/assign')
 const documentArrange = () => import('view/document/arrange/arrange')
 const documentWHGL = () => import('view/document/whgl/whgl')
 
+const documentDiy = () => import('view/permission/diy/diy')
+const documentHelp = () => import('view/permission/help/help')
 
 
 // 公文管理
@@ -17,14 +19,27 @@ const pagesDocument = [{
       paths: breadcurmb
     },
   }, {
-    path: "/document/sponse",
+    path: "/document/:type/sponse",
     name: "documentSponse",
     components: {
       default: documentSponse,
       paths: breadcurmb
     },
-  },
-  {
+  }, {
+    path: "/document/diy",
+    name: "documentDiy",
+    components: {
+      default: documentDiy,
+      paths: breadcurmb
+    },
+  }, {
+    path: "/document/help",
+    name: "documentHelp",
+    components: {
+      default: documentHelp,
+      paths: breadcurmb
+    },
+  }, {
     path: "/document/assign",
     name: "documentAssign",
     components: {

@@ -15,7 +15,8 @@ const state = {
   userInfo: {},
   flagGetInfo: false,
   groupList: [],
-  deviceCode:''
+  deviceCode: '',
+  organizationGroupId: 0
 };
 import store from 'store'
 const getters = {
@@ -25,11 +26,16 @@ const getters = {
   },
   mobile: state => state.userInfo.mobile,
   currentOrgInfo: state => {
-    return {
-      name: state.groupList[0].name,
-      value: state.groupList[0].organizationId + ''
+    let obj = {};
+    if (state.groupList && state.groupList[0]) {
+      obj = {
+        name: state.groupList[0].name,
+        value: state.groupList[0].organizationId + ''
+      }
     }
+    return obj
   },
+  organizationGroupId: state => state.organizationGroupId,
   currentUserInfo: state => {
     return {
       name: state.userInfo.name,
@@ -41,12 +47,15 @@ const getters = {
 const mutations = {};
 
 const actions = {
-  updateCode({state}){
-    getCode().then(e => {
-    });
+  updateCode({
+    state
+  }) {
+    getCode().then(e => {});
     // deviceCode
   },
-  loginErr({state}){
+  loginErr({
+    state
+  }) {
     state.flagGetInfo = false;
     state.userInfo = {};
     setTokenPlatform('')
@@ -60,6 +69,9 @@ const actions = {
       getInfo().then(e => {
         state.userInfo = e.user;
         state.groupList = e.organizationGroupList;
+        if (e.organizationGroupList[0]) {
+          state.organizationGroupId = e.organizationGroupList[0].organizationGroupId
+        }
         state.flagGetInfo = true;
         store.dispatch('updateMenuList').then(e => {
           resolve();
@@ -79,6 +91,10 @@ const actions = {
         // state.flagGetInfo = true;
         setTokenPlatform(e.platformToken)
         setTokenSystem(e.systemToken);
+        if (e.organizationList && e.organizationList[0]) {
+          let organizationGroupId = e.organizationList[0].organizationId;
+          localStorage.setItem('oa-organization', organizationGroupId)
+        }
         loginLP().then(() => {
           store.dispatch('updateMenuList').then(e => {
             resolve();

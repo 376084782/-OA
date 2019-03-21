@@ -1,5 +1,5 @@
 <template>
-  <div class="breadcrumb">
+  <div class="breadcrumb" v-if="breadcurmbList.length>0">
     <el-breadcrumb separator="/">
       <el-breadcrumb-item v-for="(item, index) in breadcurmbList" :key="index">
         <router-link

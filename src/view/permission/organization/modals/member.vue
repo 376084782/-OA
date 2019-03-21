@@ -66,14 +66,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="分管领导" prop="manageUserId">
-              <el-select v-model="form.manageUserId" placeholder="请选择领导">
-                <el-option
-                  v-for="manageUser in manageUserList"
-                  :key="manageUser.value"
-                  :label="manageUser.key"
-                  :value="manageUser.value"
-                ></el-option>
-              </el-select>
+              <el-input disabled v-model="leaderName"></el-input>
             </el-form-item>
             <el-form-item label="工龄" prop="workAge">
               <el-input type="tel" v-model="form.workAge" placeholder="请输入工龄"></el-input>
@@ -115,6 +108,54 @@
           </el-form-item>
         </el-col>
       </el-form>
+
+      <h4>分管单位：</h4>
+      <p class="line mgTop10"></p>
+      <el-form
+        ref="form2"
+        size="small"
+        class="mgTop24"
+        inline
+        label-width="120px"
+        :disabled="type == 'watch'"
+      >
+        <el-form-item label="机构全称">
+          <el-select
+            v-model="manageOrganizationGroupIdList"
+            placeholder="请选择"
+            filterable
+            :remote-method="remoteMethod"
+            remote
+            multiple
+            value-key="organizationGroupId"
+          >
+            <el-option v-for="(item,idx) in listJG" :key="idx" :label="item.name" :value="item"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <h4>分管部门：</h4>
+      <p class="line mgTop10"></p>
+      <el-form
+        ref="form3"
+        class="mgTop24"
+        size="small"
+        label-width="120px"
+        :disabled="type == 'watch'"
+      >
+        <el-form-item label="机构全称">
+          <el-select
+            v-model="manageOrganizationGroupIdList2"
+            placeholder="请选择"
+            filterable
+            :remote-method="remoteMethod2"
+            remote
+            multiple
+            value-key="organizationGroupId"
+          >
+            <el-option v-for="(item,idx) in listJG2" :key="idx" :label="item.name" :value="item"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
     </el-row>
     <div slot="footer" class="dialog-footer" v-if="type != 'watch'">
       <el-button @click="onClose">取 消</el-button>
@@ -127,11 +168,15 @@ import {
   membersOperate,
   getMemberInfo,
   getRoleList,
-  getManageList
+  getManageList,
+  noManageUser
 } from "api/permission";
 export default {
   data() {
     return {
+      leaderName: "",
+      manageOrganizationGroupIdList: [],
+      manageOrganizationGroupIdList2: [],
       dialogTitle: "新增人员",
       bShow: this.value,
       bLoading: false,
@@ -142,7 +187,7 @@ export default {
       positionList: [
         { value: 1, name: "正职" },
         { value: 2, name: "副职" },
-        { value: 3, name: "书记" },
+        // { value: 3, name: "书记" },
         { value: 4, name: "其他" }
       ],
       manageUserList: [],
@@ -173,7 +218,6 @@ export default {
         telphone: [{ pattern: this.reg.number }],
         name: [{ required: true, message: "请输入" }],
         idCard: [
-          { required: true, message: "请输入" },
           {
             pattern: this.reg.idcard
           }
@@ -185,14 +229,18 @@ export default {
         // organizationRoleId: [
         //   { required: true, message: '请选择' }
         // ]
-      }
+      },
+      listJG: [],
+      listJG2: []
     };
   },
   props: {
     value: Boolean,
     id: [String, Number],
     userId: [String, Number],
-    type: String
+    type: String,
+    orgType: [Number, String],
+    leaderId: [Number, String]
   },
   watch: {
     value(val) {
@@ -203,6 +251,9 @@ export default {
     },
     bShow(val) {
       this.$emit("input", val);
+    },
+    leaderId(val) {
+      this.getLeaderName();
     },
     userId: {
       immediate: true,
@@ -217,6 +268,20 @@ export default {
               this.form.organizationRoleId =
                 data.organizationRoleList[0] &&
                 data.organizationRoleList[0].organizationRoleId;
+              let listManageList = [];
+              let listManageList2 = [];
+              data.user.manageOrganizationGroupList.forEach(item => {
+                if (item.type == 1) {
+                  listManageList.push(item);
+                } else if (item.type == 2) {
+                  listManageList2.push(item);
+                }
+              });
+              this.manageOrganizationGroupIdList = listManageList;
+              this.manageOrganizationGroupIdList2 = listManageList2;
+              this.listJG = listManageList;
+              this.listJG2 = listManageList2;
+              console.log(this.listJG, 222);
             }
           );
         }
@@ -225,8 +290,54 @@ export default {
   },
   mounted() {
     this.getRoleList();
+    this.getLeaderName();
   },
   methods: {
+    getLeaderName() {
+      console.log("selLeaderId", this.leaderId);
+      if (this.leaderId && this.leaderId != 0) {
+        console.log(this.leaderId, 2222);
+        getMemberInfo({
+          organizationGroupId: this.id,
+          userId: this.leaderId
+        }).then(e => {
+          this.leaderName = e.user.name;
+          console.log(this.leaderName, "leaderName");
+        });
+      }
+    },
+    remoteMethod(keyword) {
+      noManageUser({
+        organizationGroupId: this.id,
+        keyWord: keyword,
+        type: 1
+      }).then(({ organizationGroupList }) => {
+        let list = [];
+        organizationGroupList.forEach(item => {
+          list.push({
+            name: item.name,
+            organizationGroupId: item.organizationGroupId
+          });
+        });
+        this.listJG = list;
+      });
+    },
+    remoteMethod2(keyword) {
+      noManageUser({
+        organizationGroupId: this.id,
+        keyWord: keyword,
+        type: 2
+      }).then(({ organizationGroupList }) => {
+        let list = [];
+        organizationGroupList.forEach(item => {
+          list.push({
+            name: item.name,
+            organizationGroupId: item.organizationGroupId
+          });
+        });
+        this.listJG2 = list;
+      });
+    },
     getRoleList() {
       getRoleList().then(e => {
         this.organizationRoleList = e.organizationRoleList;
@@ -236,7 +347,7 @@ export default {
       getManageList({
         organizationGroupId: this.id
       }).then(({ userList }) => {
-        this.manageUserList=[];
+        this.manageUserList = [];
         userList.forEach(item => {
           this.manageUserList.push({
             key: item.name,
@@ -278,6 +389,13 @@ export default {
         if (valid) {
           this.confirmLoading = true;
           let { ...params } = this.form;
+          let selList = this.manageOrganizationGroupIdList.concat(
+            this.manageOrganizationGroupIdList2
+          );
+          params.manageOrganizationGroupIdList = [];
+          selList.forEach(item => {
+            params.manageOrganizationGroupIdList.push(item.organizationGroupId);
+          });
           let finalParams = {
             organizationRoleIdList: params.organizationRoleIdList,
             organizationGroupId: this.id,

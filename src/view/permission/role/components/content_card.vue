@@ -23,28 +23,27 @@
           <div class="font-info" style="line-height: 2">权限：</div>
         </el-col>
         <el-col :span="20">
-          <el-tree v-loading="bloading"
+          <el-tree
+            v-loading="bloading"
             :data="treeData"
             :props="defaultProps"
             node-key="resourceId"
-            default-expand-all>
-          </el-tree>
+            :default-expand-all="true"
+          ></el-tree>
         </el-col>
       </el-row>
     </template>
-    <modal-role v-model="showRole" :info.sync="modalInfo"
-      :data="data"
-      @edit="editCallback"></modal-role>
+    <modal-role v-model="showRole" :info.sync="modalInfo" :data="data" @edit="editCallback"></modal-role>
   </el-card>
 </template>
 <script>
-import { getPermissionInfo } from 'api/permission';
-import modalRole from '../modals/role.vue';
+import { getPermissionInfo } from "api/permission";
+import modalRole from "../modals/role.vue";
 export default {
   components: { modalRole },
-  props: ['info', 'data'],
+  props: ["info", "data"],
   watch: {
-    info (val) {
+    info(val) {
       this.modalInfo = val;
       this.currentInfo = JSON.parse(val);
       if (val) {
@@ -52,33 +51,41 @@ export default {
       }
     }
   },
-  data () {
+  data() {
     return {
       bloading: false,
       showRole: false,
-      modalInfo: '',
+      modalInfo: "",
       currentInfo: {},
       treeData: [],
       defaultProps: {
-        children: 'chlidren',
-        label: 'name'
-      },
+        children: "children",
+        label: "name"
+      }
     };
   },
   methods: {
-    loadPermission () {
+    loadPermission() {
       this.bloading = true;
-      getPermissionInfo({roleId: this.currentInfo.organizationRoleId}).then(data => {
-        let filter_data = data.children.map(tag => {
-          tag.children = tag.children.filter(cate => cate.hasPermission);
-          return tag;
+      getPermissionInfo({ roleId: this.currentInfo.organizationRoleId })
+        .then(data => {
+          let filter_data = data.children.map(tag => {
+            tag.children = tag.children.filter(cate => cate.hasPermission);
+            return tag;
+          });
+          this.treeData = filter_data.filter(
+            role => role.hasPermission || role.children.length != 0
+          );
+          console.log(this.treeData, filter_data);
+        })
+        .finally(() => {
+          this.bloading = false;
         });
-        this.treeData = filter_data.filter(role => role.hasPermission || role.children.length != 0);
-      }).finally(() => {this.bloading = false;});
     },
-    editCallback (item) {
+    editCallback(item) {
       Object.assign(this.currentInfo, item);
       this.loadPermission();
+      this.$emit("load");
     }
   }
 };

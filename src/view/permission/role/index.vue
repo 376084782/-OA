@@ -1,7 +1,7 @@
 <template>
   <section class="permission-containner" v-loading="bLoading">
     <nav-card :info.sync="currentInfo" :data="treeData" @load="loadOrganization"></nav-card>
-    <content-card :info.sync="currentInfo" :data="treeData"></content-card>
+    <content-card @load="loadOrganization" :info.sync="currentInfo" :data="treeData"></content-card>
   </section>
 </template>
 <script>

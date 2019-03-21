@@ -64,31 +64,14 @@ export const getListProcess = ({
   });
 };
 
-export const getListMySendProcess = ({
-  modelTypeList = [100],
-  keyWord = '',
-  startTime = '',
-  deadTime = '',
-  pageNo = 1,
-  pageSize = 20,
-  dateFormat = '%Y-%m-%d',
-  organization = null,
-  pageSearchStatus = null
-}) => {
+export const getListMySendProcess = (data) => {
+  data.dateFormat = data.dateFormat || '%Y-%m-%d';
+  data.pageNo = data.pageNo || 1
+  data.pageSize = data.pageSize || 20
   return Ajax.request({
     url: "/oa/flow/processUser/page/send",
     method: "post",
-    data: {
-      modelTypeList,
-      keyWord,
-      startTime,
-      deadTime,
-      pageNo,
-      pageSize,
-      dateFormat,
-      organization,
-      pageSearchStatus
-    }
+    data
   });
 };
 
@@ -248,13 +231,15 @@ export const scedualSearch = ({
   groupName = "",
   startDate = "",
   endDate = "",
-  name = ""
+  name = "",
+  userId = undefined
 }) => {
   const data = {
     groupName,
     startDate,
     endDate,
-    name
+    name,
+    userId
   };
   return Ajax.request({
     url: "/oa/flow/workPlan/list",
@@ -337,3 +322,46 @@ export const zhuanban = (data) => {
     method: "post"
   });
 };
+
+
+export const getStatusList = (data) => {
+  return Ajax.request({
+    url: "/oa/flow/processUser/map/status",
+    data,
+    method: "post"
+  });
+};
+
+export const getSenderList = (data) => {
+  return Ajax.request({
+    url: "/oa/ums/systemOrganization/page",
+    data,
+    method: "post"
+  });
+};
+
+export const userGroupList = (data) => {
+  return Ajax.request({
+    url: "/oa/ums/organizationGroup/userGroup/list",
+    data,
+    method: "post"
+  });
+};
+
+export const organizationRoleDel = (data) => {
+  return Ajax.request({
+    url: "/oa/ums/organizationRole/delete",
+    data,
+    method: "post"
+  });
+};
+
+export const organizationRoleGroupDel = (data) => {
+  return Ajax.request({
+    url: "/oa/ums/organizationRoleGroup/delete",
+    data,
+    method: "post"
+  });
+};
+
+

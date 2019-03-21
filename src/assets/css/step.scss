@@ -34,7 +34,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      &>span{
+
+      &>span {
         margin: 6px;
       }
 
@@ -68,6 +69,7 @@
       width: 0;
       border-left: 1px dashed #4b9ffd;
       margin: 6px 25px;
+      min-height: 60px;
 
       &.disabled {
         border-color: rgba(217, 217, 217, 1);
@@ -119,9 +121,11 @@
     .user-list-wrap {
       padding-right: 20px;
       display: flex;
-      &:not(:first-child){
+
+      &:not(:first-child) {
         margin-top: 10px;
       }
+
       // flex-direction: column !important;
       .left {
         display: flex;

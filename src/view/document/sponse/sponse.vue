@@ -1,9 +1,9 @@
 <template>
   <section>
-    <el-tabs style="margin-top: -16px;" class="top-sec-tab" v-model="activeName">
+    <!-- <el-tabs style="margin-top: -16px;" class="top-sec-tab" v-model="activeName">
       <el-tab-pane label="发文" name="1"></el-tab-pane>
       <el-tab-pane label="收文" name="2"></el-tab-pane>
-    </el-tabs>
+    </el-tabs>-->
     <el-card class="mgTop24">
       <list-search
         :type="activeName"
@@ -94,13 +94,14 @@ export default {
     }
   },
   mounted() {
+    this.activeName = this.$route.params.type == "sponse" ? 1 : 2;
     this.$store.dispatch("updateBreadCurmbList", [
       {
         name: "公文管理",
         url: this.$route.path
       },
       {
-        name: "公文收发",
+        name: this.$route.params.type == "sponse" ? "发文" : "收文",
         url: this.$route.path
       }
     ]);

@@ -30,8 +30,11 @@ const menuList = {
       title: '公文管理',
       icon: 'folder',
       subMenu: [{
-        title: '公文收发',
-        path: '/document/sponse'
+        title: '发文',
+        path: '/document/sponse/sponse'
+      },{
+        title:'收文',
+        path: '/document/receive/sponse'
       }, {
         title: '公文办理',
         path: '/document/assign'
