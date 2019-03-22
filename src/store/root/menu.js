@@ -53,13 +53,13 @@ const menuList = {
         path: '/task/center'
       }]
     }, {
-      title: '排班管理',
+      title: '值班管理',
       icon: 'calendar',
       subMenu: [{
-        title: '排班查询',
+        title: '值班查询',
         path: '/schedual/search'
       }, {
-        title: '排班申请',
+        title: '值班申请',
         path: '/schedual/apply'
       }, {
         title: '调班申请',

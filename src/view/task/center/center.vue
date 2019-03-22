@@ -14,7 +14,10 @@
           <el-table-column prop="flowCode" label="级别" min-width="100px">
             <template slot-scope="scope">{{scope.row.valueContent['urgency']}}</template>
           </el-table-column>
-          <el-table-column prop="name" label="发起人" min-width="200px"></el-table-column>
+          <el-table-column v-if="activeName==2" label="发起人" min-width="200px">
+            <template slot-scope="scope">{{scope.row.valueContent['user']}}</template>
+          </el-table-column>
+          <el-table-column v-else prop="name" label="执行人" min-width="200px"></el-table-column>
           <el-table-column prop="finishStatusDictionary" label="状态" min-width="200px"></el-table-column>
           <el-table-column prop="flowCode" label="进度" min-width="200px">
             <template slot-scope="scope">{{scope.row.finishPercent}}%</template>
@@ -71,7 +74,7 @@ export default {
       listDone: [{}, {}, {}],
       listNotDone: [{}],
       oPagination: {},
-      lastSel: {},
+      lastSel: {}
     };
   },
   watch: {

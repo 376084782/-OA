@@ -96,9 +96,9 @@ export default {
     },
     getAnalyseName(type) {
       let map = {
-        1: "夜班：导入Excel排班",
-        2: "节假日：导入Excel排班",
-        3: "领导值班：导入Excel排班"
+        1: "夜班：导入Excel值班",
+        2: "节假日：导入Excel值班",
+        3: "领导值班：导入Excel值班"
       };
       return map[type];
     },

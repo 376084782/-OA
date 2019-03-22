@@ -8,16 +8,16 @@
     <el-card class="mgTop24">
       <list-search @search="onSearch" :status="activeName"></list-search>
       <el-row v-if="activeName=='10'" class="bottom-row mgTop24">
-        <el-button type="primary" size="small" @click="showFormDo()">申请排班</el-button>
+        <el-button type="primary" size="small" @click="showFormDo()">申请值班</el-button>
       </el-row>
       <section class="mgTop24">
         <el-table v-loading="bLoading" :data="dataSource">
           <el-table-column width="100px" type="index" label="序号"></el-table-column>
           <el-table-column prop="title" label="标题"></el-table-column>
-          <el-table-column min-width="180px" prop="createTime" label="排班时间"></el-table-column>
+          <el-table-column min-width="180px" prop="createTime" label="值班时间"></el-table-column>
           <el-table-column prop="name" label="发起申请人"></el-table-column>
           <el-table-column prop="organizationGroupName" label="发起部门"></el-table-column>
-          <el-table-column prop="modelTypeDictionary" label="排班当前状态"></el-table-column>
+          <el-table-column prop="modelTypeDictionary" label="值班当前状态"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click="showFormDetail(scope.row)" type="text">查看</el-button>
@@ -63,11 +63,11 @@ export default {
   mounted() {
     this.$store.dispatch("updateBreadCurmbList", [
       {
-        name: "排班管理",
+        name: "值班管理",
         url: this.$route.path
       },
       {
-        name: "排班申请",
+        name: "值班申请",
         url: this.$route.path
       }
     ]);
@@ -129,12 +129,12 @@ export default {
     },
     showFormDo() {
       let routeData = {
-        name: "申请排班",
+        name: "申请值班",
         url: "/document/schedualApply/do",
         query: {
           modelType: 400,
           permitButton: 1,
-          title: "申请排班"
+          title: "申请值班"
         }
       };
       this.$store.dispatch("addBreadCurmbList", routeData);

@@ -281,25 +281,25 @@ var configTask = {
 
 var configSchedual = {
   '/schedual/search': [{
-      name: "排班管理",
+      name: "值班管理",
       url: "/schedual/search"
     },
     {
-      name: "排班查询",
+      name: "值班查询",
       url: ""
     }
   ],
   '/schedual/apply': [{
-      name: "排班管理",
+      name: "值班管理",
       url: "/schedual/search"
     },
     {
-      name: "排班申请",
+      name: "值班申请",
       url: ""
     }
   ],
   '/schedual/applyChange': [{
-      name: "排班管理",
+      name: "值班管理",
       url: "/schedual/search"
     },
     {
@@ -308,23 +308,23 @@ var configSchedual = {
     }
   ],
   '/document/schedualApply/do': [{
-      name: "排班管理",
+      name: "值班管理",
       url: "/schedual/search"
     },
     {
-      name: "排班申请",
+      name: "值班申请",
       url: "/schedual/apply"
     }, {
-      name: "申请排班",
+      name: "申请值班",
       url: ""
     }
   ],
   '/document/seeSchedualApply/do': [{
-      name: "排班管理",
+      name: "值班管理",
       url: "/schedual/search"
     },
     {
-      name: "排班申请",
+      name: "值班申请",
       url: "/schedual/apply"
     }, {
       name: "查看",

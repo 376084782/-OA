@@ -24,10 +24,23 @@ export default {
   },
   watch: {
     val(val) {
+      this.updateVal();
       this.$emit("input", val);
     }
   },
+  mounted() {
+    this.updateVal();
+    this.getInitData();
+    this.$bus.$on("changeOptions", (optionsList, key) => {
+      if (key == this.conf.code) {
+        this.optionsList = optionsList;
+      }
+    });
+  },
   methods: {
+    updateVal() {
+      console.log("vvvv", this.val, this.selectDataList);
+    },
     changeHandler(value) {
       if (this.conf.code == "type") {
         let level = 2;
@@ -52,18 +65,13 @@ export default {
       }
     }
   },
-  mounted() {
-    this.getInitData();
-    this.$bus.$on("changeOptions", (optionsList, key) => {
-      if (key == this.conf.code) {
-        this.optionsList = optionsList;
-      }
-    });
-  },
   computed: {
     ...mapGetters(["getDataByFuncName"]),
     selectDataList() {
       if (this.optionsList) {
+        if (this.val&&!this.optionsList.some(item => item.value == this.val.value)) {
+          this.optionsList.push(this.val);
+        }
         return this.optionsList;
       }
       let list = [];
@@ -83,6 +91,10 @@ export default {
 
       if (this.autoSelect && list.length > 0) {
         this.val = list[0];
+      }
+
+      if (this.val && !list.some(item => item.value == this.val.value)) {
+        list.push(this.val);
       }
       return list;
     }

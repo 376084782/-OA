@@ -82,7 +82,7 @@ const schedualSearch = () => import('view/schedual/search/search')
 const schedualApply = () => import('view/schedual/apply/apply')
 const schedualApplyChange = () => import('view/schedual/applyChange/applyChange')
 
-// 排班管理
+// 值班管理
 const pagesSchedual = [{
   path: '/schedual/search',
   name: 'schedualSearch',

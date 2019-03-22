@@ -227,7 +227,6 @@ export default {
         !this.editData["changeStartDate"] ||
         !this.editData["changeEndDate"]
       ) {
-        console.log(this.editData, 222);
         return;
       }
       scedualSearch({
@@ -270,7 +269,7 @@ export default {
       } else if (data.conf.code == "changeUser") {
         this.$nextTick(() => {
           if (this.editData["changeUser"]) {
-            this.$bus.$emit('updateRadioNext')
+            this.$bus.$emit("updateRadioNext");
             let userId = +this.editData["changeUser"].value;
             userGroupList({
               userId
@@ -292,10 +291,14 @@ export default {
     this.$bus.$on("changeHandler", (conf, value) => {
       if (conf.code == "applyStartDate" || conf.code == "applyEndDate") {
         if (this.editData["applyStartDate"] && this.editData["applyEndDate"]) {
+          let obj = this.editData["user"];
+          if (!obj || !obj.value) {
+            return;
+          }
           scedualSearch({
             startDate: this.editData["applyStartDate"],
             endDate: this.editData["applyEndDate"],
-            userId: this.$store.getters.userId
+            userId: obj.value
           }).then(({ workPlanDateInfoList }) => {
             let list = [];
             workPlanDateInfoList.forEach(item => {

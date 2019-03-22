@@ -198,7 +198,7 @@ export const getClubList = ({
   });
 };
 
-// 解析排班excel
+// 解析值班excel
 export const analyseExcel = ({
   type,
   startDate,
@@ -225,7 +225,7 @@ export const analyseExcel = ({
   });
 };
 
-// 查询排班
+// 查询值班
 
 export const scedualSearch = ({
   groupName = "",
@@ -364,4 +364,20 @@ export const organizationRoleGroupDel = (data) => {
   });
 };
 
+export const organizationGroupTypeList = (data) => {
+  return Ajax.request({
+    url: "/oa/ums/organizationGroup/organizationGroupTypeList",
+    data,
+    method: "post"
+  });
+};
+
+
+export const fatherOrganizationGroupTypeList = (data) => {
+  return Ajax.request({
+    url: "/oa/ums/organizationGroup/fatherOrganizationGroupTypeList",
+    data,
+    method: "post"
+  });
+};
 

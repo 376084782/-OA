@@ -2,7 +2,9 @@ import Vue from 'vue'
 import store from 'store'
 import {
   getOrganizationTree,
-  scedualSearch
+  scedualSearch,
+  organizationGroupTypeList,
+  fatherOrganizationGroupTypeList
 } from 'api/index'
 import {
   getPeopleList,
@@ -81,6 +83,42 @@ const actions = {
     })
     Vue.set(state.data, 'getCurrentUserGroupList', list);
   },
+  getSendOrganizationGroupList({
+    state
+  }) {
+    organizationGroupTypeList({
+      type: 1
+    }).then(({
+      organizationGroupList
+    }) => {
+      let list = []
+      organizationGroupList.forEach(item => {
+        list.push({
+          name: item.name,
+          value: item.organizationGroupId + ''
+        })
+      })
+      Vue.set(state.data, 'getSendOrganizationGroupList', list);
+    })
+  },
+  getOrganizationUserGroupInfo({
+    state
+  }) {
+    fatherOrganizationGroupTypeList({
+      organizationGroupId: store.getters.organizationGroupId
+    }).then(({
+      organizationGroupList
+    }) => {
+      let list = []
+      organizationGroupList.forEach(item => {
+        list.push({
+          name: item.name,
+          value: item.organizationGroupId + ''
+        })
+      })
+      Vue.set(state.data, 'getOrganizationUserGroupInfo', list);
+    })
+  },
   getCurrentUserGroupInfo({
     state
   }) {
@@ -101,12 +139,12 @@ const actions = {
   },
   getFixUserGroupList({
 
-  }){
+  }) {
 
   },
   getWorkPlanList({
     state
-  }, data={}) {
+  }, data = {}) {
     // scedualSearch(data).then(({
     //   tableResponse
     // }) => {

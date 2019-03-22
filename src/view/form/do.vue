@@ -288,30 +288,7 @@ export default {
         this.query.firstFatherProcessUserId =
           config.processUser.firstFatherProcessUserId;
       }
-      let confContent = JSON.parse(config.processUser.content);
-      this.processOrganizationId = config.processUser.processOrganizationId;
-      if (!isStart) {
-        this.contentTop = confContent;
-      }
-      confContent.forEach(item => {
-        if (item.required) {
-          this.rulesTop[item.code] = [{ required: true }];
-        }
-        if (
-          item.code == "organizationGroup" ||
-          item.code == "mobile" ||
-          item.code == "user"
-        ) {
-          this.$set(item, "autoSelect", true);
-        }
-        if (item.data.function == "getMissionCode") {
-          getFlowNum(201).then(({ modelTypeNumber }) => {
-            this.$set(this.editData, item.code, modelTypeNumber);
-          });
-        }
-      });
 
-      console.log(confContent, "confContent");
       if (config.processUser.valueContent) {
         let valueContent = JSON.parse(config.processUser.valueContent);
         valueContent.forEach(item => {
@@ -327,6 +304,33 @@ export default {
           this.$set(this.editData, item.code, value);
         });
       }
+      let confContent = JSON.parse(config.processUser.content);
+
+      console.log(confContent, "confContent");
+      this.processOrganizationId = config.processUser.processOrganizationId;
+      if (!isStart) {
+        this.contentTop = confContent;
+      }
+      confContent.forEach(item => {
+        if (item.required) {
+          this.rulesTop[item.code] = [{ required: true }];
+        }
+        if (
+          item.code == "organizationGroup" ||
+          item.code == "mobile" ||
+          item.code == "user"
+        ) {
+          console.log(this.editData,'edit')
+          if (!this.editData[item.code]) {
+            this.$set(item, "autoSelect", true);
+          }
+        }
+        if (item.data.function == "getMissionCode") {
+          getFlowNum(201).then(({ modelTypeNumber }) => {
+            this.$set(this.editData, item.code, modelTypeNumber);
+          });
+        }
+      });
       this.buttonConfig = config.processButtonInfoList;
       let stepList = config.processUserStepList || [];
       let doinged = false;
@@ -371,19 +375,15 @@ export default {
         }
         stepData.showEdit = item.isDoingStep && flagShowStep;
         if (!isStart) {
-          if (
-            userList[0] &&
-            !doinged &&
-            (step == 0 || this.stepConfig[step - 1])
-          ) {
+          if (!doinged) {
             this.$set(this.stepConfig, step, stepData);
-          }
-          if (step < stepList.length - 1) {
-            this.createConfNext(
-              stepList[step + 1].processUserDetailList,
-              step,
-              stepList
-            );
+            if (step < stepList.length - 1) {
+              this.createConfNext(
+                stepList[step + 1].processUserDetailList,
+                step,
+                stepList
+              );
+            }
           }
         }
         if (stepData.showEdit && stepData.content) {
@@ -393,7 +393,7 @@ export default {
             }
           });
         }
-        doinged = item.isDoingStep;
+        !doinged && (doinged = item.isDoingStep);
       });
       if (config.processUser.finishStatus == 3) {
         this.activeStep = stepList.length;
@@ -401,6 +401,7 @@ export default {
       this.loading = false;
       storeForm.commit("update", config);
       storeForm.commit("updateData", this.editData);
+      // console.log(this.editData);
     },
     createConfNext(listPeople, step, stepList) {
       if (step == this.stepConfig.length) {

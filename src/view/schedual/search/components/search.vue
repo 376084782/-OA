@@ -21,7 +21,7 @@
       </el-row>
       <el-row :gutter="20" style="margin-top:10px;">
         <el-col :span="8">
-          <el-form-item label="排班时间:">
+          <el-form-item label="值班时间:">
             <el-date-picker
               v-model="dateRange"
               type="daterange"
