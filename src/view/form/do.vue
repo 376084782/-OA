@@ -39,7 +39,7 @@
             :type="index==0?'primary':''"
             :key="index"
             @click="clickEvents(conf)"
-          >{{conf.showValue}}</el-button>
+          >{{getBtnName(conf)}}</el-button>
         </template>
         <!-- <el-button type="primary" @click="clickFP">分派</el-button>
           <el-button @click="clickJS">拒收</el-button>
@@ -155,6 +155,14 @@ export default {
     this.initData();
   },
   methods: {
+    getBtnName(conf) {
+      if (conf.code == "permitCreateSubProcess") {
+        if (this.query.modelType >= 200 && this.query.modelType < 300) {
+          return "创建子任务";
+        }
+      }
+      return conf.showValue;
+    },
     finishHandler(data) {
       if (data.percent >= 100) {
         // 调用完成
@@ -320,7 +328,7 @@ export default {
           item.code == "mobile" ||
           item.code == "user"
         ) {
-          console.log(this.editData,'edit')
+          console.log(this.editData, "edit");
           if (!this.editData[item.code]) {
             this.$set(item, "autoSelect", true);
           }
