@@ -98,6 +98,14 @@
             v-model="editData[conf.code]"
           ></dym-radio-next-user>
         </template>
+        <template v-else-if="conf.type=='select-next-user-list'">
+          <dym-select-next-user-list
+            :auto-select="true"
+            :conf="conf"
+            :disabled="disabled||conf.readOnly"
+            v-model="editData[conf.code]"
+          ></dym-select-next-user-list>
+        </template>
         <template v-else-if="conf.type=='multi-file'">
           <dym-upload-file :disabled="disabled||conf.readOnly" v-model="editData[conf.code]"></dym-upload-file>
         </template>
@@ -139,6 +147,7 @@ import dymSelect from "./dym-components/dym-select";
 import dymRadio from "./dym-components/dym-radio";
 import dymCombine from "./dym-components/dym-combine";
 import dymRadioNextUser from "./dym-components/dym-radio-next-user";
+import dymSelectNextUserList from "./dym-components/dym-select-next-user-list";
 import dymWorkPlanImport from "./dym-components/dym-work-plan-import";
 import dymWorkPlanCalender from "./dym-components/dym-work-plan-calender";
 import dymUploadFile from "./dym-components/dym-upload-file.vue";
@@ -154,7 +163,8 @@ export default {
     dymWorkPlanImport,
     dymWorkPlanCalender,
     dymCombine,
-    dymUploadFile
+    dymUploadFile,
+    dymSelectNextUserList
   },
   props: {
     documentCodeFixd: String,

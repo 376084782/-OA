@@ -158,7 +158,7 @@ export default {
     getBtnName(conf) {
       if (conf.code == "permitCreateSubProcess") {
         if (this.query.modelType >= 200 && this.query.modelType < 300) {
-          return "创建子任务";
+          return "发起任务";
         }
       }
       return conf.showValue;
@@ -417,26 +417,37 @@ export default {
         return;
       }
       let listNext = [];
-      console.log(step, this.stepConfig[step]);
       if (!this.stepConfig[step]) {
         this.stepConfig[step] = {};
       }
       if (!this.stepConfig[step].content) {
         this.stepConfig[step].content = [];
       }
+      let configServer = listPeople[0];
+      let nextUserType = "radio-next-user";
+      let nextUserCode = "nextUserId";
+      if (
+        configServer &&
+        (configServer.permitDynamicParallel == 1 ||
+          configServer.permitDynamicSerial == 1)
+      ) {
+        nextUserType = "select-next-user-list";
+        nextUserCode = "nextUserList";
+      }
+      let nextUserConf = {
+        name: "下一步执行人",
+        type: nextUserType,
+        dataType: 2,
+        code: nextUserCode,
+        fixed: false,
+        autoSelect: true,
+        data: {
+          list: listPeople,
+          lastList: stepList[step].processUserDetailList
+        }
+      };
       let list = [
-        {
-          name: "下一步执行人",
-          type: "radio-next-user",
-          dataType: 2,
-          code: "nextUserId",
-          fixed: false,
-          autoSelect: true,
-          data: {
-            list: listPeople,
-            lastList: stepList[step].processUserDetailList
-          }
-        },
+        nextUserConf,
         {
           name: "下一步办结时限",
           type: "date",
@@ -567,12 +578,15 @@ export default {
     /** 对应处理数据方法 */
     clickAgree() {
       let valueContent = this.getValueContent();
+      console.log(this.stepData);
       let data = {
-        nextDetailUserInfoList: this.stepData.nextUserId,
+        nextDetailUserInfoList:
+          this.stepData.nextUserId || this.stepData.nextUserList,
         nextDeadTime: this.stepData.nextDeadTime,
         processUserDetailId: this.query.processUserDetailId,
         valueContent
       };
+      console.log("ddddaaaaattt", data);
       agree(data).then(e => {
         this.routerBack();
       });
@@ -597,7 +611,8 @@ export default {
     clickRefuse(valueContent) {
       let data = {
         processUserDetailId: this.query.processUserDetailId,
-        valueContent
+        valueContent,
+        processUserWatcherId: this.query.processUserWatcherId
       };
       refuse(data).then(e => {
         this.routerBack();

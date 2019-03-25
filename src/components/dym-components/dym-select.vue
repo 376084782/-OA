@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     updateVal() {
-      console.log("vvvv", this.val, this.selectDataList);
+      // console.log("vvvv", this.val, this.selectDataList);
     },
     changeHandler(value) {
       if (this.conf.code == "type") {

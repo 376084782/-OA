@@ -48,7 +48,7 @@ export default {
             </span>
             <span style="width:100px;">特急</span>
             <span style="width:200px">
-              <el-button type="text">添加子任务</el-button>
+              <el-button type="text">发起任务</el-button>
               <i class="grey">|</i>
               <el-button type="text">查看</el-button>
               <i class="grey">|</i>

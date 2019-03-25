@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible="show" @update:visible="toggle" width="1020px" title="添加子任务">
+  <el-dialog :visible="show" @update:visible="toggle" width="1020px" title="发起任务">
     <common-form @success="successHandler" :from-modal="true" :query-data="queryData" v-if="show"></common-form>
   </el-dialog>
 </template>

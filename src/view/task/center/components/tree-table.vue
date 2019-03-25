@@ -78,7 +78,7 @@ export default {
                     this.addSubTask(data);
                   }}
                 >
-                  添加子任务
+                  发起任务
                 </el-button>
                 <i class="grey">|</i>
                 <el-button

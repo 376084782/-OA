@@ -22,14 +22,14 @@
           <el-table-column prop="numid" label="紧急程度">
             <template slot-scope="scope">{{scope.row.valueContent['urgency']}}</template>
           </el-table-column>
-          <el-table-column prop="finishStatusDictionary" label="状态"></el-table-column>
+          <el-table-column v-if="activeName==1" prop="finishStatusDictionary" label="状态"></el-table-column>
           <el-table-column
             v-if="activeName!='1'"
             min-width="220px"
             prop="organizationGroupName"
             label="来文单位"
           >
-            <template slot-scope="scope">{{scope.row.valueContent['mainGroupList']}}</template>
+            <template slot-scope="scope">{{scope.row.valueContent['sendGroup']}}</template>
           </el-table-column>
           <template v-if="activeName=='2'">
             <el-table-column min-width="180px" prop="finishTime" label="限办日期"></el-table-column>
@@ -91,22 +91,28 @@ export default {
         modelTypeList: [100, 101]
       };
       this.onSearch();
+    },
+    $route() {
+      this.init();
     }
   },
   mounted() {
-    this.activeName = this.$route.params.type == "sponse" ? 1 : 2;
-    this.$store.dispatch("updateBreadCurmbList", [
-      {
-        name: "公文管理",
-        url: this.$route.path
-      },
-      {
-        name: this.$route.params.type == "sponse" ? "发文" : "收文",
-        url: this.$route.path
-      }
-    ]);
+    this.init();
   },
   methods: {
+    init() {
+      this.activeName = this.$route.params.type == "sponse" ? 1 : 2;
+      this.$store.dispatch("updateBreadCurmbList", [
+        {
+          name: "公文管理",
+          url: this.$route.path
+        },
+        {
+          name: this.$route.params.type == "sponse" ? "发文" : "收文",
+          url: this.$route.path
+        }
+      ]);
+    },
     getJJCD(data) {
       let valueContent = JSON.parse(data.valueContent);
       let dataUrgency = valueContent.filter(item => {

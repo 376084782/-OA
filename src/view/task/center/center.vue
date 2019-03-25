@@ -25,7 +25,7 @@
           <el-table-column prop="flowCode" label="操作" min-width="200px">
             <template slot-scope="scope">
               <template v-if="scope.row.permitButton==5">
-                <el-button type="text" @click="addSubTask(scope.row)">添加子任务</el-button>
+                <el-button type="text" @click="addSubTask(scope.row)">发起任务</el-button>
                 <i class="grey">|</i>
               </template>
               <el-button type="text" @click="seeDetail(scope.row)">查看</el-button>

@@ -32,8 +32,8 @@ export default {
       val.forEach((item, index) => {
         nextDetailUserInfoList.push({
           processUserDetailId: this.conf.data.list[index].processUserDetailId,
+          name: "",
           userId: item,
-          name: ""
         });
       });
       this.$emit("input", nextDetailUserInfoList);
