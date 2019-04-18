@@ -7,8 +7,9 @@
       :multiple="multiple"
       filterable
       @change="changeHandler"
+      @visible-change="visibleChange"
     >
-      <el-option v-for="item in selectDataList" :key="item.value" :label="item.name" :value="item"></el-option>
+      <el-option v-for="item in selectDataList2" :key="item.value" :label="item.name" :value="item"></el-option>
     </el-select>
   </div>
 </template>
@@ -19,7 +20,8 @@ export default {
   data() {
     return {
       val: this.value,
-      optionsList: null
+      optionsList: null,
+      opend: false
     };
   },
   watch: {
@@ -38,9 +40,17 @@ export default {
     });
   },
   methods: {
+    visibleChange(flag) {
+      if (flag && !this.opend && !this.multiple) {
+        this.val = {};
+      } else {
+      }
+      this.opend = true;
+    },
     updateVal() {
       // console.log("vvvv", this.val, this.selectDataList);
     },
+    changeOptionsList() {},
     changeHandler(value) {
       if (this.conf.code == "type") {
         let level = 2;
@@ -69,8 +79,19 @@ export default {
     ...mapGetters(["getDataByFuncName"]),
     selectDataList() {
       if (this.optionsList) {
-        if (this.val&&!this.optionsList.some(item => item.value == this.val.value)) {
-          this.optionsList.push(this.val);
+        if (
+          this.val &&
+          !this.opend &&
+          this.list &&
+          !this.optionsList.some(item => item.value == this.val.value)
+        ) {
+          let data = Object.assign(
+            {
+              newAdded: true
+            },
+            this.val
+          );
+          this.optionsList.push(data);
         }
         return this.optionsList;
       }
@@ -80,23 +101,32 @@ export default {
       } else if (this.conf.dataType == 3) {
         list = this.getDataByFuncName(this.conf);
       }
-      // if (
-      //   this.value &&
-      //   !list.some(item => {
-      //     return item.value == this.value.value;
-      //   })
-      // ) {
-      //   list.push(this.value);
-      // }
-
       if (this.autoSelect && list.length > 0) {
         this.val = list[0];
       }
 
-      if (this.val && !list.some(item => item.value == this.val.value)) {
-        list.push(this.val);
+      if (
+        this.val &&
+        !this.opend &&
+        list &&
+        !list.some(item => item.value == this.val.value)
+      ) {
+        let data = Object.assign(
+          {
+            newAdded: true
+          },
+          this.val
+        );
+        list.push(data);
       }
       return list;
+    },
+    selectDataList2() {
+      if (this.opend) {
+        return this.selectDataList.filter(item => !item.newAdded);
+      } else {
+        return this.selectDataList;
+      }
     }
   }
 };

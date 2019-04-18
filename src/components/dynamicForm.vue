@@ -213,13 +213,13 @@ export default {
         (query.permitButton == 1 || query.permitButton == 2);
       let { groupList, userInfo } = this.$store.state.login;
       if (flagStart) {
-        groupList &&
-          groupList[0] &&
-          !this.editData["sendGroup"] &&
-          this.$set(this.editData, "sendGroup", {
-            name: groupList[0].name,
-            value: groupList[0].organizationGroupId + ""
-          });
+        // groupList &&
+        //   groupList[0] &&
+        //   !this.editData["sendGroup"] &&
+        //   this.$set(this.editData, "sendGroup", {
+        //     name: groupList[0].name,
+        //     value: groupList[0].organizationGroupId + ""
+        //   });
       }
       this.$set(
         this.editData,

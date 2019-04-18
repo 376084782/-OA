@@ -157,7 +157,10 @@ export default {
   methods: {
     getBtnName(conf) {
       if (conf.code == "permitCreateSubProcess") {
-        if (this.query.modelType >= 200 && this.query.modelType < 300) {
+        if (
+          (this.query.modelType >= 200 && this.query.modelType < 300) ||
+          this.query.modelType == 101
+        ) {
           return "发起任务";
         }
       }
