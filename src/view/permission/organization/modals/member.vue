@@ -10,6 +10,16 @@
         :disabled="type == 'watch'"
       >
         <el-row>
+          <el-form-item v-if="type != 'watch'" label="所属部门" prop="newOrganizationGroupId">
+            <el-select v-model="form.newOrganizationGroupId">
+              <el-option
+                v-for="(item,idx) in listGroupDep"
+                :key="idx"
+                :value="item.organizationGroupId"
+                :label="item.name"
+              ></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="姓名" prop="name">
             <el-input v-model="form.name" placeholder="请输入姓名"></el-input>
           </el-form-item>
@@ -133,7 +143,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <h4>分管部门：</h4>
+      <h4>分管科室：</h4>
       <p class="line mgTop10"></p>
       <el-form
         ref="form3"
@@ -169,11 +179,13 @@ import {
   getMemberInfo,
   getRoleList,
   getManageList,
+  getChangeDepList,
   noManageUser
 } from "api/permission";
 export default {
   data() {
     return {
+      listGroupDep: [],
       leaderName: "",
       manageOrganizationGroupIdList: [],
       manageOrganizationGroupIdList2: [],
@@ -260,9 +272,11 @@ export default {
       handler(val) {
         this.dialogTitle = val ? "人员编辑" : "新增人员";
         if (val) {
+          this.getDepList();
           getMemberInfo({ organizationGroupId: this.id, userId: val }).then(
             data => {
               Object.assign(this.form, data.user);
+              this.form.newOrganizationGroupId = this.form.organizationGroupId;
               this.form.organizationRoleIdList =
                 this.form.organizationRoleIdList || [];
               this.form.organizationRoleId =
@@ -281,7 +295,6 @@ export default {
               this.manageOrganizationGroupIdList2 = listManageList2;
               this.listJG = listManageList;
               this.listJG2 = listManageList2;
-              console.log(this.listJG, 222);
             }
           );
         }
@@ -293,10 +306,13 @@ export default {
     this.getLeaderName();
   },
   methods: {
+    getDepList() {
+      getChangeDepList({}).then(({ organizationGroupList }) => {
+        this.listGroupDep = organizationGroupList;
+      });
+    },
     getLeaderName() {
-      console.log("selLeaderId", this.leaderId);
       if (this.leaderId && this.leaderId != 0) {
-        console.log(this.leaderId, 2222);
         getMemberInfo({
           organizationGroupId: this.id,
           userId: this.leaderId

@@ -12,7 +12,7 @@ export const getPeopleList = (data) => {
     data
   });
 };
-/* 获取部门树 */
+/* 获取科室树 */
 export const getOrganizationTree = ({
   organizationGroupId
 }) => {
@@ -26,7 +26,7 @@ export const getOrganizationTree = ({
   });
 };
 
-/* 部门新增编辑删除 */
+/* 科室新增编辑删除 */
 export const organizationOperate = (params, type) => {
   const data = params;
   let urlMap = {
@@ -41,7 +41,7 @@ export const organizationOperate = (params, type) => {
   });
 };
 
-/* 获取部门成员列表 */
+/* 获取科室成员列表 */
 export const getOrganizationMembers = (params) => {
   return Ajax.request({
     url: "/oa/ums/organizationGroupMember/list",
@@ -51,7 +51,7 @@ export const getOrganizationMembers = (params) => {
 };
 
 
-/* 获取部门上级领导列表 */
+/* 获取科室上级领导列表 */
 export const getOrganizationLeaders = (params) => {
   return Ajax.request({
     url: "oa/ums/organizationGroupMember/fatherLeaderList",
@@ -60,7 +60,7 @@ export const getOrganizationLeaders = (params) => {
   });
 };
 
-/* 获取部门详情 */
+/* 获取科室详情 */
 export const getOrganizationInfo = ({
   organizationGroupId
 }) => {
@@ -93,7 +93,7 @@ export const getRoleList = (params = {}) => {
 };
 
 
-/* 部门成员新增编辑删除 */
+/* 科室成员新增编辑删除 */
 export const membersOperate = (params, type) => {
   const data = params;
   let urlMap = {
@@ -108,7 +108,7 @@ export const membersOperate = (params, type) => {
   });
 };
 
-/* 部门成员停用和启用 */
+/* 科室成员停用和启用 */
 export const userOperate = (params, type) => {
   const data = params;
   let urlMap = {
@@ -217,3 +217,19 @@ export const noManageUser = (data) => {
     method: "post"
   });
 };
+
+export const getChangeDepList = (data) => {
+  return Ajax.request({
+    url: '/oa/ums/organizationGroup/organization/list',
+    data,
+    method: "post"
+  });
+};
+export const sortDepList = (data) => {
+  return Ajax.request({
+    url: '/oa/ums/organizationGroup/update/list',
+    data,
+    method: "post"
+  });
+};
+

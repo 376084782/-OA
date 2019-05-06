@@ -1,7 +1,7 @@
 <template>
   <section class="permission-containner" v-loading="bLoading">
     <nav-card :info.sync="currentInfo" :data="treeData" :defaultExpand.sync="defaultExpand"></nav-card>
-    <content-card :info.sync="currentInfo" @success="onSuccess"></content-card>
+    <content-card :info.sync="currentInfo" @success="onSuccess" @update="updateTree"></content-card>
   </section>
 </template>
 <script>
@@ -32,11 +32,33 @@ export default {
     ]);
   },
   methods: {
+    updateTree() {
+      // this.sortTree(this.treeData);
+      // this.treeData=this.treeData.concat();
+    },
+    sortTree(list) {
+      if (!list) {
+        return;
+      }
+      list.forEach(item => {
+        if (
+          item.chlidOrganizationGroupList &&
+          item.chlidOrganizationGroupList.length > 0
+        ) {
+          this.sortTree(item.chlidOrganizationGroupList);
+        } else {
+          list = list.sort((a, b) => {
+            return a.sort - b.sort;
+          });
+        }
+      });
+    },
     loadOrganization(id) {
       this.bLoading = true;
       getOrganizationTree({ organizationGroupId: -1 })
         .then(data => {
           this.treeData = data.organizationGroupList;
+          this.sortTree(this.treeData);
           this.defaultExpand = id
             ? [id]
             : [this.treeData[0].organizationGroupId];

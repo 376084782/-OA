@@ -7,8 +7,10 @@ const documentArrange = () => import('view/document/arrange/arrange')
 const documentWHGL = () => import('view/document/whgl/whgl')
 
 const documentDiy = () => import('view/permission/diy/diy')
+const documentDiyCreate = () => import('view/permission/diy/diyCreate')
 const documentHelp = () => import('view/permission/help/help')
 
+const documentWatch = () => import('view/document/watch/watch')
 
 // 公文管理
 const pagesDocument = [{
@@ -30,6 +32,13 @@ const pagesDocument = [{
     name: "documentDiy",
     components: {
       default: documentDiy,
+      paths: breadcurmb
+    },
+  }, {
+    path: "/document/diy/create",
+    name: "documentDiyCreate",
+    components: {
+      default: documentDiyCreate,
       paths: breadcurmb
     },
   }, {
@@ -61,7 +70,14 @@ const pagesDocument = [{
       default: documentWHGL,
       paths: breadcurmb
     },
-  },
+  }, {
+    path: '/document/watch',
+    name: "documentWatch",
+    components: {
+      default: documentWatch,
+      paths: breadcurmb
+    }
+  }
 
 ];
 

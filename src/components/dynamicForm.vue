@@ -72,7 +72,15 @@
             value-format="yyyy-MM-dd HH:mm:ss"
           ></el-date-picker>
         </template>
-
+        <template v-else-if="conf.type=='date-time'">
+          <el-date-picker
+            :disabled="disabled||conf.readOnly"
+            :style="{width:inputWidth}"
+            v-model="editData[conf.code]"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+          ></el-date-picker>
+        </template>
         <template v-else-if="conf.type=='radio'">
           <dym-radio
             :auto-select="true"

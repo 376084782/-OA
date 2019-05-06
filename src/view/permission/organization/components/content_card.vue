@@ -3,35 +3,39 @@
     <div class="content-header">
       <span class="font-large">{{currentInfo && currentInfo.name}}</span>
       <el-button
-        size="small"
+        size="mini"
         v-if="currentInfo.hasOrganizationOperation||currentInfo.hasAllOperation"
         class="mgLeft20"
         @click="onEdit"
+        type="primary"
       >编辑</el-button>
-      <el-button v-else size="small" class="mgLeft20" @click="onSee">查看</el-button>
+      <el-button v-else size="mini" class="mgLeft20" @click="onSee" type="primary">查看</el-button>
     </div>
     <div class="content-department">
-      <div class="font-info mgBottom10">下级部门</div>
+      <div class="font-info mgBottom10">下级科室</div>
       <el-card :body-style="{'padding': '0 20px'}">
         <div slot="header">
           <el-button
             v-if="currentInfo.hasAllOperation"
             type="primary"
-            size="small"
+            size="mini"
             @click="showDepartment = true;"
-          >添加子部门</el-button>
+          >添加子科室</el-button>
           <el-button
             v-if="currentInfo.hasAllOperation&& showBtnUnit"
             type="primary"
-            size="small"
+            size="mini"
             @click="showUnit = true"
           >添加子单位</el-button>
+          <el-button size="mini" @click="saveGroupSort">保存排序</el-button>
         </div>
-        <div
-          :key="item.organizationGroupId"
-          class="department-item"
-          v-for="item in currentInfo.chlidOrganizationGroupList"
-        >{{item.name}}</div>
+        <div ref="departmentList">
+          <div
+            :key="item.organizationGroupId"
+            class="department-item"
+            v-for="item in currentInfo.chlidOrganizationGroupList"
+          >{{item.name}}</div>
+        </div>
         <div
           class="empty-block"
           v-if="currentInfo.chlidOrganizationGroupList && currentInfo.chlidOrganizationGroupList.length == 0"
@@ -39,11 +43,19 @@
       </el-card>
     </div>
     <div class="content-members">
-      <div class="font-info mgTop20 mgBottom10">部门成员</div>
+      <div class="font-info mgTop20 mgBottom10">科室成员</div>
       <el-card :body-style="{'padding': '0 20px'}">
         <div slot="header" v-if="currentInfo.hasAllOperation">
+          <el-form inline size="mini">
+            <el-form-item label="姓名:">
+              <el-input v-model="searchData.keyWord"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button size="mini" type="primary" @click="loadMembers">查询</el-button>
+            </el-form-item>
+          </el-form>
           <el-button-group>
-            <el-button size="small" @click="onAddMember">添加成员</el-button>
+            <el-button size="mini" type="primary" @click="onAddMember">添加成员</el-button>
             <!-- <el-button size="small">批量导入导出</el-button> -->
           </el-button-group>
         </div>
@@ -84,23 +96,39 @@
   </el-card>
 </template>
 <script>
-import { getOrganizationMembers } from "api/permission";
+import { getOrganizationMembers, sortDepList } from "api/permission";
 import modalMember from "../modals/member.vue";
 import modalDepartment from "../modals/department.vue";
 import modalUnit from "../modals/unit.vue";
 import memberTable from "./member_table.vue";
+import Sortable from "sortablejs";
 export default {
   components: { memberTable, modalMember, modalDepartment, modalUnit },
   props: ["info"],
   watch: {
     info(val) {
       this.currentInfo = JSON.parse(val);
+      this.currentInfo.chlidOrganizationGroupList.sort((a, b) => {
+        return a.sort - b.sort;
+      });
       console.log(this.currentInfo, "curren");
+
       this.loadMembers();
     }
   },
+  mounted() {
+    let self = this;
+    new Sortable(this.$refs.departmentList, {
+      onEnd({ newIndex, oldIndex }) {
+        let list = self.currentInfo.chlidOrganizationGroupList;
+        const currRow = list.splice(oldIndex, 1)[0];
+        list.splice(newIndex, 0, currRow);
+      }
+    });
+  },
   data() {
     return {
+      searchData: {},
       selLeaderId: null,
       showUnit: false,
       bloading: false,
@@ -122,6 +150,17 @@ export default {
     }
   },
   methods: {
+    saveGroupSort() {
+      let list = this.currentInfo.chlidOrganizationGroupList;
+      list.forEach((item, idx) => {
+        item.sort = idx;
+      });
+      sortDepList({
+        organizationGroupList: list
+      }).then(e=>{
+        this.$emit('update')
+      })
+    },
     onAddMember() {
       this.showMember = true;
     },
@@ -132,7 +171,10 @@ export default {
       /* do request */
       this.bloading = true;
       let params = [this.currentInfo.organizationGroupId];
-      getOrganizationMembers({ organizationGroupIdList: params })
+      getOrganizationMembers({
+        organizationGroupIdList: params,
+        keyWord: this.searchData.keyWord
+      })
         .then(data => {
           this.membersList = data.userList;
         })

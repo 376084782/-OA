@@ -16,7 +16,7 @@
           <el-table-column prop="title" label="标题" min-width="200px"></el-table-column>
           <el-table-column min-width="180px" prop="createTime" label="值班时间"></el-table-column>
           <el-table-column prop="name" label="发起申请人"></el-table-column>
-          <el-table-column prop="organizationGroupName" label="发起部门"></el-table-column>
+          <el-table-column prop="organizationGroupName" label="发起科室"></el-table-column>
           <el-table-column prop="modelTypeDictionary" label="值班当前状态"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">

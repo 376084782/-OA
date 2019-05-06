@@ -57,7 +57,6 @@ export default {
       this.radioDataList = [];
       let userList = this.conf.data.list;
       userList.forEach((item, index) => {
-        console.log(item, "ittttte");
         this.$set(this.radioDataList, index, []);
         if (item.persionType == 3) {
           getPeopleListByRole({
@@ -97,12 +96,12 @@ export default {
         } else if (item.persionType == 5) {
           let organizationGroupId = item.businessId;
           if (item.businessId == -2) {
-            // 发起部门
+            // 发起科室
             organizationGroupId =
               config.processUser.organizationGroupId ||
               this.$store.getters.organizationGroupId;
           } else if (item.businessId == -3) {
-            // 执行部门
+            // 执行科室
           }
           getManageList({
             organizationGroupId: organizationGroupId,

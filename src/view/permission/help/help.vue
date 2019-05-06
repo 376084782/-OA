@@ -9,7 +9,7 @@
       <el-form-item label="申请人">
         <el-input disabled :value="$store.getters.name"></el-input>
       </el-form-item>
-      <el-form-item label="所在部门">
+      <el-form-item label="所在科室">
         <el-input disabled :value="$store.getters.currentOrgInfo.name"></el-input>
       </el-form-item>
       <el-form-item label="开始时间">

@@ -64,7 +64,7 @@ export default {
   data() {
     return {
       leaderName: "",
-      dialogTitle: "添加子部门",
+      dialogTitle: "添加子科室",
       bShow: this.value,
       bLoading: false,
       confirmLoading: false,
@@ -183,7 +183,7 @@ export default {
     }
   },
   created() {
-    this.dialogTitle = this.type == "add" ? "新增子部门" : "部门编辑";
+    this.dialogTitle = this.type == "add" ? "新增子科室" : "科室编辑";
     if (this.type != "add") {
       this.bLoading = true;
       getOrganizationInfo({ organizationGroupId: this.id })

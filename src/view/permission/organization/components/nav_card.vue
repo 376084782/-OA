@@ -8,36 +8,43 @@
         <el-button>角色权限</el-button>
       </router-link>
     </el-button-group>
-    <el-tree :data="treeData" :props="defaultProps" v-loading="bLoading"
-      node-key="organizationGroupId" :default-expanded-keys="defaultExpand"
-      @current-change="handleNodeClick"></el-tree>
+    <el-tree
+      :data="treeData"
+      :props="defaultProps"
+      v-loading="bLoading"
+      node-key="organizationGroupId"
+      :default-expanded-keys="defaultExpand"
+      @current-change="handleNodeClick"
+    ></el-tree>
   </el-card>
 </template>
 <script>
 export default {
-  props: ['info', 'data', 'defaultExpand'],
-  data () {
+  props: ["info", "data", "defaultExpand"],
+  data() {
     return {
-      searchValue: '',
+      selInfo: {},
+      searchValue: "",
       defaultProps: {
-        children: 'chlidOrganizationGroupList',
-        label: 'name'
+        children: "chlidOrganizationGroupList",
+        label: "name"
       },
       bLoading: false,
       treeData: this.data
     };
   },
   watch: {
-    'data': {
+    data: {
       // immediate: true,
-      handler (val) {
+      handler(val) {
         this.treeData = val;
       }
     }
   },
   methods: {
-    handleNodeClick (data) {
-      this.$emit('update:info', JSON.stringify(data));
+    handleNodeClick(data) {
+      this.selInfo = this._.cloneDeep(data);
+      this.$emit("update:info", JSON.stringify(data));
     }
   }
 };

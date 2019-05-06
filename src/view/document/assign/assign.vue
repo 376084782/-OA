@@ -75,7 +75,10 @@ export default {
     this.onSearch();
   },
   methods: {
-    onPageChange(page) {},
+    onPageChange(page) {
+      this.oPagination.pageNo++;
+      this.loadData()
+    },
     getJJCD(data) {
       // let valueContent = JSON.parse(data.valueContent);
       // let dataUrgency = valueContent.filter(item => {
@@ -91,6 +94,7 @@ export default {
     loadData() {
       this.bLoading = true;
       this.searchParams.dateFormat = "%Y-%m-%d";
+      Object.assign(this.searchParams,this.oPagination);
       getListAssign(this.searchParams)
         .then(({ tableResponse }) => {
           tableResponse.list.forEach(item => {

@@ -35,7 +35,7 @@
       </el-row>
       <p class="line"></p>
       <el-form class="mgTop24" style="width:400px;" size="small" label-width="120px">
-        <el-form-item label="部门：">
+        <el-form-item label="科室：">
           <el-input v-if="edit"></el-input>
           <span v-else>22</span>
         </el-form-item>
